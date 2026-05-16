@@ -13,7 +13,7 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
 - `find-skills`: adapted from Vercel Labs' `find-skills` skill with two local rules:
   - check already-available skills before searching externally;
   - never install skills silently or with automatic confirmation unless explicitly approved.
-- `convert-skill-to-codex`: converts useful third-party skills, especially Claude Code skills, into Codex-compatible skill folders before installation.
+- `migrate-to-codex`: official OpenAI skill for migrating supported instruction files, skills, agents, and MCP config into Codex project and global files.
 - `frontend-design`: adapted from Anthropic's frontend design skill for Codex-compatible high-quality UI work.
 
 ## Reproduce Locally
@@ -23,7 +23,7 @@ From this repository root:
 ```bash
 mkdir -p ~/.codex/skills
 cp -R skills/find-skills ~/.codex/skills/find-skills
-cp -R skills/convert-skill-to-codex ~/.codex/skills/convert-skill-to-codex
+cp -R skills/migrate-to-codex ~/.codex/skills/migrate-to-codex
 cp -R skills/frontend-design ~/.codex/skills/frontend-design
 ```
 

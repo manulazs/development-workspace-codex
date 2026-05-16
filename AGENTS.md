@@ -33,6 +33,6 @@ Before adding external skills, check whether an existing local, global, project,
 
 External skills should be reviewed before installation. Avoid silent installation flags unless Manuel explicitly approves unattended installation for a low-risk case.
 
-If an external skill is useful but not directly compatible with Codex, use `convert-skill-to-codex` to adapt it before installation. Do not install a Claude Code or other agent-specific skill unchanged unless Manuel explicitly accepts the compatibility risk.
+If an external skill is useful but not directly compatible with Codex, use `migrate-to-codex` to migrate or adapt it before installation. Do not install a Claude Code or other agent-specific skill unchanged unless Manuel explicitly accepts the compatibility risk.
 
-When `skill-installer` is invoked directly for an external skill, still perform the compatibility check first. If the source is from another agent ecosystem or unknown format, route through `convert-skill-to-codex` before installing.
+When `skill-installer` is invoked directly for an external skill, still perform the compatibility check first. If the source is from another agent ecosystem or unknown format, route through `migrate-to-codex` before installing.

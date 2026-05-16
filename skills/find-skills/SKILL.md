@@ -122,7 +122,7 @@ Treat a skill as needing conversion when it relies on:
 - Installation paths or metadata that do not match Codex skill structure.
 - Ambiguous instructions that would make Codex overreach, auto-install, or skip approval.
 
-If conversion is needed, use `$convert-skill-to-codex` before recommending installation. Do not install the original skill directly unless the user explicitly asks to keep it unchanged and understands the compatibility risk.
+If migration or conversion is needed, use `$migrate-to-codex` before recommending installation. Do not install the original skill directly unless the user explicitly asks to keep it unchanged and understands the compatibility risk.
 
 ### Step 6: Present Options
 
