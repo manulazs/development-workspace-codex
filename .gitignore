@@ -1,0 +1,28 @@
+# Local/editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets and credentials
+*.env
+.env
+.env.*
+auth.json
+*token*
+*secret*
+
+# Codex internal state, logs, and caches
+logs_*.sqlite*
+state_*.sqlite*
+models_cache.json
+cache/
+sessions/
+shell_snapshots/
+tmp/
+.tmp/
+
+# Python/Node caches
+__pycache__/
+*.pyc
+node_modules/
+
