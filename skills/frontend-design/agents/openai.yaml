@@ -1,0 +1,8 @@
+interface:
+  display_name: "Frontend Design"
+  short_description: "Build distinctive polished UI"
+  default_prompt: "Use $frontend-design to build a polished frontend UI that fits the product context and avoids generic AI-looking design."
+
+policy:
+  allow_implicit_invocation: true
+

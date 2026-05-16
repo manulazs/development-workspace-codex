@@ -14,6 +14,7 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
   - check already-available skills before searching externally;
   - never install skills silently or with automatic confirmation unless explicitly approved.
 - `convert-skill-to-codex`: converts useful third-party skills, especially Claude Code skills, into Codex-compatible skill folders before installation.
+- `frontend-design`: adapted from Anthropic's frontend design skill for Codex-compatible high-quality UI work.
 
 ## Reproduce Locally
 
@@ -23,6 +24,7 @@ From this repository root:
 mkdir -p ~/.codex/skills
 cp -R skills/find-skills ~/.codex/skills/find-skills
 cp -R skills/convert-skill-to-codex ~/.codex/skills/convert-skill-to-codex
+cp -R skills/frontend-design ~/.codex/skills/frontend-design
 ```
 
 Restart Codex after installing or updating skills so the new skill metadata is picked up.
