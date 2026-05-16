@@ -18,6 +18,17 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
 - `openai-docs`: official OpenAI docs skill for current API and model guidance.
 - `pdf`: official OpenAI skill for reading, creating, and reviewing PDFs with layout fidelity.
 - `screenshot`: official OpenAI skill for desktop and system screenshot capture.
+- `xlsx`: imported from Anthropic `skills`.
+- `webapp-testing`: imported from Anthropic `skills`.
+- `web-artifacts-builder`: imported from Anthropic `skills`.
+- `pptx`: imported from Anthropic `skills`.
+- `theme-factory`: imported from Anthropic `skills`.
+- `canvas-design`: imported from Anthropic `skills`.
+- `agent-browser`: imported from Vercel Labs `agent-browser`.
+- `caveman`: imported from JuliusBrussee `caveman`.
+- `caveman-compress`: imported from JuliusBrussee `caveman`.
+- `caveman-commit`: imported from JuliusBrussee `caveman`.
+- `caveman-help`: imported from JuliusBrussee `caveman`.
 
 ## Reproduce Locally
 
@@ -25,12 +36,27 @@ From this repository root:
 
 ```bash
 mkdir -p ~/.codex/skills
-cp -R skills/find-skills ~/.codex/skills/find-skills
-cp -R skills/migrate-to-codex ~/.codex/skills/migrate-to-codex
-cp -R skills/frontend-design ~/.codex/skills/frontend-design
-cp -R skills/openai-docs ~/.codex/skills/openai-docs
-cp -R skills/pdf ~/.codex/skills/pdf
-cp -R skills/screenshot ~/.codex/skills/screenshot
+for skill in \
+  find-skills \
+  migrate-to-codex \
+  frontend-design \
+  openai-docs \
+  pdf \
+  screenshot \
+  xlsx \
+  webapp-testing \
+  web-artifacts-builder \
+  pptx \
+  theme-factory \
+  canvas-design \
+  agent-browser \
+  caveman \
+  caveman-compress \
+  caveman-commit \
+  caveman-help
+do
+  cp -R "skills/$skill" ~/.codex/skills/
+done
 ```
 
 Restart Codex after installing or updating skills so the new skill metadata is picked up.
