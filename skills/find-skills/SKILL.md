@@ -5,7 +5,7 @@ description: Helps discover, evaluate, and install agent skills when the user as
 
 # Find Skills
 
-This skill helps discover and install skills from the open agent skills ecosystem without skipping local reuse, quality checks, or user approval.
+This skill helps discover and install skills from the open agent skills ecosystem without skipping local reuse, compatibility checks, quality checks, or user approval.
 
 ## Core Rule
 
@@ -98,12 +98,33 @@ Check:
 - Source reputation.
 - GitHub stars or project credibility.
 - Last update or visible maintenance, when relevant.
+- Codex compatibility.
 - Whether the skill contains only instructions or also scripts that should be reviewed.
 - Whether it asks for risky behavior such as broad automation, secret handling, destructive commands, or silent installation.
 
 Be cautious with unknown maintainers, very low installs, unclear READMEs, or skills that require broad permissions.
 
-### Step 5: Present Options
+### Step 5: Check Codex Compatibility
+
+Before recommending installation, inspect whether the skill is directly usable by Codex.
+
+Treat a skill as directly compatible when it has:
+
+- A clear skill folder with `SKILL.md`.
+- YAML frontmatter with `name` and `description`.
+- Instructions that do not depend on another agent's private features.
+- Scripts or assets that can run in the local Codex environment.
+
+Treat a skill as needing conversion when it relies on:
+
+- Claude Code-specific files, commands, hooks, slash commands, or assumptions.
+- Agent names, tools, MCP servers, or context patterns not available in Codex.
+- Installation paths or metadata that do not match Codex skill structure.
+- Ambiguous instructions that would make Codex overreach, auto-install, or skip approval.
+
+If conversion is needed, use `$convert-skill-to-codex` before recommending installation. Do not install the original skill directly unless the user explicitly asks to keep it unchanged and understands the compatibility risk.
+
+### Step 6: Present Options
 
 When relevant skills are found, present:
 
@@ -111,13 +132,14 @@ When relevant skills are found, present:
 - What it does.
 - Why it fits the current need.
 - Source and reputation signals.
+- Codex compatibility status: compatible, conversion recommended, or not suitable.
 - Installation command.
 - Link to the source or skill page.
 - Risks or limitations.
 
 If multiple skills are plausible, compare them briefly and recommend one.
 
-### Step 6: Ask Before Installing
+### Step 7: Ask Before Installing
 
 Never install a skill silently.
 
@@ -140,7 +162,7 @@ Before installation, state:
 
 Proceed only after explicit user approval.
 
-### Step 7: If No Skill Fits
+### Step 8: If No Skill Fits
 
 If no relevant skill exists:
 
@@ -167,4 +189,3 @@ If no relevant skill exists:
 - Try alternate terms if results are weak.
 - Prefer official or well-maintained sources.
 - Treat local custom skills as higher-priority when they encode user or project context.
-

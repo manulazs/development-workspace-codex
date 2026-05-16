@@ -1,0 +1,8 @@
+interface:
+  display_name: "Find Skills"
+  short_description: "Discover and vet reusable skills"
+  default_prompt: "Use $find-skills to find a suitable skill, check local options first, and verify Codex compatibility before recommending installation."
+
+policy:
+  allow_implicit_invocation: true
+

@@ -13,6 +13,7 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
 - `find-skills`: adapted from Vercel Labs' `find-skills` skill with two local rules:
   - check already-available skills before searching externally;
   - never install skills silently or with automatic confirmation unless explicitly approved.
+- `convert-skill-to-codex`: converts useful third-party skills, especially Claude Code skills, into Codex-compatible skill folders before installation.
 
 ## Reproduce Locally
 
@@ -21,6 +22,7 @@ From this repository root:
 ```bash
 mkdir -p ~/.codex/skills
 cp -R skills/find-skills ~/.codex/skills/find-skills
+cp -R skills/convert-skill-to-codex ~/.codex/skills/convert-skill-to-codex
 ```
 
 Restart Codex after installing or updating skills so the new skill metadata is picked up.
@@ -28,4 +30,3 @@ Restart Codex after installing or updating skills so the new skill metadata is p
 ## Repository Policy
 
 This repository should remain private. It may contain workflow preferences and local environment conventions, but it must not contain credentials, tokens, logs, private data exports, or Codex internal state files.
-

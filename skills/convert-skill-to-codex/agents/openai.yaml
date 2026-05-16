@@ -1,0 +1,8 @@
+interface:
+  display_name: "Convert Skill To Codex"
+  short_description: "Port external skills to Codex"
+  default_prompt: "Use $convert-skill-to-codex to adapt this external agent skill into a safe Codex-compatible skill."
+
+policy:
+  allow_implicit_invocation: true
+
