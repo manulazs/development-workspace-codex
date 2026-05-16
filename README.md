@@ -14,7 +14,7 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
   - check already-available skills before searching externally;
   - never install skills silently or with automatic confirmation unless explicitly approved.
 - `migrate-to-codex`: official OpenAI skill for migrating supported instruction files, skills, agents, and MCP config into Codex project and global files.
-- `frontend-design`: adapted from Anthropic's frontend design skill for Codex-compatible high-quality UI work.
+- `frontend-design`: migrated from Anthropic's frontend design skill through OpenAI's `migrate-to-codex` workflow.
 
 ## Reproduce Locally
 
