@@ -8,6 +8,12 @@ Recommended repository name:
 development-workspace-codex
 ```
 
+Created private repository:
+
+```text
+https://github.com/manulazs/development-workspace-codex
+```
+
 ## Option 1: GitHub CLI
 
 From the repository root:
@@ -32,4 +38,3 @@ Replace `<owner>` with the GitHub user or organization that owns the repository.
 Keep the repository private unless Manuel explicitly decides otherwise.
 
 Do not push credentials, tokens, logs, local databases, corporate data exports, or Codex internal state.
-
