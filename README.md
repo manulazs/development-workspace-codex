@@ -15,6 +15,9 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
   - never install skills silently or with automatic confirmation unless explicitly approved.
 - `migrate-to-codex`: official OpenAI skill for migrating supported instruction files, skills, agents, and MCP config into Codex project and global files.
 - `frontend-design`: migrated from Anthropic's frontend design skill through OpenAI's `migrate-to-codex` workflow.
+- `openai-docs`: official OpenAI docs skill for current API and model guidance.
+- `pdf`: official OpenAI skill for reading, creating, and reviewing PDFs with layout fidelity.
+- `screenshot`: official OpenAI skill for desktop and system screenshot capture.
 
 ## Reproduce Locally
 
@@ -25,6 +28,9 @@ mkdir -p ~/.codex/skills
 cp -R skills/find-skills ~/.codex/skills/find-skills
 cp -R skills/migrate-to-codex ~/.codex/skills/migrate-to-codex
 cp -R skills/frontend-design ~/.codex/skills/frontend-design
+cp -R skills/openai-docs ~/.codex/skills/openai-docs
+cp -R skills/pdf ~/.codex/skills/pdf
+cp -R skills/screenshot ~/.codex/skills/screenshot
 ```
 
 Restart Codex after installing or updating skills so the new skill metadata is picked up.
