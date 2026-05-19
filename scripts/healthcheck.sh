@@ -9,7 +9,8 @@ for arg in "$@"; do
       cat <<'EOF'
 Usage: scripts/healthcheck.sh [--strict]
 
-Validates the Codex workspace repository on macOS/Linux.
+Validates this portable Codex workspace repository on macOS/Linux. Runtime state
+under ~/.codex is intentionally out of scope.
 EOF
       exit 0
       ;;
@@ -30,8 +31,8 @@ WARNS=()
 FAILS=()
 
 add_result() {
-  local level="$1"
-  local message="$2"
+  level="$1"
+  message="$2"
   case "$level" in
     INFO) INFOS+=("$message"); INFO_COUNT=$((INFO_COUNT + 1)) ;;
     WARN) WARNS+=("$message"); WARN_COUNT=$((WARN_COUNT + 1)) ;;
@@ -43,15 +44,21 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
-PYTHON_BIN=""
-if command_exists python3; then
-  PYTHON_BIN="python3"
-elif command_exists python; then
-  PYTHON_BIN="python"
-fi
+find_python() {
+  for candidate in python3 python; do
+    if command_exists "$candidate"; then
+      if "$candidate" -c 'import sys; raise SystemExit(0 if sys.version_info[0] >= 3 else 1)' >/dev/null 2>&1; then
+        echo "$candidate"
+        return
+      fi
+    fi
+  done
+  echo ""
+}
 
 cd "$REPO_ROOT" || exit 1
 add_result INFO "Repository root: $REPO_ROOT"
+add_result INFO "Runtime state under ~/.codex is intentionally out of scope for this repository healthcheck."
 
 if ! command_exists git; then
   add_result FAIL "git is not available on PATH."
@@ -61,56 +68,58 @@ else
   add_result INFO "Git worktree detected."
 fi
 
-required_dirs=(
-  "skills"
-  ".codex/agents"
-  "codex-global"
-  "docs/decisions"
-  "docs/runbooks"
-  "docs/operations"
-  "docs/audits"
-  "docs/lessons"
-  "docs/patterns"
-  "scripts"
-)
+required_dirs="
+skills
+.codex/agents
+codex-global
+docs/decisions
+docs/runbooks
+docs/operations
+docs/audits
+docs/lessons
+docs/patterns
+scripts
+"
 
-for dir in "${required_dirs[@]}"; do
-  if [[ -d "$dir" ]]; then
+for dir in $required_dirs; do
+  if [ -d "$dir" ]; then
     add_result INFO "Directory exists: $dir"
   else
     add_result FAIL "Required directory missing: $dir"
   fi
 done
 
-required_docs=(
-  "README.md"
-  "LICENSE"
-  "CONTRIBUTING.md"
-  "CHANGELOG.md"
-  "SECURITY.md"
-  "CODE_OF_CONDUCT.md"
-  "docs/README.md"
-  "docs/capability-inventory.md"
-  "docs/skill-template.md"
-  "docs/agent-template.md"
-  "docs/subagents-policy.md"
-  "docs/subagents-lifecycle.md"
-  "docs/self-improvement-lifecycle.md"
-  "docs/lessons/TEMPLATE.md"
-  "docs/patterns/TEMPLATE.md"
-  "docs/patterns/rejected/README.md"
-  "docs/audits/TEMPLATE.md"
-  "docs/decisions/TEMPLATE.md"
-  "docs/archive/README.md"
-  "docs/runbooks/setup-windows.md"
-  "docs/runbooks/setup-macos.md"
-)
+required_docs="
+README.md
+.gitattributes
+LICENSE
+CONTRIBUTING.md
+CHANGELOG.md
+SECURITY.md
+CODE_OF_CONDUCT.md
+workspace-manifest.json
+docs/README.md
+docs/capability-inventory.md
+docs/skill-template.md
+docs/agent-template.md
+docs/subagents-policy.md
+docs/subagents-lifecycle.md
+docs/self-improvement-lifecycle.md
+docs/lessons/TEMPLATE.md
+docs/patterns/TEMPLATE.md
+docs/patterns/rejected/README.md
+docs/audits/TEMPLATE.md
+docs/decisions/TEMPLATE.md
+docs/archive/README.md
+docs/runbooks/setup-windows.md
+docs/runbooks/setup-macos.md
+"
 
-for doc in "${required_docs[@]}"; do
-  if [[ -f "$doc" ]]; then
-    add_result INFO "Required doc exists: $doc"
+for doc in $required_docs; do
+  if [ -f "$doc" ]; then
+    add_result INFO "Required file exists: $doc"
   else
-    add_result FAIL "Required doc missing: $doc"
+    add_result FAIL "Required file missing: $doc"
   fi
 done
 
@@ -118,7 +127,13 @@ skill_files=()
 while IFS= read -r skill_file; do
   skill_files+=("$skill_file")
 done < <(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -type f 2>/dev/null | sort)
-if [[ "${#skill_files[@]}" -eq 0 ]]; then
+
+repo_skills=()
+for skill_file in "${skill_files[@]}"; do
+  repo_skills+=("$(basename "$(dirname "$skill_file")")")
+done
+
+if [ "${#skill_files[@]}" -eq 0 ]; then
   add_result FAIL "No skills with SKILL.md found under skills/."
 else
   add_result INFO "Skills discovered: ${#skill_files[@]}"
@@ -126,7 +141,7 @@ fi
 
 for skill_file in "${skill_files[@]}"; do
   first_line="$(sed -n '1p' "$skill_file")"
-  if [[ "$first_line" != "---" ]]; then
+  if [ "$first_line" != "---" ]; then
     add_result FAIL "$skill_file frontmatter must start with ---."
     continue
   fi
@@ -146,7 +161,13 @@ agent_files=()
 while IFS= read -r agent_file; do
   agent_files+=("$agent_file")
 done < <(find .codex/agents -maxdepth 1 -name '*.toml' -type f 2>/dev/null | sort)
-if [[ "${#agent_files[@]}" -eq 0 ]]; then
+
+repo_agents=()
+for agent_file in "${agent_files[@]}"; do
+  repo_agents+=("$(basename "$agent_file" .toml)")
+done
+
+if [ "${#agent_files[@]}" -eq 0 ]; then
   add_result FAIL "No custom agent TOML files found under .codex/agents/."
 else
   add_result INFO "Custom agents discovered: ${#agent_files[@]}"
@@ -160,37 +181,142 @@ for agent_file in "${agent_files[@]}"; do
   done
 done
 
+PYTHON_BIN="$(find_python)"
+if [ -z "$PYTHON_BIN" ]; then
+  add_result WARN "Python 3 is not available; skipped JSON manifest and migrate validation."
+else
+  while IFS="$(printf '\t')" read -r level message; do
+    [ -n "$level" ] && add_result "$level" "$message"
+  done < <("$PYTHON_BIN" - "workspace-manifest.json" <<'PY'
+import json
+import os
+import sys
+
+manifest_path = sys.argv[1]
+allowed = {"core", "optional", "curated", "review", "deprecated", "archived"}
+blocked = {"curated", "review", "deprecated", "archived"}
+
+def emit(level, message):
+    print(f"{level}\t{message}")
+
+try:
+    with open(manifest_path, encoding="utf-8") as handle:
+        manifest = json.load(handle)
+except Exception as exc:
+    emit("FAIL", f"workspace-manifest.json is not valid JSON: {exc}")
+    raise SystemExit(0)
+
+emit("INFO", "workspace-manifest.json parsed successfully.")
+
+repo_skills = sorted(
+    name for name in os.listdir("skills")
+    if os.path.isdir(os.path.join("skills", name))
+)
+repo_agents = sorted(
+    os.path.splitext(name)[0]
+    for name in os.listdir(".codex/agents")
+    if name.endswith(".toml")
+)
+manifest_skills = manifest.get("skills", {})
+manifest_agents = manifest.get("agents", {})
+
+for status in manifest.get("statuses", {}):
+    if status not in allowed:
+        emit("FAIL", f"Manifest declares unsupported status: {status}")
+
+for skill in repo_skills:
+    if skill not in manifest_skills:
+        emit("FAIL", f"Manifest does not classify skill: {skill}")
+for skill, status in manifest_skills.items():
+    if skill not in repo_skills:
+        emit("FAIL", f"Manifest references missing skill directory: {skill}")
+    if status not in allowed:
+        emit("FAIL", f"Manifest skill '{skill}' has unsupported status '{status}'.")
+
+for agent in repo_agents:
+    if agent not in manifest_agents:
+        emit("FAIL", f"Manifest does not classify agent: {agent}")
+for agent, status in manifest_agents.items():
+    if agent not in repo_agents:
+        emit("FAIL", f"Manifest references missing agent file: {agent}")
+    if status not in allowed:
+        emit("FAIL", f"Manifest agent '{agent}' has unsupported status '{status}'.")
+
+profiles = manifest.get("profiles", {})
+for profile_name, profile in profiles.items():
+    for parent in profile.get("extends", []):
+        if parent not in profiles:
+            emit("FAIL", f"Profile '{profile_name}' extends unknown profile '{parent}'.")
+    for skill in profile.get("skills", []):
+        status = manifest_skills.get(skill)
+        if status is None:
+            emit("FAIL", f"Profile '{profile_name}' references unknown skill '{skill}'.")
+        elif status in blocked:
+            emit("FAIL", f"Profile '{profile_name}' references non-installable skill '{skill}' with status '{status}'.")
+    for agent in profile.get("agents", []):
+        status = manifest_agents.get(agent)
+        if status is None:
+            emit("FAIL", f"Profile '{profile_name}' references unknown agent '{agent}'.")
+        elif status in blocked:
+            emit("FAIL", f"Profile '{profile_name}' references non-installable agent '{agent}' with status '{status}'.")
+PY
+)
+fi
+
+if [ -f docs/capability-inventory.md ]; then
+  inventory="$(cat docs/capability-inventory.md)"
+  for skill_name in "${repo_skills[@]}"; do
+    case "$inventory" in
+      *"$skill_name"*) ;;
+      *) add_result FAIL "Capability inventory does not mention skill: $skill_name" ;;
+    esac
+  done
+  for agent_name in "${repo_agents[@]}"; do
+    case "$inventory" in
+      *"$agent_name"*) ;;
+      *) add_result FAIL "Capability inventory does not mention agent: $agent_name" ;;
+    esac
+  done
+else
+  add_result FAIL "docs/capability-inventory.md is missing."
+fi
+
 migrate_cli="skills/migrate-to-codex/scripts/cli.py"
-if [[ -f "$migrate_cli" && -n "$PYTHON_BIN" ]]; then
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$migrate_cli" ]; then
   if "$PYTHON_BIN" "$migrate_cli" --validate-target . >/tmp/codex-workspace-migrate-validate.log 2>&1; then
     add_result INFO "migrate-to-codex validation passed."
   else
     add_result FAIL "migrate-to-codex validation failed. See /tmp/codex-workspace-migrate-validate.log."
   fi
-elif [[ -z "$PYTHON_BIN" ]]; then
-  add_result WARN "python3/python is not available; skipped migrate-to-codex validation."
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped migrate-to-codex validation."
 else
   add_result WARN "migrate-to-codex validator not found at $migrate_cli."
 fi
 
-quick_validate="$HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py"
-if [[ -f "$quick_validate" && -n "$PYTHON_BIN" ]]; then
-  if "$PYTHON_BIN" -c "import yaml" >/dev/null 2>&1; then
-    add_result INFO "PyYAML is available for quick_validate.py."
-  else
-    add_result WARN "PyYAML is not installed for the active python. quick_validate.py would fail; install PyYAML or use a managed Python environment."
+for installer in scripts/install-workspace.ps1 scripts/install-workspace.sh; do
+  if [ ! -f "$installer" ]; then
+    add_result FAIL "Installer missing: $installer"
+    continue
   fi
-else
-  add_result WARN "System skill quick_validate.py not available; using built-in lightweight skill checks only."
+  if ! grep -q "workspace-manifest.json" "$installer"; then
+    add_result FAIL "$installer does not use workspace-manifest.json."
+  fi
+done
+if ! grep -q "SupportsShouldProcess" scripts/install-workspace.ps1 2>/dev/null; then
+  add_result FAIL "scripts/install-workspace.ps1 must support PowerShell WhatIf."
+fi
+if ! grep -q -- "--dry-run" scripts/install-workspace.sh 2>/dev/null; then
+  add_result FAIL "scripts/install-workspace.sh must support --dry-run."
 fi
 
 if command_exists git; then
   secret_patterns='-----BEGIN (RSA |DSA |EC |OPENSSH )?PRIVATE KEY-----|ghp_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|dapi[a-f0-9]{32}|xox[baprs]-[A-Za-z0-9-]{10,}|sk-[A-Za-z0-9]{20,}'
   while IFS= read -r file; do
-    [[ -f "$file" ]] || continue
+    [ -f "$file" ] || continue
     size="$(wc -c < "$file" | tr -d ' ')"
-    [[ "$size" -gt 1048576 ]] && continue
-    if grep -Eiq -e "$secret_patterns" "$file"; then
+    [ "$size" -gt 1048576 ] && continue
+    if grep -Eiq -- "$secret_patterns" "$file"; then
       add_result FAIL "Potential secret pattern found in tracked file: $file"
     fi
   done < <(git ls-files)
@@ -200,73 +326,15 @@ while IFS= read -r large_file; do
   add_result WARN "Large file over 5MB: $large_file"
 done < <(find . -path ./.git -prune -o -type f -size +5M -print)
 
-if [[ ! -f docs/capability-inventory.md ]]; then
-  add_result FAIL "docs/capability-inventory.md is missing."
-else
-  inventory="$(cat docs/capability-inventory.md)"
-  for skill_file in "${skill_files[@]}"; do
-    skill_name="$(basename "$(dirname "$skill_file")")"
-    if [[ "$inventory" != *"$skill_name"* ]]; then
-      add_result WARN "Capability inventory does not mention skill: $skill_name"
-    fi
-  done
-  for agent_file in "${agent_files[@]}"; do
-    agent_name="$(basename "$agent_file" .toml)"
-    if [[ "$inventory" != *"$agent_name"* ]]; then
-      add_result WARN "Capability inventory does not mention agent: $agent_name"
-    fi
-  done
-fi
-
-if [[ -z "${GITHUB_ACTIONS:-}" ]]; then
-  codex_skills="$HOME/.codex/skills"
-  codex_agents="$HOME/.codex/agents"
-  if [[ -d "$codex_skills" ]]; then
-    missing_skills=()
-    for skill_file in "${skill_files[@]}"; do
-      skill_name="$(basename "$(dirname "$skill_file")")"
-      [[ -d "$codex_skills/$skill_name" ]] || missing_skills+=("$skill_name")
-    done
-    if [[ "${#missing_skills[@]}" -gt 0 ]]; then
-      add_result WARN "Repo skills not installed in ~/.codex/skills: ${missing_skills[*]}"
-    else
-      add_result INFO "All repo skills are installed in ~/.codex/skills."
-    fi
-  else
-    add_result WARN "~/.codex/skills does not exist."
-  fi
-
-  if [[ -d "$codex_agents" ]]; then
-    missing_agents=()
-    for agent_file in "${agent_files[@]}"; do
-      agent_name="$(basename "$agent_file")"
-      [[ -f "$codex_agents/$agent_name" ]] || missing_agents+=("${agent_name%.toml}")
-    done
-    if [[ "${#missing_agents[@]}" -gt 0 ]]; then
-      add_result WARN "Repo agents not installed in ~/.codex/agents: ${missing_agents[*]}"
-    else
-      add_result INFO "All repo agents are installed in ~/.codex/agents."
-    fi
-  else
-    add_result WARN "~/.codex/agents does not exist."
-  fi
-fi
-
-echo "Workspace healthcheck"
-echo "====================="
-if [[ "$INFO_COUNT" -gt 0 ]]; then
-  for message in "${INFOS[@]}"; do echo "[INFO] $message"; done
-fi
-if [[ "$WARN_COUNT" -gt 0 ]]; then
-  for message in "${WARNS[@]}"; do echo "[WARN] $message"; done
-fi
-if [[ "$FAIL_COUNT" -gt 0 ]]; then
-  for message in "${FAILS[@]}"; do echo "[FAIL] $message"; done
-fi
+echo "Workspace repository healthcheck"
+echo "================================"
+for message in "${INFOS[@]}"; do echo "[INFO] $message"; done
+for message in "${WARNS[@]}"; do echo "[WARN] $message"; done
+for message in "${FAILS[@]}"; do echo "[FAIL] $message"; done
 echo
 echo "Summary: $INFO_COUNT info, $WARN_COUNT warnings, $FAIL_COUNT failures."
 
-if [[ "$FAIL_COUNT" -gt 0 || ( "$STRICT" -eq 1 && "$WARN_COUNT" -gt 0 ) ]]; then
+if [ "$FAIL_COUNT" -gt 0 ] || { [ "$STRICT" -eq 1 ] && [ "$WARN_COUNT" -gt 0 ]; }; then
   exit 1
 fi
 

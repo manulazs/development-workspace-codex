@@ -29,39 +29,23 @@ function Test-CommandExists {
     return $null -ne (Get-Command $Name -ErrorAction SilentlyContinue)
 }
 
-function Get-ReadmeSectionItems {
+function Get-ObjectPropertyValue {
     param(
-        [string]$Path,
-        [string]$StartHeading,
-        [string]$EndHeading
+        [Parameter(Mandatory = $true)]$Object,
+        [Parameter(Mandatory = $true)][string]$Name
     )
 
-    if (-not (Test-Path $Path)) {
-        return @()
+    $property = $Object.PSObject.Properties[$Name]
+    if ($null -eq $property) {
+        return $null
     }
 
-    $lines = Get-Content $Path
-    $inside = $false
-    $items = New-Object System.Collections.Generic.List[string]
-
-    foreach ($line in $lines) {
-        if ($line -eq $StartHeading) {
-            $inside = $true
-            continue
-        }
-        if ($inside -and $line -eq $EndHeading) {
-            break
-        }
-        if ($inside -and $line -match '^- `([^`]+)`') {
-            $items.Add($Matches[1]) | Out-Null
-        }
-    }
-
-    return $items.ToArray()
+    return $property.Value
 }
 
 Set-Location $RepoRoot
 Add-Result INFO "Repository root: $RepoRoot"
+Add-Result INFO "Runtime state under ~/.codex is intentionally out of scope for this repository healthcheck."
 
 if (-not (Test-CommandExists "git")) {
     Add-Result FAIL "git is not available on PATH."
@@ -97,11 +81,13 @@ foreach ($dir in $requiredDirs) {
 
 $requiredDocs = @(
     "README.md",
+    ".gitattributes",
     "LICENSE",
     "CONTRIBUTING.md",
     "CHANGELOG.md",
     "SECURITY.md",
     "CODE_OF_CONDUCT.md",
+    "workspace-manifest.json",
     "docs/README.md",
     "docs/capability-inventory.md",
     "docs/skill-template.md",
@@ -121,33 +107,34 @@ $requiredDocs = @(
 
 foreach ($doc in $requiredDocs) {
     if (Test-Path $doc) {
-        Add-Result INFO "Required doc exists: $doc"
+        Add-Result INFO "Required file exists: $doc"
     } else {
-        Add-Result FAIL "Required doc missing: $doc"
+        Add-Result FAIL "Required file missing: $doc"
     }
 }
 
-$skillFiles = @(Get-ChildItem "skills" -Directory -ErrorAction SilentlyContinue | ForEach-Object {
-    Join-Path $_.FullName "SKILL.md"
-} | Where-Object { Test-Path $_ })
+$repoSkills = @(Get-ChildItem "skills" -Directory -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name | Sort-Object)
+$skillFiles = @($repoSkills | ForEach-Object { Join-Path (Join-Path "skills" $_) "SKILL.md" })
 
-if ($skillFiles.Count -eq 0) {
-    Add-Result FAIL "No skills with SKILL.md found under skills/."
+if ($repoSkills.Count -eq 0) {
+    Add-Result FAIL "No skills found under skills/."
 } else {
-    Add-Result INFO "Skills discovered: $($skillFiles.Count)"
+    Add-Result INFO "Skills discovered: $($repoSkills.Count)"
 }
 
 foreach ($skillFile in $skillFiles) {
-    $relative = Resolve-Path -Relative $skillFile
-    $lines = @(Get-Content $skillFile)
-
-    if ($lines.Count -lt 4) {
-        Add-Result FAIL "$relative is too short to contain valid skill frontmatter."
+    if (-not (Test-Path $skillFile)) {
+        Add-Result FAIL "$skillFile is missing."
         continue
     }
 
+    $lines = @(Get-Content $skillFile)
+    if ($lines.Count -lt 4) {
+        Add-Result FAIL "$skillFile is too short to contain valid skill frontmatter."
+        continue
+    }
     if ($lines[0] -ne "---") {
-        Add-Result FAIL "$relative frontmatter must start with ---."
+        Add-Result FAIL "$skillFile frontmatter must start with ---."
     }
 
     $endIndex = -1
@@ -159,20 +146,21 @@ foreach ($skillFile in $skillFiles) {
     }
 
     if ($endIndex -lt 0) {
-        Add-Result FAIL "$relative frontmatter closing delimiter not found in first 60 lines."
+        Add-Result FAIL "$skillFile frontmatter closing delimiter not found in first 60 lines."
         continue
     }
 
     $frontmatter = $lines[1..($endIndex - 1)]
     if (-not ($frontmatter | Where-Object { $_ -match '^name:\s*"?[^"]+"?\s*$' })) {
-        Add-Result FAIL "$relative missing simple name field in frontmatter."
+        Add-Result FAIL "$skillFile missing simple name field in frontmatter."
     }
     if (-not ($frontmatter | Where-Object { $_ -match '^description:\s*.+' })) {
-        Add-Result FAIL "$relative missing description field in frontmatter."
+        Add-Result FAIL "$skillFile missing description field in frontmatter."
     }
 }
 
-$agentFiles = @(Get-ChildItem ".codex/agents" -Filter "*.toml" -File -ErrorAction SilentlyContinue)
+$agentFiles = @(Get-ChildItem ".codex/agents" -Filter "*.toml" -File -ErrorAction SilentlyContinue | Sort-Object Name)
+$repoAgents = @($agentFiles | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.Name) })
 if ($agentFiles.Count -eq 0) {
     Add-Result FAIL "No custom agent TOML files found under .codex/agents/."
 } else {
@@ -189,8 +177,112 @@ foreach ($agentFile in $agentFiles) {
     }
 }
 
-if (Test-Path "scripts/migrate-to-codex/scripts/cli.py") {
-    Add-Result WARN "Unexpected migrate-to-codex script path under scripts/. Expected under skills/."
+$manifest = $null
+if (Test-Path "workspace-manifest.json") {
+    try {
+        $manifest = Get-Content -Raw "workspace-manifest.json" | ConvertFrom-Json
+        Add-Result INFO "workspace-manifest.json parsed successfully."
+    } catch {
+        Add-Result FAIL "workspace-manifest.json is not valid JSON: $($_.Exception.Message)"
+    }
+} else {
+    Add-Result FAIL "workspace-manifest.json is missing."
+}
+
+if ($null -ne $manifest) {
+    $allowedStatuses = @("core", "optional", "curated", "review", "deprecated", "archived")
+    $installBlockedStatuses = @("curated", "review", "deprecated", "archived")
+
+    foreach ($statusProperty in $manifest.statuses.PSObject.Properties) {
+        if ($allowedStatuses -notcontains $statusProperty.Name) {
+            Add-Result FAIL "Manifest declares unsupported status: $($statusProperty.Name)"
+        }
+    }
+
+    $manifestSkills = @($manifest.skills.PSObject.Properties.Name | Sort-Object)
+    $manifestAgents = @($manifest.agents.PSObject.Properties.Name | Sort-Object)
+
+    foreach ($skill in $repoSkills) {
+        if ($manifestSkills -notcontains $skill) {
+            Add-Result FAIL "Manifest does not classify skill: $skill"
+        }
+    }
+    foreach ($skill in $manifestSkills) {
+        if ($repoSkills -notcontains $skill) {
+            Add-Result FAIL "Manifest references missing skill directory: $skill"
+        }
+        $status = Get-ObjectPropertyValue -Object $manifest.skills -Name $skill
+        if ($allowedStatuses -notcontains $status) {
+            Add-Result FAIL "Manifest skill '$skill' has unsupported status '$status'."
+        }
+    }
+
+    foreach ($agent in $repoAgents) {
+        if ($manifestAgents -notcontains $agent) {
+            Add-Result FAIL "Manifest does not classify agent: $agent"
+        }
+    }
+    foreach ($agent in $manifestAgents) {
+        if ($repoAgents -notcontains $agent) {
+            Add-Result FAIL "Manifest references missing agent file: $agent"
+        }
+        $status = Get-ObjectPropertyValue -Object $manifest.agents -Name $agent
+        if ($allowedStatuses -notcontains $status) {
+            Add-Result FAIL "Manifest agent '$agent' has unsupported status '$status'."
+        }
+    }
+
+    $profileNames = @($manifest.profiles.PSObject.Properties.Name)
+    foreach ($profileProperty in $manifest.profiles.PSObject.Properties) {
+        $profileName = $profileProperty.Name
+        $profile = $profileProperty.Value
+
+        if ($null -ne $profile.extends) {
+            foreach ($parent in @($profile.extends)) {
+                if ($profileNames -notcontains $parent) {
+                    Add-Result FAIL "Profile '$profileName' extends unknown profile '$parent'."
+                }
+            }
+        }
+
+        if ($null -ne $profile.skills) {
+            foreach ($skill in @($profile.skills)) {
+                $status = Get-ObjectPropertyValue -Object $manifest.skills -Name $skill
+                if ($null -eq $status) {
+                    Add-Result FAIL "Profile '$profileName' references unknown skill '$skill'."
+                } elseif ($installBlockedStatuses -contains $status) {
+                    Add-Result FAIL "Profile '$profileName' references non-installable skill '$skill' with status '$status'."
+                }
+            }
+        }
+
+        if ($null -ne $profile.agents) {
+            foreach ($agent in @($profile.agents)) {
+                $status = Get-ObjectPropertyValue -Object $manifest.agents -Name $agent
+                if ($null -eq $status) {
+                    Add-Result FAIL "Profile '$profileName' references unknown agent '$agent'."
+                } elseif ($installBlockedStatuses -contains $status) {
+                    Add-Result FAIL "Profile '$profileName' references non-installable agent '$agent' with status '$status'."
+                }
+            }
+        }
+    }
+}
+
+if (Test-Path "docs/capability-inventory.md") {
+    $inventory = Get-Content -Raw "docs/capability-inventory.md"
+    foreach ($skill in $repoSkills) {
+        if ($inventory -notmatch [Regex]::Escape($skill)) {
+            Add-Result FAIL "Capability inventory does not mention skill: $skill"
+        }
+    }
+    foreach ($agent in $repoAgents) {
+        if ($inventory -notmatch [Regex]::Escape($agent)) {
+            Add-Result FAIL "Capability inventory does not mention agent: $agent"
+        }
+    }
+} else {
+    Add-Result FAIL "docs/capability-inventory.md is missing."
 }
 
 $migrateCli = "skills/migrate-to-codex/scripts/cli.py"
@@ -207,20 +299,21 @@ if ((Test-Path $migrateCli) -and (Test-CommandExists "python")) {
     Add-Result WARN "migrate-to-codex validator not found at $migrateCli."
 }
 
-$quickValidate = Join-Path $env:USERPROFILE ".codex/skills/.system/skill-creator/scripts/quick_validate.py"
-if ((Test-Path $quickValidate) -and (Test-CommandExists "python")) {
-    $previousErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = "Continue"
-    $yamlOutput = & python -c "import yaml" 2>&1
-    $yamlExitCode = $LASTEXITCODE
-    $ErrorActionPreference = $previousErrorActionPreference
-    if ($yamlExitCode -ne 0) {
-        Add-Result WARN "PyYAML is not installed for the active python. quick_validate.py would fail; install PyYAML or use a managed Python environment."
-    } else {
-        Add-Result INFO "PyYAML is available for quick_validate.py."
+foreach ($installer in @("scripts/install-workspace.ps1", "scripts/install-workspace.sh")) {
+    if (-not (Test-Path $installer)) {
+        Add-Result FAIL "Installer missing: $installer"
+        continue
     }
-} else {
-    Add-Result WARN "System skill quick_validate.py not available; using built-in lightweight skill checks only."
+    $content = Get-Content -Raw $installer
+    if ($content -notmatch "workspace-manifest\.json") {
+        Add-Result FAIL "$installer does not use workspace-manifest.json."
+    }
+    if ($installer -like "*.ps1" -and $content -notmatch "SupportsShouldProcess") {
+        Add-Result FAIL "$installer must support PowerShell WhatIf."
+    }
+    if ($installer -like "*.sh" -and $content -notmatch "--dry-run") {
+        Add-Result FAIL "$installer must support --dry-run."
+    }
 }
 
 if (Test-CommandExists "git") {
@@ -260,69 +353,8 @@ foreach ($file in $largeFiles) {
     Add-Result WARN "Large file over 5MB: $relative ($([Math]::Round($file.Length / 1MB, 2)) MB)"
 }
 
-$repoSkills = @(Get-ChildItem "skills" -Directory | Select-Object -ExpandProperty Name | Sort-Object)
-$readmeSkills = @(Get-ReadmeSectionItems -Path "README.md" -StartHeading "## Current Skills" -EndHeading "## Current Custom Agents" | Sort-Object)
-if ($readmeSkills.Count -gt 0) {
-    $diff = @(Compare-Object $repoSkills $readmeSkills)
-    if ($diff.Count -gt 0) {
-        Add-Result WARN "README Current Skills list differs from skills/ directory. Prefer docs/capability-inventory.md as source of truth."
-    } else {
-        Add-Result INFO "README Current Skills list matches skills/ directory."
-    }
-} else {
-    Add-Result INFO "README delegates skill inventory to docs/capability-inventory.md."
-}
-
-if (Test-Path "docs/capability-inventory.md") {
-    $inventory = Get-Content -Raw "docs/capability-inventory.md"
-    foreach ($skill in $repoSkills) {
-        if ($inventory -notmatch [Regex]::Escape($skill)) {
-            Add-Result WARN "Capability inventory does not mention skill: $skill"
-        }
-    }
-    foreach ($agent in $agentFiles) {
-        $name = [IO.Path]::GetFileNameWithoutExtension($agent.Name)
-        if ($inventory -notmatch [Regex]::Escape($name)) {
-            Add-Result WARN "Capability inventory does not mention agent: $name"
-        }
-    }
-} else {
-    Add-Result FAIL "docs/capability-inventory.md is missing."
-}
-
-if (-not $env:GITHUB_ACTIONS) {
-    $codexSkills = Join-Path $env:USERPROFILE ".codex/skills"
-    $codexAgents = Join-Path $env:USERPROFILE ".codex/agents"
-
-    if (Test-Path $codexSkills) {
-        $installedSkills = @(Get-ChildItem $codexSkills -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne ".system" } | Select-Object -ExpandProperty Name)
-        $missingSkills = @($repoSkills | Where-Object { $_ -notin $installedSkills })
-        if ($missingSkills.Count -gt 0) {
-            Add-Result WARN "Repo skills not installed in ~/.codex/skills: $($missingSkills -join ', ')"
-        } else {
-            Add-Result INFO "All repo skills are installed in ~/.codex/skills."
-        }
-    } else {
-        Add-Result WARN "~/.codex/skills does not exist."
-    }
-
-    if (Test-Path $codexAgents) {
-        $installedAgents = @(Get-ChildItem $codexAgents -Filter "*.toml" -File -ErrorAction SilentlyContinue | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.Name) })
-        $repoAgents = @($agentFiles | ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.Name) })
-        $missingAgents = @($repoAgents | Where-Object { $_ -notin $installedAgents })
-        if ($missingAgents.Count -gt 0) {
-            Add-Result WARN "Repo agents not installed in ~/.codex/agents: $($missingAgents -join ', ')"
-        } else {
-            Add-Result INFO "All repo agents are installed in ~/.codex/agents."
-        }
-    } else {
-        Add-Result WARN "~/.codex/agents does not exist."
-    }
-}
-
-Write-Host "Workspace healthcheck"
-Write-Host "====================="
-
+Write-Host "Workspace repository healthcheck"
+Write-Host "================================"
 foreach ($message in $Infos) {
     Write-Host "[INFO] $message"
 }

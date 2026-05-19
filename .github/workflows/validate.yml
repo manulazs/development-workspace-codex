@@ -36,7 +36,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -WhatIf
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
 
       - name: Validate shell script syntax
         if: runner.os != 'Windows'
@@ -56,7 +56,7 @@ jobs:
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          scripts/install-workspace.sh --dry-run
+          scripts/install-workspace.sh --profile governed-codex --dry-run
 
       - name: Validate custom agents
         shell: bash

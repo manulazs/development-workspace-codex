@@ -4,6 +4,12 @@ All notable changes to this workspace are tracked here.
 
 ## Unreleased
 
+- Reposition the repository as a public, portable Codex workspace template rather than a mirror of local `~/.codex` state.
+- Add `workspace-manifest.json` with reusable adoption profiles and capability status classification.
+- Change install scripts to profile-based optional adoption with `-WhatIf`/`--dry-run`.
+- Change healthchecks to validate repository integrity instead of local runtime synchronization.
+- Reclassify skills and subagent templates with `core`, `optional`, `curated`, `review`, `deprecated`, and `archived` statuses.
+- Add `.gitattributes` so shell scripts keep LF line endings across Windows and macOS/Linux clones.
 - Prepare public repository documentation.
 - Add cross-platform setup and validation scripts.
 - Formalize self-improvement, subagent, and capability lifecycles.

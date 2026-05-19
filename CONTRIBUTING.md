@@ -1,11 +1,12 @@
 # Contributing
 
-This repository is a reusable Codex workspace. Contributions should improve reliability, portability, governance, or capability quality without adding avoidable complexity.
+This repository is a public, portable Codex workspace template. Contributions should improve reliability, portability, governance, or capability quality without adding avoidable complexity or local runtime assumptions.
 
 ## Before You Start
 
 - Read `README.md` and `docs/README.md`.
 - Run the healthcheck for your platform.
+- Inspect `workspace-manifest.json` before changing adoption behavior.
 - Check `docs/capability-inventory.md` before adding skills or agents.
 - Check `docs/self-improvement-lifecycle.md` before adding permanent rules.
 
@@ -29,7 +30,13 @@ macOS/Linux:
 
 ```bash
 scripts/healthcheck.sh
-scripts/install-workspace.sh --dry-run
+scripts/install-workspace.sh --profile governed-codex --dry-run
+```
+
+Windows install preview:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
 ```
 
 Agent validation:
@@ -41,8 +48,9 @@ python skills/migrate-to-codex/scripts/cli.py --validate-target .
 ## Adding Skills
 
 - Use `docs/skill-template.md`.
-- Prove the capability is not already covered by an existing skill, system skill, or plugin.
+- Prove the capability is not already covered by an existing skill, agent, runbook, system skill, or plugin.
 - Document external commands, network use, destructive actions, and secret risk.
+- Update `workspace-manifest.json`.
 - Update `docs/capability-inventory.md`.
 - Validate before committing.
 
@@ -52,6 +60,7 @@ python skills/migrate-to-codex/scripts/cli.py --validate-target .
 - Compare against `.codex/agents/` and `docs/capability-inventory.md`.
 - Keep ownership, permissions, and outputs narrow.
 - Prefer read-only for audit and review roles.
+- Update `workspace-manifest.json`.
 - Update `docs/capability-inventory.md`.
 
 ## Self-Improvement
@@ -69,3 +78,4 @@ Every pull request should explain:
 - Why it changed.
 - What validations were run.
 - Whether skills, agents, inventory, or instructions were affected.
+- Whether adoption profiles or local-runtime boundaries were affected.
