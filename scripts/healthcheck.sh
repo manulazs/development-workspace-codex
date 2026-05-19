@@ -43,6 +43,13 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
+PYTHON_BIN=""
+if command_exists python3; then
+  PYTHON_BIN="python3"
+elif command_exists python; then
+  PYTHON_BIN="python"
+fi
+
 cd "$REPO_ROOT" || exit 1
 add_result INFO "Repository root: $REPO_ROOT"
 
@@ -107,7 +114,10 @@ for doc in "${required_docs[@]}"; do
   fi
 done
 
-mapfile -t skill_files < <(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -type f 2>/dev/null | sort)
+skill_files=()
+while IFS= read -r skill_file; do
+  skill_files+=("$skill_file")
+done < <(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -type f 2>/dev/null | sort)
 if [[ "${#skill_files[@]}" -eq 0 ]]; then
   add_result FAIL "No skills with SKILL.md found under skills/."
 else
@@ -132,7 +142,10 @@ for skill_file in "${skill_files[@]}"; do
   fi
 done
 
-mapfile -t agent_files < <(find .codex/agents -maxdepth 1 -name '*.toml' -type f 2>/dev/null | sort)
+agent_files=()
+while IFS= read -r agent_file; do
+  agent_files+=("$agent_file")
+done < <(find .codex/agents -maxdepth 1 -name '*.toml' -type f 2>/dev/null | sort)
 if [[ "${#agent_files[@]}" -eq 0 ]]; then
   add_result FAIL "No custom agent TOML files found under .codex/agents/."
 else
@@ -148,21 +161,21 @@ for agent_file in "${agent_files[@]}"; do
 done
 
 migrate_cli="skills/migrate-to-codex/scripts/cli.py"
-if [[ -f "$migrate_cli" ]] && command_exists python; then
-  if python "$migrate_cli" --validate-target . >/tmp/codex-workspace-migrate-validate.log 2>&1; then
+if [[ -f "$migrate_cli" && -n "$PYTHON_BIN" ]]; then
+  if "$PYTHON_BIN" "$migrate_cli" --validate-target . >/tmp/codex-workspace-migrate-validate.log 2>&1; then
     add_result INFO "migrate-to-codex validation passed."
   else
     add_result FAIL "migrate-to-codex validation failed. See /tmp/codex-workspace-migrate-validate.log."
   fi
-elif ! command_exists python; then
-  add_result WARN "python is not available; skipped migrate-to-codex validation."
+elif [[ -z "$PYTHON_BIN" ]]; then
+  add_result WARN "python3/python is not available; skipped migrate-to-codex validation."
 else
   add_result WARN "migrate-to-codex validator not found at $migrate_cli."
 fi
 
 quick_validate="$HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py"
-if [[ -f "$quick_validate" ]] && command_exists python; then
-  if python -c "import yaml" >/dev/null 2>&1; then
+if [[ -f "$quick_validate" && -n "$PYTHON_BIN" ]]; then
+  if "$PYTHON_BIN" -c "import yaml" >/dev/null 2>&1; then
     add_result INFO "PyYAML is available for quick_validate.py."
   else
     add_result WARN "PyYAML is not installed for the active python. quick_validate.py would fail; install PyYAML or use a managed Python environment."
@@ -177,7 +190,7 @@ if command_exists git; then
     [[ -f "$file" ]] || continue
     size="$(wc -c < "$file" | tr -d ' ')"
     [[ "$size" -gt 1048576 ]] && continue
-    if grep -Eiq "$secret_patterns" "$file"; then
+    if grep -Eiq -e "$secret_patterns" "$file"; then
       add_result FAIL "Potential secret pattern found in tracked file: $file"
     fi
   done < <(git ls-files)
@@ -241,9 +254,15 @@ fi
 
 echo "Workspace healthcheck"
 echo "====================="
-for message in "${INFOS[@]}"; do echo "[INFO] $message"; done
-for message in "${WARNS[@]}"; do echo "[WARN] $message"; done
-for message in "${FAILS[@]}"; do echo "[FAIL] $message"; done
+if [[ "$INFO_COUNT" -gt 0 ]]; then
+  for message in "${INFOS[@]}"; do echo "[INFO] $message"; done
+fi
+if [[ "$WARN_COUNT" -gt 0 ]]; then
+  for message in "${WARNS[@]}"; do echo "[WARN] $message"; done
+fi
+if [[ "$FAIL_COUNT" -gt 0 ]]; then
+  for message in "${FAILS[@]}"; do echo "[FAIL] $message"; done
+fi
 echo
 echo "Summary: $INFO_COUNT info, $WARN_COUNT warnings, $FAIL_COUNT failures."
 
