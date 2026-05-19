@@ -8,6 +8,8 @@ This directory contains operating documentation for the Codex development worksp
 - `runbooks/setup-macos.md`: macOS/Linux setup and validation.
 - `operations/workspace-health.md`: current health state and known gaps.
 - `capability-inventory.md`: tracked skills, agents, status, risk, and overlap.
+- `skill-template.md`: proposal and validation template for new or changed skills.
+- `agent-template.md`: proposal and validation template for new or changed subagents.
 - `subagents-policy.md`: subagent orchestration rules.
 - `subagents-lifecycle.md`: creation, reuse, validation, and retirement of custom agents.
 - `self-improvement-lifecycle.md`: lesson, pattern, skill, agent, rule, audit, and inventory promotion flow.
@@ -19,6 +21,7 @@ This directory contains operating documentation for the Codex development worksp
 - `lessons/`: recurring errors, fixes, and learnings.
 - `patterns/`: approved reusable workflows and rejected patterns.
 - `patterns/rejected/`: rejected workflows that should not be revived without new evidence.
+- `archive/`: retired capabilities kept outside runtime-loadable paths.
 
 ## Maintenance
 

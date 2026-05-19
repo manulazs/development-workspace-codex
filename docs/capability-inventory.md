@@ -10,6 +10,7 @@ This file is the source of truth for tracked workspace skills and custom agents.
 - `review`: useful, but overlap or risk should be reviewed before broad use.
 - `curated`: keep as source material; install or invoke only when the task clearly needs it.
 - `retire-candidate`: remove or archive if no validated use appears in the next review.
+- `archived`: removed from runtime-loadable locations but retained for history.
 
 ## Runtime Status
 
@@ -19,6 +20,26 @@ The repository and active Codex runtime are separate:
 - Runtime install: `~/.codex/skills` and `~/.codex/agents`.
 
 Run `scripts/healthcheck.ps1` to compare them. Run `scripts/install-workspace.ps1 -WhatIf` before copying anything into the runtime profile.
+
+## Capability Lifecycle
+
+Use `docs/skill-template.md` before adding or materially changing a skill. Use `docs/agent-template.md` before adding or materially changing a custom agent.
+
+Creation requires:
+
+- Existing capability check against local skills, system skills, plugins, and custom agents.
+- Clear trigger, owner, risk, validation signal, and retention decision.
+- Inventory update in this file.
+- Validation through the platform healthcheck and relevant skill/agent validator.
+
+Archive or retire a capability when:
+
+- It duplicates a better native, plugin, skill, or agent capability.
+- It has no demonstrated use and adds maintenance overhead.
+- Its permission or command risk is higher than its value.
+- Its workflow is better represented as a runbook, pattern, or short `AGENTS.md` rule.
+
+Archived capabilities must be moved outside runtime-loadable paths: use `docs/archive/agents/` for agent history and `docs/archive/skills/` for skill history.
 
 ## Skills
 
@@ -77,3 +98,4 @@ Run `scripts/healthcheck.ps1` to compare them. Run `scripts/install-workspace.ps
 - Do not invoke a custom agent if the main agent can complete the next step faster and safer.
 - Do not add a new skill or agent until this inventory shows the gap.
 - Review `review` and `curated` items quarterly.
+- Move obsolete capabilities to `docs/archive/` or remove them entirely; do not leave retired agents under `.codex/agents/` or retired skills under `skills/`.

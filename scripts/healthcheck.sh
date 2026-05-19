@@ -79,6 +79,8 @@ required_docs=(
   "README.md"
   "docs/README.md"
   "docs/capability-inventory.md"
+  "docs/skill-template.md"
+  "docs/agent-template.md"
   "docs/subagents-policy.md"
   "docs/subagents-lifecycle.md"
   "docs/self-improvement-lifecycle.md"
@@ -87,6 +89,7 @@ required_docs=(
   "docs/patterns/rejected/README.md"
   "docs/audits/TEMPLATE.md"
   "docs/decisions/TEMPLATE.md"
+  "docs/archive/README.md"
   "docs/runbooks/setup-windows.md"
   "docs/runbooks/setup-macos.md"
 )
