@@ -1,6 +1,8 @@
 # Windows Setup And Validation Runbook
 
-This repository is Windows-first. Use PowerShell from the repository root.
+This file is kept for compatibility. The canonical Windows setup runbook is `docs/runbooks/setup-windows.md`.
+
+Use PowerShell from the repository root.
 
 ## 1. Inspect
 

@@ -2,6 +2,20 @@
 
 Private, reproducible workspace for Manuel's Codex configuration, custom skills, and agentic workflow conventions.
 
+![Validate Workspace](https://github.com/manulazs/development-workspace-codex/actions/workflows/validate.yml/badge.svg)
+
+## What This Repository Is
+
+This repository is the source of truth for a reusable Codex development workspace:
+
+- custom or adapted Codex skills;
+- custom Codex subagents;
+- global instruction templates;
+- healthcheck and install scripts;
+- operational docs for governance, self-improvement, and capability inventory.
+
+The active runtime install is separate and lives under `~/.codex`.
+
 ## Contents
 
 - `skills/`: custom or adapted Codex skills.
@@ -12,6 +26,48 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
 - `docs/runbooks/`: operational setup and validation procedures.
 - `docs/lessons/` and `docs/patterns/`: operational memory for recurring fixes and reusable workflows.
 - `scripts/`: Windows-first maintenance scripts.
+
+## Quickstart Windows
+
+```powershell
+git clone https://github.com/manulazs/development-workspace-codex.git
+cd development-workspace-codex
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -WhatIf
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1
+```
+
+Restart Codex after installing or updating skills or agents.
+
+Detailed steps: `docs/runbooks/setup-windows.md`.
+
+## Quickstart macOS/Linux
+
+```bash
+git clone https://github.com/manulazs/development-workspace-codex.git
+cd development-workspace-codex
+chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
+scripts/healthcheck.sh
+scripts/install-workspace.sh --dry-run
+scripts/install-workspace.sh
+```
+
+Restart Codex after installing or updating skills or agents.
+
+Detailed steps: `docs/runbooks/setup-macos.md`.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  repo[Repository source] --> health[Healthcheck]
+  repo --> install[Install script]
+  install --> runtime[~/.codex runtime]
+  runtime --> use[Codex sessions]
+  use --> lessons[Lessons and patterns]
+  lessons --> inventory[Capability inventory]
+  inventory --> repo
+```
 
 ## Current Skills
 
@@ -38,20 +94,6 @@ The tracked custom agents are also inventoried in `docs/capability-inventory.md`
 - `package_manager`: dependency, lockfile, version, and environment specialist.
 - `local_skill_builder`: creates project-local skills for recurring workflows and asks before global promotion.
 - `version_control_manager`: Git hygiene, commit, push, and repository state specialist.
-
-## Reproduce Locally
-
-Use PowerShell from this repository root:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -WhatIf
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1
-```
-
-Restart Codex after installing or updating skills or agents so runtime metadata is picked up.
-
-Detailed steps are in `docs/runbooks/windows-setup-and-validation.md`.
 
 ## Governance
 
