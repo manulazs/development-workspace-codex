@@ -54,13 +54,13 @@ When adding or updating model assignments for custom agents, prefer `gpt-5.3-cod
 
 ## Subagent Policy
 
-Use 0 subagents by default. Use 1 subagent only when Manuel explicitly allows subagent work, the task has a clear independent scope, and the output can be reviewed without redoing the work.
+Use 0 subagents by default for small, linear, or tightly coupled work. Use subagents when delegation improves quality, speed, or risk coverage and the task has a clear independent scope.
 
-Use multiple subagents only for independent workstreams with disjoint ownership. The default limit is 3 subagents per round; more requires explicit justification.
+Use multiple subagents for independent workstreams with disjoint ownership or clearly separate responsibilities. Do not impose an artificial numeric limit; require explicit justification when many subagents are used or when scopes look similar.
 
-Never delegate the next critical-path blocker, never ask multiple similar agents the same question, and always record objective, owner, read/write scope, input, output, dependency, and risk before spawning.
+Never delegate the next critical-path blocker, never ask multiple similar agents the same question, and always record objective, owner, read/write scope, input, output, dependency, and risk before spawning. The orchestrator can propose or use subagents outside `/plan` when runtime rules permit it; if active runtime instructions require explicit user authorization, those instructions prevail.
 
-The detailed policy is `docs/subagents-policy.md`.
+The detailed policy is `docs/subagents-policy.md`. Creation, reuse, validation, and retirement of custom agents are governed by `docs/subagents-lifecycle.md`.
 
 ## Self-Improvement
 
@@ -68,4 +68,4 @@ Record recurring errors and validated fixes in `docs/lessons/`. Promote stable r
 
 Update `docs/capability-inventory.md` whenever skills or agents are added, removed, reclassified, or materially changed.
 
-Prefer PowerShell scripts for repository automation because Manuel's active environment is Windows/PowerShell.
+Prefer PowerShell for Windows automation and POSIX shell scripts for macOS/Linux parity.

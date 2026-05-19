@@ -32,12 +32,14 @@ Use this file as the source template for Manuel's global Codex behavior.
 
 ## Subagent Control
 
-- Use 0 subagents by default.
-- Use 1 subagent only when Manuel explicitly allows subagent work and the task is independent, scoped, and reviewable.
-- Use multiple subagents only for independent workstreams with disjoint ownership; default maximum is 3 per round.
+- Use 0 subagents by default for small, linear, or tightly coupled work.
+- Use subagents when delegation improves speed, quality, or risk coverage and the task is independent, scoped, and reviewable.
+- Use multiple subagents for independent workstreams with disjoint ownership or clearly separate responsibilities.
+- Do not enforce an artificial numeric limit; justify many subagents or subagents with similar-looking scopes.
 - Do not delegate the immediate critical-path blocker.
 - Do not ask multiple similar agents to do the same work.
 - Before spawning, record objective, owner, read/write scope, input, expected output, dependencies, and risk.
+- The orchestrator may propose or use subagents outside `/plan` when the task justifies it and the runtime permits it. If active runtime instructions require explicit user authorization, those instructions prevail.
 
 ## Local Skill Evolution
 
