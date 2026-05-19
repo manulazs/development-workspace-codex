@@ -185,9 +185,8 @@ PYTHON_BIN="$(find_python)"
 if [ -z "$PYTHON_BIN" ]; then
   add_result WARN "Python 3 is not available; skipped JSON manifest and migrate validation."
 else
-  while IFS="$(printf '\t')" read -r level message; do
-    [ -n "$level" ] && add_result "$level" "$message"
-  done < <("$PYTHON_BIN" - "workspace-manifest.json" <<'PY'
+  manifest_report="$(mktemp "${TMPDIR:-/tmp}/codex-workspace-manifest.XXXXXX")"
+  if "$PYTHON_BIN" - "workspace-manifest.json" > "$manifest_report" <<'PY'
 import json
 import os
 import sys
@@ -260,7 +259,14 @@ for profile_name, profile in profiles.items():
         elif status in blocked:
             emit("FAIL", f"Profile '{profile_name}' references non-installable agent '{agent}' with status '{status}'.")
 PY
-)
+  then
+    while IFS="$(printf '\t')" read -r level message; do
+      [ -n "$level" ] && add_result "$level" "$message"
+    done < "$manifest_report"
+  else
+    add_result FAIL "workspace-manifest.json validation script failed."
+  fi
+  rm -f "$manifest_report"
 fi
 
 if [ -f docs/capability-inventory.md ]; then
@@ -316,7 +322,7 @@ if command_exists git; then
     [ -f "$file" ] || continue
     size="$(wc -c < "$file" | tr -d ' ')"
     [ "$size" -gt 1048576 ] && continue
-    if grep -Eiq -- "$secret_patterns" "$file"; then
+    if grep -Eiq -e "$secret_patterns" "$file"; then
       add_result FAIL "Potential secret pattern found in tracked file: $file"
     fi
   done < <(git ls-files)
@@ -328,9 +334,15 @@ done < <(find . -path ./.git -prune -o -type f -size +5M -print)
 
 echo "Workspace repository healthcheck"
 echo "================================"
-for message in "${INFOS[@]}"; do echo "[INFO] $message"; done
-for message in "${WARNS[@]}"; do echo "[WARN] $message"; done
-for message in "${FAILS[@]}"; do echo "[FAIL] $message"; done
+if [ "$INFO_COUNT" -gt 0 ]; then
+  for message in "${INFOS[@]}"; do echo "[INFO] $message"; done
+fi
+if [ "$WARN_COUNT" -gt 0 ]; then
+  for message in "${WARNS[@]}"; do echo "[WARN] $message"; done
+fi
+if [ "$FAIL_COUNT" -gt 0 ]; then
+  for message in "${FAILS[@]}"; do echo "[FAIL] $message"; done
+fi
 echo
 echo "Summary: $INFO_COUNT info, $WARN_COUNT warnings, $FAIL_COUNT failures."
 
