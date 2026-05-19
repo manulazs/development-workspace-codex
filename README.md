@@ -17,6 +17,7 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
 - `migrate-to-codex`: official OpenAI skill for migrating supported instruction files, skills, agents, and MCP config into Codex project and global files.
 - `plan-deep`: manual-only Plan Mode add-on for deep planning, insights, task cataloging, and subagent delegation recommendations.
 - `plan-deep-skills`: manual-only Plan Mode add-on that extends `plan-deep` with local/external skill evaluation through `find-skills` and `migrate-to-codex`.
+- `strategic-compact`: manual-only Codex context compaction checklist adapted from `affaan-m/ECC`.
 - `frontend-design`: migrated from Anthropic's frontend design skill through OpenAI's `migrate-to-codex` workflow.
 - `pdf`: official OpenAI skill for reading, creating, and reviewing PDFs with layout fidelity.
 - `screenshot`: official OpenAI skill for desktop and system screenshot capture.
@@ -54,6 +55,7 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
 - `code_reviewer`: read-only reviewer that uses `codex review` when possible.
 - `security_auditor`: security scan and threat-modeling specialist.
 - `package_manager`: dependency, lockfile, version, and environment specialist.
+- `local_skill_builder`: creates project-local skills for recurring workflows and asks before global promotion.
 - `version_control_manager`: Git hygiene, commit, push, and repository state specialist.
 
 ## Reproduce Locally
@@ -67,6 +69,7 @@ for skill in \
   migrate-to-codex \
   plan-deep \
   plan-deep-skills \
+  strategic-compact \
   frontend-design \
   pdf \
   screenshot \

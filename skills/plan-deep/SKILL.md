@@ -45,6 +45,7 @@ Create a decision-complete plan that:
 5. Map agents.
    - Check built-in roles first: `default`, `explorer`, `worker`.
    - Check existing custom agents under `.codex/agents` and `~/.codex/agents`.
+   - When a stable project-local workflow clearly deserves reusable instructions, recommend `local_skill_builder` for a separate local skill creation task.
    - Recommend delegation only when the task can run in parallel or has a clear ownership boundary.
    - Do not recommend delegating work that blocks the immediate next critical-path step.
 

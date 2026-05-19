@@ -47,7 +47,8 @@ Create a decision-complete plan that:
 
 5. Build the task and capability map.
    - For each task, identify agent, skill, inputs, output, validation, dependencies, and risk.
-   - Recommend new custom agents or skills only when the gap is material.
+   - Recommend new custom agents or local skills only when the gap is material.
+   - When a project-local skill should be created during implementation, assign that task to `local_skill_builder`.
    - Do not delegate or install during planning.
 
 ## Final Plan Shape

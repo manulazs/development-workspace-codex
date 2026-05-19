@@ -29,3 +29,10 @@ Use this file as the source template for Manuel's global Codex behavior.
 - If no project `AGENTS.md` exists, create one when file edits are allowed and the project has enough context to record useful guidance.
 - Keep project `AGENTS.md` updated as real conventions emerge, including project structure, commands, validation steps, important decisions, constraints, and known risks.
 - Prefer factual, compact instructions based on repository evidence and Manuel's explicit decisions. Do not invent conventions.
+
+## Local Skill Evolution
+
+- As projects evolve, create local skills only when a workflow, correction, or project-specific procedure is clearly recurring and useful beyond the immediate task.
+- Prefer delegating local skill creation to `local_skill_builder` when subagents are available.
+- Keep new skills local to the project by default, under the project's documented local skill convention.
+- Promote a local skill to global `~/.codex/skills` only after asking Manuel directly and receiving explicit approval.

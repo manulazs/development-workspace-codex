@@ -46,3 +46,5 @@ When `skill-installer` is invoked directly for an external skill, still perform 
 Validate every changed skill with `skill-creator/scripts/quick_validate.py` before copying it into `~/.codex/skills` or committing it to this repository.
 
 Validate changed custom agents with `migrate-to-codex --validate-target .` before copying them into `~/.codex/agents` or committing them to this repository.
+
+When adding or updating model assignments for custom agents, prefer `gpt-5.3-codex` with high reasoning for implementation-heavy coding, SQL, dbt, package, or environment work where Codex-specific efficiency matters; prefer `gpt-5.4` for visual, analytical, review, security, and ambiguous reasoning tasks.
