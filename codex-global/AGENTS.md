@@ -16,3 +16,15 @@ Use this file as the source template for Manuel's global Codex behavior.
 - If the skill comes from another agent ecosystem, such as Claude Code, Cursor, Copilot, Gemini, or an unknown format, use `migrate-to-codex` before installation.
 - If conversion is possible, install the converted Codex-compatible version instead of the original agent-specific version.
 - If conversion is not suitable, explain the blocker and do not install the skill unless Manuel explicitly asks to preserve it unchanged and accepts the compatibility risk.
+
+## Communication Mode
+
+- Keep `caveman lite` as the default response style in all conversations.
+- Use concise, low-filler phrasing by default while preserving technical correctness.
+- Only switch away from `caveman lite` when Manuel explicitly asks for normal mode or a different style.
+
+## Repository Discipline
+
+- In Manuel's development workspace repositories, treat change tracking as mandatory by default.
+- After each coherent modification set, stage, commit, and push without waiting for an explicit prompt.
+- Skip automatic commit/push only if Manuel asks to pause, or if permissions/network block the operation.

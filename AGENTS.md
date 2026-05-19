@@ -9,6 +9,9 @@ This repository stores Manuel's reproducible Codex development workspace: global
 - Preserve source attribution when adapting third-party skills.
 - Do not commit secrets, tokens, private logs, local database files, authentication files, or Codex internal state.
 - Use clear commits that describe one coherent environment change at a time.
+- By default, every workspace modification must be recorded in this repository without waiting for an explicit request.
+- After completing a coherent change set, stage, commit, and push to `origin/main` when network/permissions allow.
+- Only skip commit/push when Manuel explicitly asks to hold changes, or when a technical blocker prevents it.
 
 ## Scope
 
