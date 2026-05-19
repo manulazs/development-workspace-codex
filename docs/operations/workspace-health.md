@@ -7,9 +7,13 @@ Last reviewed: 2026-05-19
 - Repository path: `C:\Users\c36647b\OneDrive - CNH Industrial\Documentos\github\development-workspace-codex`
 - Branch: `main`
 - Remote: `origin`
+- Latest published governance commit: `3288234 govern workspace operations`
 - Repository capabilities: 31 skills, 9 custom agents.
-- Runtime skills observed before implementation: `.system`, `powerbi-dax-html`.
-- Runtime agents observed before implementation: no `~/.codex/agents` directory.
+- Current Windows validation: `scripts/healthcheck.ps1` passes with 0 failures.
+- Current agent validation: `migrate-to-codex --validate-target .` passes.
+- Known runtime gap: repo skills and custom agents are not installed into the active `~/.codex` profile.
+- Known validation gap: active Python lacks `PyYAML`, so full `quick_validate.py` validation is not available.
+- Known platform gap: macOS/Linux scripts and CI are not implemented yet.
 
 ## Operational Gap
 
