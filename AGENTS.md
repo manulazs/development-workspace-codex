@@ -31,8 +31,12 @@ Do not track:
 
 Before adding external skills, check whether an existing local, global, project, or built-in skill already fits the purpose.
 
+Avoid maintaining user-level duplicates for capabilities already covered by Codex system skills or enabled plugins unless the local version has a clear, documented advantage. Prefer the system/plugin version for broad capabilities such as OpenAI docs, presentations, spreadsheets, documents, or browser automation.
+
 External skills should be reviewed before installation. Avoid silent installation flags unless Manuel explicitly approves unattended installation for a low-risk case.
 
 If an external skill is useful but not directly compatible with Codex, use `migrate-to-codex` to migrate or adapt it before installation. Do not install a Claude Code or other agent-specific skill unchanged unless Manuel explicitly accepts the compatibility risk.
 
 When `skill-installer` is invoked directly for an external skill, still perform the compatibility check first. If the source is from another agent ecosystem or unknown format, route through `migrate-to-codex` before installing.
+
+Validate every changed skill with `skill-creator/scripts/quick_validate.py` before copying it into `~/.codex/skills` or committing it to this repository.

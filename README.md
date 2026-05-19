@@ -15,20 +15,32 @@ Private, reproducible workspace for Manuel's Codex configuration, custom skills,
   - never install skills silently or with automatic confirmation unless explicitly approved.
 - `migrate-to-codex`: official OpenAI skill for migrating supported instruction files, skills, agents, and MCP config into Codex project and global files.
 - `frontend-design`: migrated from Anthropic's frontend design skill through OpenAI's `migrate-to-codex` workflow.
-- `openai-docs`: official OpenAI docs skill for current API and model guidance.
 - `pdf`: official OpenAI skill for reading, creating, and reviewing PDFs with layout fidelity.
 - `screenshot`: official OpenAI skill for desktop and system screenshot capture.
-- `xlsx`: imported from Anthropic `skills`.
+- `spreadsheet`: OpenAI spreadsheet workflow reconstructed from the published `skills.sh` listing after the GitHub tree path was unavailable.
+- `powerbi-expert`: community Power BI, DAX, Power Query, and report design skill from `personamanagmentlayer/pcl`, with Codex-valid frontmatter.
+- `using-dbt-for-analytics-engineering`: dbt Labs skill for analytics engineering workflows.
+- `adding-dbt-unit-test`: dbt Labs skill for dbt unit tests.
+- `answering-natural-language-questions-with-dbt`: dbt Labs skill for semantic-layer business questions.
+- `building-dbt-semantic-layer`: dbt Labs skill for semantic models, metrics, and dimensions.
+- `configuring-dbt-mcp-server`: dbt Labs skill for dbt MCP setup and troubleshooting.
+- `creating-mermaid-dbt-dag`: dbt Labs skill for Mermaid lineage diagrams.
+- `fetching-dbt-docs`: dbt Labs skill for dbt documentation lookup.
+- `running-dbt-commands`: dbt Labs skill for dbt CLI command usage.
+- `troubleshooting-dbt-job-errors`: dbt Labs skill for dbt job failures.
+- `working-with-dbt-mesh`: dbt Labs skill for dbt Mesh.
+- `migrating-dbt-core-to-fusion`: dbt Labs migration skill for dbt Core to Fusion.
+- `migrating-dbt-project-across-platforms`: dbt Labs migration skill for warehouse/platform migrations.
+- `using-dbt-index`: dbt Labs extras skill for dbt index usage.
+- `auditing-skills`: dbt Labs skill-auditing helper.
 - `webapp-testing`: imported from Anthropic `skills`.
-- `web-artifacts-builder`: imported from Anthropic `skills`.
-- `pptx`: imported from Anthropic `skills`.
+- `web-artifacts-builder`: imported from Anthropic `skills` and adapted to Codex/local HTML artifact wording.
 - `theme-factory`: imported from Anthropic `skills`.
-- `canvas-design`: imported from Anthropic `skills`.
-- `agent-browser`: imported from Vercel Labs `agent-browser`.
+- `canvas-design`: imported from Anthropic `skills` and adapted to Codex wording.
+- `agent-browser`: imported from Vercel Labs `agent-browser`, with Codex-valid frontmatter and non-overriding browser-tool guidance.
 - `caveman`: imported from JuliusBrussee `caveman`.
 - `caveman-compress`: imported from JuliusBrussee `caveman`.
 - `caveman-commit`: imported from JuliusBrussee `caveman`.
-- `caveman-help`: imported from JuliusBrussee `caveman`.
 
 ## Reproduce Locally
 
@@ -40,20 +52,32 @@ for skill in \
   find-skills \
   migrate-to-codex \
   frontend-design \
-  openai-docs \
   pdf \
   screenshot \
-  xlsx \
+  spreadsheet \
+  powerbi-expert \
+  using-dbt-for-analytics-engineering \
+  adding-dbt-unit-test \
+  answering-natural-language-questions-with-dbt \
+  building-dbt-semantic-layer \
+  configuring-dbt-mcp-server \
+  creating-mermaid-dbt-dag \
+  fetching-dbt-docs \
+  running-dbt-commands \
+  troubleshooting-dbt-job-errors \
+  working-with-dbt-mesh \
+  migrating-dbt-core-to-fusion \
+  migrating-dbt-project-across-platforms \
+  using-dbt-index \
+  auditing-skills \
   webapp-testing \
   web-artifacts-builder \
-  pptx \
   theme-factory \
   canvas-design \
   agent-browser \
   caveman \
   caveman-compress \
-  caveman-commit \
-  caveman-help
+  caveman-commit
 do
   cp -R "skills/$skill" ~/.codex/skills/
 done
