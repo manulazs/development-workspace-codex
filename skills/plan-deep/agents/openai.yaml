@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Deep"
+  short_description: "Deep manual planning with delegation matrix"
+  default_prompt: "Use plan-deep to analyze this task, identify insights, decompose work, and recommend an agent delegation matrix without implementing changes."

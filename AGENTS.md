@@ -18,6 +18,7 @@ This repository stores Manuel's reproducible Codex development workspace: global
 Track:
 
 - Custom or adapted skills under `skills/`.
+- Custom Codex subagents under `.codex/agents/`.
 - Global Codex instruction templates under `codex-global/`.
 - Reproduction notes and decisions under `docs/`.
 
@@ -43,3 +44,5 @@ If an external skill is useful but not directly compatible with Codex, use `migr
 When `skill-installer` is invoked directly for an external skill, still perform the compatibility check first. If the source is from another agent ecosystem or unknown format, route through `migrate-to-codex` before installing.
 
 Validate every changed skill with `skill-creator/scripts/quick_validate.py` before copying it into `~/.codex/skills` or committing it to this repository.
+
+Validate changed custom agents with `migrate-to-codex --validate-target .` before copying them into `~/.codex/agents` or committing them to this repository.

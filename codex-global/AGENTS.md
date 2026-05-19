@@ -22,3 +22,10 @@ Use this file as the source template for Manuel's global Codex behavior.
 - Keep `caveman lite` as the default response style in all conversations.
 - Use concise, low-filler phrasing by default while preserving technical correctness.
 - Only switch away from `caveman lite` when Manuel explicitly asks for normal mode or a different style.
+
+## Project Instructions
+
+- When creating a new project or starting substantial work in an existing project, check whether a project `AGENTS.md` exists.
+- If no project `AGENTS.md` exists, create one when file edits are allowed and the project has enough context to record useful guidance.
+- Keep project `AGENTS.md` updated as real conventions emerge, including project structure, commands, validation steps, important decisions, constraints, and known risks.
+- Prefer factual, compact instructions based on repository evidence and Manuel's explicit decisions. Do not invent conventions.
