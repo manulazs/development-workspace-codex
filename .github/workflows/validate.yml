@@ -7,13 +7,58 @@ on:
   pull_request:
 
 jobs:
-  healthcheck:
-    runs-on: windows-latest
+  validate:
+    name: Validate on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - macos-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run workspace healthcheck
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run Windows healthcheck
+        if: runner.os == 'Windows'
         shell: powershell
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
+
+      - name: Run Windows install dry-run
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -WhatIf
+
+      - name: Validate shell script syntax
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          bash -n scripts/healthcheck.sh
+          bash -n scripts/install-workspace.sh
+
+      - name: Run macOS/Linux healthcheck
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
+          scripts/healthcheck.sh
+
+      - name: Run macOS/Linux install dry-run
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          scripts/install-workspace.sh --dry-run
+
+      - name: Validate custom agents
+        shell: bash
+        run: |
+          python skills/migrate-to-codex/scripts/cli.py --validate-target .
