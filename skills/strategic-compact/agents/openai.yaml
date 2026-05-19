@@ -1,4 +1,0 @@
-interface:
-  display_name: "Strategic Compact"
-  short_description: "Manual context compaction checkpoint"
-  default_prompt: "Use strategic-compact to decide whether this is a good moment to compact context and produce a compact handoff summary."
