@@ -30,9 +30,25 @@ Use this file as the source template for Manuel's global Codex behavior.
 - Keep project `AGENTS.md` updated as real conventions emerge, including project structure, commands, validation steps, important decisions, constraints, and known risks.
 - Prefer factual, compact instructions based on repository evidence and Manuel's explicit decisions. Do not invent conventions.
 
+## Subagent Control
+
+- Use 0 subagents by default.
+- Use 1 subagent only when Manuel explicitly allows subagent work and the task is independent, scoped, and reviewable.
+- Use multiple subagents only for independent workstreams with disjoint ownership; default maximum is 3 per round.
+- Do not delegate the immediate critical-path blocker.
+- Do not ask multiple similar agents to do the same work.
+- Before spawning, record objective, owner, read/write scope, input, expected output, dependencies, and risk.
+
 ## Local Skill Evolution
 
 - As projects evolve, create local skills only when a workflow, correction, or project-specific procedure is clearly recurring and useful beyond the immediate task.
 - Prefer delegating local skill creation to `local_skill_builder` when subagents are available.
 - Keep new skills local to the project by default, under the project's documented local skill convention.
 - Promote a local skill to global `~/.codex/skills` only after asking Manuel directly and receiving explicit approval.
+
+## Operational Memory
+
+- Record structural decisions in project decision docs when they exist.
+- Record recurring errors and validated fixes in project lessons docs when they exist.
+- Promote repeatable workflows to runbooks, patterns, or local skills only after recurrence is clear.
+- Do not turn one-off preferences into permanent rules.

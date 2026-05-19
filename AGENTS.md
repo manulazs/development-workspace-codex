@@ -6,6 +6,8 @@ This repository stores Manuel's reproducible Codex development workspace: global
 
 - Keep this repository private unless Manuel explicitly decides otherwise.
 - Version custom skills and global instruction templates here before copying them into `~/.codex`.
+- Treat this repository as the source of truth and `~/.codex` as the active runtime install. Never assume they are synchronized.
+- Before changing this workspace, run `scripts/healthcheck.ps1` or state why it could not be run.
 - Preserve source attribution when adapting third-party skills.
 - Do not commit secrets, tokens, private logs, local database files, authentication files, or Codex internal state.
 - Use clear commits that describe one coherent environment change at a time.
@@ -21,6 +23,7 @@ Track:
 - Custom Codex subagents under `.codex/agents/`.
 - Global Codex instruction templates under `codex-global/`.
 - Reproduction notes and decisions under `docs/`.
+- Operational runbooks, audits, lessons, patterns, and capability inventory under `docs/`.
 
 Do not track:
 
@@ -48,3 +51,21 @@ Validate every changed skill with `skill-creator/scripts/quick_validate.py` befo
 Validate changed custom agents with `migrate-to-codex --validate-target .` before copying them into `~/.codex/agents` or committing them to this repository.
 
 When adding or updating model assignments for custom agents, prefer `gpt-5.3-codex` with high reasoning for implementation-heavy coding, SQL, dbt, package, or environment work where Codex-specific efficiency matters; prefer `gpt-5.4` for visual, analytical, review, security, and ambiguous reasoning tasks.
+
+## Subagent Policy
+
+Use 0 subagents by default. Use 1 subagent only when Manuel explicitly allows subagent work, the task has a clear independent scope, and the output can be reviewed without redoing the work.
+
+Use multiple subagents only for independent workstreams with disjoint ownership. The default limit is 3 subagents per round; more requires explicit justification.
+
+Never delegate the next critical-path blocker, never ask multiple similar agents the same question, and always record objective, owner, read/write scope, input, output, dependency, and risk before spawning.
+
+The detailed policy is `docs/subagents-policy.md`.
+
+## Self-Improvement
+
+Record recurring errors and validated fixes in `docs/lessons/`. Promote stable repeatable workflows to `docs/patterns/` or `docs/runbooks/`. Record structural decisions in `docs/decisions/`.
+
+Update `docs/capability-inventory.md` whenever skills or agents are added, removed, reclassified, or materially changed.
+
+Prefer PowerShell scripts for repository automation because Manuel's active environment is Windows/PowerShell.

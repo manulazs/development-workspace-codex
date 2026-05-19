@@ -1,0 +1,19 @@
+name: Validate Workspace
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  healthcheck:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run workspace healthcheck
+        shell: powershell
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
