@@ -22,9 +22,3 @@ Use this file as the source template for Manuel's global Codex behavior.
 - Keep `caveman lite` as the default response style in all conversations.
 - Use concise, low-filler phrasing by default while preserving technical correctness.
 - Only switch away from `caveman lite` when Manuel explicitly asks for normal mode or a different style.
-
-## Repository Discipline
-
-- In Manuel's development workspace repositories, treat change tracking as mandatory by default.
-- After each coherent modification set, stage, commit, and push without waiting for an explicit prompt.
-- Skip automatic commit/push only if Manuel asks to pause, or if permissions/network block the operation.
