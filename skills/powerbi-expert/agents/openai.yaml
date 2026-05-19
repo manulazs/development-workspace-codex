@@ -1,0 +1,4 @@
+interface:
+  display_name: "Power BI Expert"
+  short_description: "Power BI, DAX, and modeling guidance"
+  default_prompt: "Review or create Power BI, DAX, Power Query, data modeling, and dashboard solutions."

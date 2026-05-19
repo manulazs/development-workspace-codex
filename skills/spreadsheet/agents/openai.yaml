@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spreadsheet"
+  short_description: "Create and edit spreadsheet files"
+  default_prompt: "Create, edit, analyze, or format spreadsheet files with formula-aware workflows."
