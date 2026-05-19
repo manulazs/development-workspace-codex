@@ -4,6 +4,10 @@ This directory contains operating documentation for the Codex development worksp
 
 ## Start Here
 
+- `../README.md`: repository overview and quickstarts.
+- `../CONTRIBUTING.md`: contribution workflow.
+- `../SECURITY.md`: security and secret-handling policy.
+- `../CHANGELOG.md`: release and change history.
 - `runbooks/setup-windows.md`: Windows setup and validation.
 - `runbooks/setup-macos.md`: macOS/Linux setup and validation.
 - `operations/workspace-health.md`: current health state and known gaps.

@@ -1,6 +1,6 @@
 # Development Workspace Codex
 
-Private, reproducible workspace for Manuel's Codex configuration, custom skills, and agentic workflow conventions.
+Reusable, governed Codex workspace for custom skills, subagents, cross-platform setup, and self-improving development operations.
 
 ![Validate Workspace](https://github.com/manulazs/development-workspace-codex/actions/workflows/validate.yml/badge.svg)
 
@@ -16,6 +16,15 @@ This repository is the source of truth for a reusable Codex development workspac
 
 The active runtime install is separate and lives under `~/.codex`.
 
+## Public Project Docs
+
+- `docs/README.md`: documentation index.
+- `CONTRIBUTING.md`: contribution workflow.
+- `CHANGELOG.md`: notable changes.
+- `SECURITY.md`: vulnerability and secret-handling policy.
+- `CODE_OF_CONDUCT.md`: participation rules.
+- `LICENSE`: Apache-2.0 license.
+
 ## Contents
 
 - `skills/`: custom or adapted Codex skills.
@@ -25,7 +34,7 @@ The active runtime install is separate and lives under `~/.codex`.
 - `docs/capability-inventory.md`: source of truth for tracked skills, agents, status, risk, and overlap.
 - `docs/runbooks/`: operational setup and validation procedures.
 - `docs/lessons/` and `docs/patterns/`: operational memory for recurring fixes and reusable workflows.
-- `scripts/`: Windows-first maintenance scripts.
+- `scripts/`: cross-platform maintenance scripts.
 
 ## Quickstart Windows
 
@@ -106,4 +115,4 @@ The tracked custom agents are also inventoried in `docs/capability-inventory.md`
 
 ## Repository Policy
 
-This repository should remain private. It may contain workflow preferences and local environment conventions, but it must not contain credentials, tokens, logs, private data exports, or Codex internal state files.
+This repository is prepared for public reuse under Apache-2.0. It may contain workflow preferences and local environment conventions, but it must not contain credentials, tokens, logs, private data exports, or Codex internal state files.

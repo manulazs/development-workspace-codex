@@ -77,6 +77,11 @@ done
 
 required_docs=(
   "README.md"
+  "LICENSE"
+  "CONTRIBUTING.md"
+  "CHANGELOG.md"
+  "SECURITY.md"
+  "CODE_OF_CONDUCT.md"
   "docs/README.md"
   "docs/capability-inventory.md"
   "docs/skill-template.md"

@@ -4,7 +4,7 @@ This repository stores Manuel's reproducible Codex development workspace: global
 
 ## Operating Rules
 
-- Keep this repository private unless Manuel explicitly decides otherwise.
+- This repository is public-ready under Apache-2.0, but changing repository visibility still requires Manuel's explicit approval and a clean security review.
 - Version custom skills and global instruction templates here before copying them into `~/.codex`.
 - Treat this repository as the source of truth and `~/.codex` as the active runtime install. Never assume they are synchronized.
 - Before changing this workspace, run `scripts/healthcheck.ps1` or state why it could not be run.

@@ -97,6 +97,11 @@ foreach ($dir in $requiredDirs) {
 
 $requiredDocs = @(
     "README.md",
+    "LICENSE",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
     "docs/README.md",
     "docs/capability-inventory.md",
     "docs/skill-template.md",
