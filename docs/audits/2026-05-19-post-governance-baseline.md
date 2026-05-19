@@ -1,34 +1,34 @@
 # Post-Governance Baseline Audit - 2026-05-19
 
+Status: historical and superseded by the public-template rewrite.
+
 ## Scope
 
-Validate the workspace state after commit `3288234 govern workspace operations` was published to `origin/main`.
+This audit captured a Windows-governed baseline before the repository had the current public, portable, profile-based structure.
 
-## Validation Run
+## Historical Strengths
 
-- `git status --short --branch`: clean, `main...origin/main`.
-- `scripts/healthcheck.ps1`: passed with 0 failures.
-- `python skills/migrate-to-codex/scripts/cli.py --validate-target .`: passed with the expected `.codex/config.toml` warning.
-- `scripts/install-workspace.ps1 -WhatIf`: previously validated as non-mutating preview of skills and agents copy operations.
+- Required governance directories existed.
+- Repository healthcheck existed.
+- Capability inventory existed.
+- Custom agent TOML files validated structurally.
+- Repository and runtime state were recognized as separate concepts.
 
-## Confirmed Strengths
+## Superseded Gaps
 
-- Repository governance is now operational on Windows, not only documented.
-- Required directories for audits, lessons, operations, patterns, runbooks, scripts, and capability inventory exist.
-- The README delegates detailed capability tracking to `docs/capability-inventory.md`, reducing drift.
-- Custom agent TOML files validate structurally.
-- The repository and runtime profile are intentionally treated as separate states.
+- The repository now has macOS/Linux scripts and CI.
+- Public repository files now exist.
+- Runtime installation state is no longer a repository health gap.
+- Current installation is profile-based and optional.
+- Current improvement lifecycle includes promotion, rejection, retirement, audit, and inventory-update rules.
 
-## Remaining Gaps
+## Current Reference
 
-- No macOS/Linux shell scripts exist yet.
-- CI validates only `windows-latest`.
-- `PyYAML` is missing from the active Python environment, so full system skill validation cannot be claimed.
-- Repo skills and custom agents are not installed into the active `~/.codex` runtime profile.
-- Public repository files are missing: `LICENSE`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, issue templates, and pull request template.
-- The self-improvement lifecycle needs explicit promotion, rejection, retirement, audit, and inventory-update rules.
-- The subagent policy is still stricter than the desired model for independent multi-agent work.
+Use these current sources instead of this historical baseline:
 
-## Baseline Decision
-
-The current baseline is acceptable as a Windows-governed private workspace, but not yet acceptable as a cross-platform public Apache-2.0 repository.
+- `README.md`
+- `workspace-manifest.json`
+- `docs/capability-inventory.md`
+- `docs/operations/workspace-health.md`
+- `docs/runbooks/setup-windows.md`
+- `docs/runbooks/setup-macos.md`

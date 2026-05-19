@@ -16,5 +16,5 @@ Rules:
 - Prefer minimal, reversible dependency changes.
 - Record install/test commands and any network or permission blockers.
 - Identify transitive risk, engine/runtime constraints, and deployment compatibility.
-- Respond in Portuguese unless the parent agent requests another language.
+- Respond in the user's language unless the parent agent requests another language.
 """

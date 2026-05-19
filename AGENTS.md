@@ -1,29 +1,30 @@
 # Development Workspace Codex
 
-This repository stores Manuel's reproducible Codex development workspace: global instructions, custom skills, and setup documentation.
+This repository is a public, portable Codex workspace template. Treat it as a source repository for reusable skills, subagent templates, policies, runbooks, and validation scripts.
+
+It must not reflect the private state of any local Codex runtime.
 
 ## Operating Rules
 
-- This repository is public-ready under Apache-2.0, but changing repository visibility still requires Manuel's explicit approval and a clean security review.
-- Version custom skills and global instruction templates here before copying them into `~/.codex`.
-- Treat this repository as the source of truth and `~/.codex` as the active runtime install. Never assume they are synchronized.
-- Before changing this workspace, run `scripts/healthcheck.ps1` or state why it could not be run.
-- Preserve source attribution when adapting third-party skills.
-- Do not commit secrets, tokens, private logs, local database files, authentication files, or Codex internal state.
-- Use clear commits that describe one coherent environment change at a time.
-- By default, every workspace modification must be recorded in this repository without waiting for an explicit request.
-- After completing a coherent change set, stage, commit, and push to `origin/main` when network/permissions allow.
-- Only skip commit/push when Manuel explicitly asks to hold changes, or when a technical blocker prevents it.
+- Keep repository health separate from `~/.codex` or any other local runtime.
+- Validate repository changes with the platform healthcheck when practical.
+- Use `workspace-manifest.json` as the source of adoption profiles.
+- Use `docs/capability-inventory.md` as the source of capability status, risk, and intended use.
+- Preserve source attribution and license notes when adapting third-party skills.
+- Do not commit secrets, tokens, private logs, local databases, authentication files, cache files, sessions, or corporate data.
+- Do not auto-commit, push, publish, or change repository visibility unless the user explicitly asks for that operation.
+- Keep edits scoped to the requested repository change; do not copy files into a local runtime unless explicitly requested.
 
 ## Scope
 
 Track:
 
-- Custom or adapted skills under `skills/`.
-- Custom Codex subagents under `.codex/agents/`.
-- Global Codex instruction templates under `codex-global/`.
-- Reproduction notes and decisions under `docs/`.
-- Operational runbooks, audits, lessons, patterns, and capability inventory under `docs/`.
+- Skill sources under `skills/`.
+- Custom subagent templates under `.codex/agents/`.
+- Global instruction templates under `codex-global/`.
+- Adoption profiles in `workspace-manifest.json`.
+- Governance, setup, audits, lessons, patterns, and decisions under `docs/`.
+- Repository validation and optional profile installers under `scripts/`.
 
 Do not track:
 
@@ -32,40 +33,49 @@ Do not track:
 - `~/.codex/state_*.sqlite`.
 - `~/.codex/cache/`.
 - `~/.codex/sessions/`.
-- Any corporate data, credentials, exports, or sensitive values.
+- Any machine-specific runtime inventory.
+- Any private data export, credential, token, or sensitive value.
 
 ## Skill Policy
 
-Before adding external skills, check whether an existing local, global, project, or built-in skill already fits the purpose.
+Before adding or changing a skill:
 
-Avoid maintaining user-level duplicates for capabilities already covered by Codex system skills or enabled plugins unless the local version has a clear, documented advantage. Prefer the system/plugin version for broad capabilities such as OpenAI docs, presentations, spreadsheets, documents, or browser automation.
+- Check existing skills, agents, runbooks, patterns, docs, system skills, and plugin capabilities.
+- Prefer a runbook or short policy when the workflow is not reusable enough to justify a skill.
+- Do not promote personal preference or one-off behavior into a public default.
+- Classify the skill in `workspace-manifest.json` as `core`, `optional`, `curated`, `review`, `deprecated`, or `archived`.
+- Update `docs/capability-inventory.md` with purpose, risk, overlap, supported platforms, when to use, and when not to use.
+- Validate changed skills through the repository healthcheck and relevant local validator.
 
-External skills should be reviewed before installation. Avoid silent installation flags unless Manuel explicitly approves unattended installation for a low-risk case.
-
-If an external skill is useful but not directly compatible with Codex, use `migrate-to-codex` to migrate or adapt it before installation. Do not install a Claude Code or other agent-specific skill unchanged unless Manuel explicitly accepts the compatibility risk.
-
-When `skill-installer` is invoked directly for an external skill, still perform the compatibility check first. If the source is from another agent ecosystem or unknown format, route through `migrate-to-codex` before installing.
-
-Validate every changed skill with `skill-creator/scripts/quick_validate.py` before copying it into `~/.codex/skills` or committing it to this repository.
-
-Validate changed custom agents with `migrate-to-codex --validate-target .` before copying them into `~/.codex/agents` or committing them to this repository.
-
-When adding or updating model assignments for custom agents, prefer `gpt-5.3-codex` with high reasoning for implementation-heavy coding, SQL, dbt, package, or environment work where Codex-specific efficiency matters; prefer `gpt-5.4` for visual, analytical, review, security, and ambiguous reasoning tasks.
+Core skills should be small, generally useful, and low ambiguity. Domain skills should remain optional unless they are required for broad workspace governance.
 
 ## Subagent Policy
 
-Use 0 subagents by default for small, linear, or tightly coupled work. Use subagents when delegation improves quality, speed, or risk coverage and the task has a clear independent scope.
+Delegation is an operational decision, not a default.
 
-Use multiple subagents for independent workstreams with disjoint ownership or clearly separate responsibilities. Do not impose an artificial numeric limit; require explicit justification when many subagents are used or when scopes look similar.
+- Use 0 subagents for simple, linear, tightly coupled, or low-risk work.
+- Use 1 subagent for an independent audit, review, or bounded side task.
+- Use multiple subagents only when scopes are genuinely independent and integration cost is justified.
+- The main agent remains responsible for synthesis, final judgment, and user-facing output.
+- Every subagent template should define objective, scope, suggested model class, reasoning level, sandbox, required inputs, expected output, risks, when to use, when not to use, and exit criteria.
 
-Never delegate the next critical-path blocker, never ask multiple similar agents the same question, and always record objective, owner, read/write scope, input, output, dependency, and risk before spawning. The orchestrator can propose or use subagents outside `/plan` when runtime rules permit it; if active runtime instructions require explicit user authorization, those instructions prevail.
+The detailed policy is `docs/subagents-policy.md`. Agent creation, reuse, validation, and retirement are governed by `docs/subagents-lifecycle.md`.
 
-The detailed policy is `docs/subagents-policy.md`. Creation, reuse, validation, and retirement of custom agents are governed by `docs/subagents-lifecycle.md`.
+## Model Policy
+
+Model guidance must be generic and revisable. Prefer criteria by risk and task complexity over hard requirements for one specific model.
+
+- Critical security, review, migration, and destructive-operation tasks need a strong model class and explicit confirmation gates.
+- Complex implementation or architecture work should use a strong Codex-oriented model when available.
+- Mechanical documentation or inventory work can use a smaller model when risk is low.
+- Consumer workspaces may substitute available models when the suggested model is unavailable.
 
 ## Self-Improvement
 
-Record recurring errors and validated fixes in `docs/lessons/`. Promote stable repeatable workflows to `docs/patterns/` or `docs/runbooks/`. Record structural decisions in `docs/decisions/`.
+Use the public lifecycle:
 
-Update `docs/capability-inventory.md` whenever skills or agents are added, removed, reclassified, or materially changed.
+```text
+use -> observe -> lesson -> pattern -> skill/agent/doc -> validate -> review -> prune
+```
 
-Prefer PowerShell for Windows automation and POSIX shell scripts for macOS/Linux parity.
+Do not create a new skill or agent for a single occurrence. Capture lessons only when they are reusable, and remove stale or redundant content during review.

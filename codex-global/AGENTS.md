@@ -1,56 +1,49 @@
-# Global Codex Instructions
+# Global Codex Instructions Template
 
-Use this file as the source template for Manuel's global Codex behavior.
+Use this file as a source template for a consumer workspace's global Codex behavior. Adapt it before copying it into a local runtime.
+
+This template is not evidence of the current machine's `~/.codex` state.
 
 ## Skill Discovery
 
-- When a task may benefit from a reusable skill, use the `find-skills` skill if available.
-- Before searching externally, check whether an existing local, global, project, or built-in skill already fits the purpose.
-- Before installing any external skill, present the source, purpose, reputation signals, risks, and proposed install command.
-- If a useful skill is not directly compatible with Codex, use `migrate-to-codex` before recommending or installing it.
-- Never install external skills silently or with automatic confirmation unless Manuel explicitly approves that behavior.
-
-## External Skill Installation
-
-- When the user directly invokes `skill-installer` for an external skill, first check whether the source skill is directly compatible with Codex.
-- If the skill comes from another agent ecosystem, such as Claude Code, Cursor, Copilot, Gemini, or an unknown format, use `migrate-to-codex` before installation.
-- If conversion is possible, install the converted Codex-compatible version instead of the original agent-specific version.
-- If conversion is not suitable, explain the blocker and do not install the skill unless Manuel explicitly asks to preserve it unchanged and accepts the compatibility risk.
-
-## Communication Mode
-
-- Keep `caveman lite` as the default response style in all conversations.
-- Use concise, low-filler phrasing by default while preserving technical correctness.
-- Only switch away from `caveman lite` when Manuel explicitly asks for normal mode or a different style.
+- When a task may benefit from a reusable skill, first check available project, user, system, and plugin skills.
+- Before installing or copying an external skill, identify source, purpose, license/attribution, reputation signals, risks, expected validation, and overlap with existing capabilities.
+- If a useful skill is not directly compatible with Codex, migrate or adapt it before adoption.
+- Do not silently install external skills or approve unattended setup unless the user explicitly requests that behavior.
 
 ## Project Instructions
 
-- When creating a new project or starting substantial work in an existing project, check whether a project `AGENTS.md` exists.
-- If no project `AGENTS.md` exists, create one when file edits are allowed and the project has enough context to record useful guidance.
-- Keep project `AGENTS.md` updated as real conventions emerge, including project structure, commands, validation steps, important decisions, constraints, and known risks.
-- Prefer factual, compact instructions based on repository evidence and Manuel's explicit decisions. Do not invent conventions.
+- When starting substantial work in a repository, check whether a project `AGENTS.md` exists.
+- Create or update project instructions only when edits are allowed and repository evidence supports the guidance.
+- Keep project instructions factual: structure, commands, validation, constraints, important decisions, and known risks.
+- Do not invent conventions or promote one-off preferences into permanent rules.
 
 ## Subagent Control
 
-- Use 0 subagents by default for small, linear, or tightly coupled work.
-- Use subagents when delegation improves speed, quality, or risk coverage and the task is independent, scoped, and reviewable.
-- Use multiple subagents for independent workstreams with disjoint ownership or clearly separate responsibilities.
-- Do not enforce an artificial numeric limit; justify many subagents or subagents with similar-looking scopes.
+- Use 0 subagents for small, linear, tightly coupled, or low-risk work.
+- Use 1 subagent for an independent audit, review, or bounded side task.
+- Use multiple subagents only for genuinely separate workstreams with clear ownership and integration value.
 - Do not delegate the immediate critical-path blocker.
 - Do not ask multiple similar agents to do the same work.
-- Before spawning, record objective, owner, read/write scope, input, expected output, dependencies, and risk.
-- The orchestrator may propose or use subagents outside `/plan` when the task justifies it and the runtime permits it. If active runtime instructions require explicit user authorization, those instructions prevail.
+- Before delegating, define objective, scope, input context, expected output, dependencies, risks, and stopping criteria.
+- The main agent remains responsible for final synthesis and user-facing decisions.
 
 ## Local Skill Evolution
 
-- As projects evolve, create local skills only when a workflow, correction, or project-specific procedure is clearly recurring and useful beyond the immediate task.
-- Prefer delegating local skill creation to `local_skill_builder` when subagents are available.
-- Keep new skills local to the project by default, under the project's documented local skill convention.
-- Promote a local skill to global `~/.codex/skills` only after asking Manuel directly and receiving explicit approval.
+- Create a local skill only when a workflow, correction, or domain procedure is clearly recurring.
+- Prefer a runbook or project instruction when the workflow is not reusable enough for a skill.
+- Keep new skills local to the consumer workspace by default.
+- Promote local skills to a broader shared location only after explicit review and approval.
 
 ## Operational Memory
 
-- Record structural decisions in project decision docs when they exist.
-- Record recurring errors and validated fixes in project lessons docs when they exist.
+- Record structural decisions in decision docs when they exist.
+- Record recurring errors and validated fixes in lessons docs when they exist.
 - Promote repeatable workflows to runbooks, patterns, or local skills only after recurrence is clear.
-- Do not turn one-off preferences into permanent rules.
+- Prune stale lessons, patterns, skills, and agents when they stop reducing work.
+
+## Safety
+
+- Treat local runtime state, logs, sessions, caches, auth files, and private data as outside repository scope.
+- Ask before destructive operations or broad writes.
+- Do not auto-commit, push, publish, or change visibility unless explicitly requested.

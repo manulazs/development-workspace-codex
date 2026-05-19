@@ -1,30 +1,31 @@
 # Global Workspace Audit - 2026-05-19
 
+Status: historical and superseded by the public-template policy.
+
 ## Summary
 
-The workspace has a strong conceptual base but needed operational controls to become a reliable continuous development environment.
+This audit identified the need for operational controls: healthchecks, install previews, capability inventory, lessons, patterns, runbooks, and subagent policy.
 
-## Findings
+The audit was written while the repository still behaved like a maintainer-specific workspace. Current policy treats the repository as a public template and local runtime adoption as optional.
 
-- Repository structure is clear: `skills/`, `.codex/agents/`, `codex-global/`, and `docs/decisions/`.
-- Runtime installation can drift from the repo. Before this audit, repo skills and agents were not fully reflected in `~/.codex`.
-- There was no Windows-first install script, healthcheck script, operational health document, lessons directory, patterns directory, or subagent policy document.
-- Custom agents validated structurally with `migrate-to-codex --validate-target .`.
-- Skill validation through system `quick_validate.py` was blocked by missing `PyYAML` in the active Python environment.
-- Existing subagent guidance was mostly inside manual-only planning skills, not permanent global policy.
+## Lasting Findings
 
-## Actions Implemented
+- Repository structure benefits from clear capability boundaries.
+- Skills and agents need inventory, risk, overlap, and retirement rules.
+- Subagent use needs explicit delegation criteria.
+- Review and pruning are necessary to avoid capability sprawl.
 
-- Added PowerShell healthcheck and install scripts.
-- Added permanent subagent policy and capability inventory.
-- Added operational health, Windows setup, lessons, patterns, and audit documentation.
-- Added GitHub Actions validation.
-- Updated permanent instructions to include healthcheck, repo/runtime distinction, subagent control, and self-improvement rules.
-- Changed `security_auditor` to read-only.
+## Superseded Findings
 
-## Remaining Watch Items
+- Repository-to-runtime drift is no longer a standard repository health signal.
+- Local validator dependency gaps are not public repository state unless they block repository validation.
+- The question is no longer whether all repository skills should be installed, but which adoption profile a consumer explicitly chooses.
 
-- Decide whether all repo skills should be installed into `~/.codex` or kept as a curated source catalog.
-- Fix the Python validator environment if full `quick_validate.py` validation is required locally.
-- Review high-risk skills with external install commands before enabling them broadly.
-- Run quarterly inventory pruning to avoid skill sprawl.
+## Actions Kept
+
+- Permanent subagent policy.
+- Capability inventory.
+- Operational health documentation.
+- Lessons and patterns.
+- GitHub Actions validation.
+- Read-only posture for security audit roles.

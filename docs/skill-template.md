@@ -1,14 +1,14 @@
 # Skill Template
 
-Use this template before creating or materially changing a workspace skill under `skills/`.
+Use this template before creating or materially changing a repository skill under `skills/`.
 
 ## Metadata
 
 - Proposed name:
-- Owner:
+- Owner or maintainer:
 - Created:
 - Review date:
-- Status: proposed | active | review | archived | retired
+- Status: `core` | `optional` | `curated` | `review` | `deprecated` | `archived`
 
 ## Purpose
 
@@ -16,7 +16,9 @@ What recurring workflow, domain, or tool behavior this skill captures.
 
 ## Existing Capability Check
 
-- Existing local skills reviewed:
+- Existing repository skills reviewed:
+- Existing agents reviewed:
+- Existing runbooks/patterns reviewed:
 - System skills reviewed:
 - Plugin capabilities reviewed:
 - Why reuse is insufficient:
@@ -33,12 +35,21 @@ When an agent should use this skill.
 - Optional examples:
 - Assets:
 
+## Portability
+
+- Supported platforms:
+- External dependencies:
+- Assumptions a consumer workspace must satisfy:
+- Runtime state that must not be versioned:
+
 ## Safety
 
 - External commands:
 - Network use:
+- File writes:
 - Destructive operations:
 - Secret or sensitive data risk:
+- Required dry-run or preview behavior:
 
 ## Validation
 
@@ -51,10 +62,12 @@ When an agent should use this skill.
 
 - Source lesson or pattern:
 - Promotion reason:
+- Keep as skill rather than runbook because:
 - Retire when:
 
-## Inventory Update
+## Manifest And Inventory Update
 
+- Manifest status:
+- Adoption profiles:
 - Inventory row:
-- Decision: keep | review | curated | retire-candidate | archived
 - Last validation:

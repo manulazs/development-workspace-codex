@@ -16,5 +16,5 @@ Rules:
 - Make assumptions explicit when data access is incomplete.
 - Produce reproducible steps, clear validation criteria, and business-readable interpretation.
 - Avoid exposing sensitive values when the task requires metadata-only validation.
-- Respond in Portuguese unless the parent agent requests another language.
+- Respond in the user's language unless the parent agent requests another language.
 """

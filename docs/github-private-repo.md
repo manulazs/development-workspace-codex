@@ -1,6 +1,8 @@
-# Private GitHub Repository Setup
+# GitHub Repository Publishing
 
-This workspace is intended to be stored in a private GitHub repository.
+Status: historical filename, current public-template guidance.
+
+This repository is designed to be public, portable, and reusable. Consumers may still keep forks private when their adaptations contain private policies, internal tools, or organization-specific context.
 
 Recommended repository name:
 
@@ -8,23 +10,23 @@ Recommended repository name:
 development-workspace-codex
 ```
 
-Created private repository:
+## Public Repository
 
-```text
-https://github.com/manulazs/development-workspace-codex
+Create a public repository when the content contains only reusable template material:
+
+```bash
+gh repo create development-workspace-codex --public --source . --remote origin --push
 ```
 
-## Option 1: GitHub CLI
+## Private Fork Or Internal Adaptation
 
-From the repository root:
+Use a private repository when the fork contains private organizational rules, internal system names, logs, exports, credentials, or non-public business context:
 
 ```bash
 gh repo create development-workspace-codex --private --source . --remote origin --push
 ```
 
-## Option 2: Existing Empty Private Repository
-
-Create an empty private repository on GitHub, then run:
+## Existing Empty Repository
 
 ```bash
 git remote add origin git@github.com:<owner>/development-workspace-codex.git
@@ -33,8 +35,6 @@ git push -u origin main
 
 Replace `<owner>` with the GitHub user or organization that owns the repository.
 
-## Privacy Rule
+## Safety Rule
 
-Keep the repository private unless Manuel explicitly decides otherwise.
-
-Do not push credentials, tokens, logs, local databases, corporate data exports, or Codex internal state.
+Do not push credentials, tokens, logs, local databases, runtime state, cache files, sessions, auth files, corporate data exports, or private workspace assumptions.

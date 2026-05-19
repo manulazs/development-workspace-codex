@@ -17,5 +17,5 @@ Rules:
 - For HTML visuals, keep text inside containers and validate layout when browser or screenshot tooling is available.
 - Avoid cluttered dashboards; prefer a small number of high-value KPIs and readable visuals.
 - Return concrete findings, measures, queries, or UI changes with validation steps.
-- Respond in Portuguese unless the parent agent requests another language.
+- Respond in the user's language unless the parent agent requests another language.
 """

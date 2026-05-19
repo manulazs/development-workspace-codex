@@ -2,57 +2,97 @@
 
 Last reviewed: 2026-05-19
 
-## Current State
+## Definition
 
-- Repository path: `C:\Users\c36647b\OneDrive - CNH Industrial\Documentos\github\development-workspace-codex`
-- Branch: `main`
-- Remote: `origin`
-- Latest published governance commit before this officialization round: `3288234 govern workspace operations`
-- Latest local validation commit before final audit: `1fea1a2 validate workspace across platforms`
-- Repository capabilities: 31 skills, 9 custom agents.
-- Current Windows validation: `scripts/healthcheck.ps1` passes with 0 failures.
-- Current agent validation: `migrate-to-codex --validate-target .` passes.
-- Current Windows install preview: `scripts/install-workspace.ps1 -WhatIf` previews 31 skills and 9 agents without mutation.
-- Known runtime gap: repo skills and custom agents are not installed into the active `~/.codex` profile.
-- Known validation gap: active Python lacks `PyYAML`, so full `quick_validate.py` validation is not available.
-- Known platform gap: macOS/Linux scripts exist, but local execution was not possible on this Windows host because `bash`/`sh` are unavailable. GitHub Actions must validate `macos-latest` after push.
+Repository health means the public template is internally consistent, safe to clone, and ready for consumers to evaluate or adopt by profile.
 
-## Operational Gap
+It does not mean any maintainer's private `~/.codex` runtime matches this repository.
 
-The repository is the source of truth for reproducible workspace configuration. The active Codex profile under `~/.codex` is the runtime install. They can drift.
+## Healthcheck Scope
 
-Use `scripts/healthcheck.ps1` to detect drift and `scripts/install-workspace.ps1 -WhatIf` to preview synchronization.
+The standard healthcheck validates:
+
+- required repository directories and canonical docs;
+- `workspace-manifest.json` parses and classifies real files;
+- every skill directory has `SKILL.md` with required frontmatter;
+- every custom agent TOML has required fields;
+- adoption profiles reference only installable statuses;
+- `docs/capability-inventory.md` mentions all tracked skills and agents;
+- install scripts support safe preview (`-WhatIf` or `--dry-run`);
+- basic tracked-file secret patterns;
+- repository-local validators when their dependencies are available.
+
+The standard healthcheck intentionally does not validate:
+
+- whether any profile has been copied into `~/.codex`;
+- whether a consumer has restarted Codex after local adoption;
+- local auth, sessions, caches, logs, or private runtime state;
+- private corporate data or tools outside the repository.
+
+## Commands
+
+Windows:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
+```
+
+macOS/Linux:
+
+```bash
+scripts/healthcheck.sh
+```
+
+Strict mode treats warnings as failures:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
+```
+
+```bash
+scripts/healthcheck.sh --strict
+```
+
+## Optional Runtime Checks
+
+Runtime checks, if added later, must be separate, opt-in, and explicitly local. They must not be part of public repository health.
+
+Acceptable runtime helpers may answer:
+
+- which profile would be copied;
+- which files differ in a consumer-selected target;
+- whether a consumer runtime has required directories.
+
+They must not make repository health depend on local installation state.
 
 ## Health Signals
 
 Green:
 
-- Git worktree exists.
-- Required directories exist.
-- Skill frontmatter is present.
-- Custom agents validate structurally.
-- Capability inventory mentions all tracked skills and agents.
-- No obvious tracked secret pattern is detected.
+- Manifest, inventory, docs, skills, agents, and installers are aligned.
+- Healthcheck passes with 0 failures.
+- Install preview is profile-based and non-destructive.
+- No obvious secret patterns are tracked.
 
 Yellow:
 
-- Repo skills or agents are not installed in `~/.codex`.
-- `quick_validate.py` cannot run because Python dependencies are missing.
-- README contains a manual capability list that differs from the repo.
-- Files over 5 MB are tracked without explicit justification.
-- GitHub Actions macOS validation has not run yet for the local officialization commits.
+- Optional validators are unavailable because Python or tool dependencies are missing.
+- Historical audits need clearer status labels.
+- A capability remains in `review` longer than the review cadence allows.
+- A large file exists and needs explicit justification.
 
 Red:
 
-- Agent TOML required fields are missing.
-- Skill frontmatter is missing required fields.
-- Potential secret patterns appear in tracked files.
-- `migrate-to-codex --validate-target .` fails.
-- Required governance directories are missing.
+- A profile references missing or non-installable capabilities.
+- Inventory omits tracked skills or agents.
+- Skill frontmatter or agent TOML is structurally invalid.
+- Installer copies everything by default or lacks preview mode.
+- Potential secrets, local runtime state, logs, caches, or sessions are tracked.
 
 ## Maintenance Cadence
 
-- Run healthcheck before and after workspace changes.
-- Review `docs/capability-inventory.md` whenever skills or agents change.
-- Add a monthly audit note under `docs/audits/`.
-- Promote repeated lessons into `docs/patterns/` or a local skill only after recurrence is proven.
+- Run the repository healthcheck before and after structural changes.
+- Update `workspace-manifest.json` and `docs/capability-inventory.md` in the same change set when skills or agents change.
+- Review `review` and `curated` capabilities periodically.
+- Promote recurring lessons only after recurrence is clear.
+- Prune stale capabilities and docs during each review instead of only adding new material.

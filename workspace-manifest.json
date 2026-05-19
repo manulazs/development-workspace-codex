@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "purpose": "Reusable Codex workspace adoption profiles. This manifest describes what a consumer workspace may choose to copy; it does not describe any local runtime state.",
+  "global_template": "codex-global/AGENTS.md",
+  "statuses": {
+    "core": "Recommended for broadly governed Codex workspaces.",
+    "optional": "Useful for specific domains or workflows; adopt when the workspace needs it.",
+    "curated": "Kept as source material or examples; do not install by default.",
+    "review": "Requires a capability review before adoption.",
+    "deprecated": "Kept only for migration context; do not adopt.",
+    "archived": "Retired and stored outside runtime-loadable paths."
+  },
+  "skills": {
+    "adding-dbt-unit-test": "optional",
+    "agent-browser": "review",
+    "answering-natural-language-questions-with-dbt": "optional",
+    "auditing-skills": "core",
+    "building-dbt-semantic-layer": "optional",
+    "canvas-design": "curated",
+    "caveman": "review",
+    "caveman-commit": "review",
+    "caveman-compress": "review",
+    "configuring-dbt-mcp-server": "optional",
+    "creating-mermaid-dbt-dag": "optional",
+    "fetching-dbt-docs": "optional",
+    "find-skills": "core",
+    "frontend-design": "optional",
+    "migrate-to-codex": "core",
+    "migrating-dbt-core-to-fusion": "optional",
+    "migrating-dbt-project-across-platforms": "optional",
+    "pdf": "optional",
+    "plan-deep": "core",
+    "plan-deep-skills": "core",
+    "powerbi-expert": "optional",
+    "running-dbt-commands": "optional",
+    "screenshot": "review",
+    "spreadsheet": "optional",
+    "theme-factory": "curated",
+    "troubleshooting-dbt-job-errors": "optional",
+    "using-dbt-for-analytics-engineering": "optional",
+    "using-dbt-index": "optional",
+    "web-artifacts-builder": "curated",
+    "webapp-testing": "optional",
+    "working-with-dbt-mesh": "optional"
+  },
+  "agents": {
+    "agents_md_maintainer": "core",
+    "code_reviewer": "core",
+    "dashboard_visualization_specialist": "optional",
+    "data_pipeline_engineer": "optional",
+    "data_science_modeler": "optional",
+    "local_skill_builder": "optional",
+    "package_manager": "optional",
+    "security_auditor": "core",
+    "version_control_manager": "review"
+  },
+  "profiles": {
+    "minimal": {
+      "description": "Repository-only adoption: use docs, policies, and templates without copying runtime-loadable skills or agents.",
+      "skills": [],
+      "agents": [],
+      "notes": "Use this profile when evaluating or forking the public template."
+    },
+    "governed-codex": {
+      "description": "Core governance and planning capabilities for a Codex workspace.",
+      "skills": [
+        "auditing-skills",
+        "find-skills",
+        "migrate-to-codex",
+        "plan-deep",
+        "plan-deep-skills"
+      ],
+      "agents": [
+        "agents_md_maintainer",
+        "code_reviewer",
+        "security_auditor"
+      ],
+      "notes": "Start here for a reusable governed workspace."
+    },
+    "data-bi": {
+      "description": "Analytics engineering, dbt, BI, and dashboard-oriented workspaces.",
+      "extends": [
+        "governed-codex"
+      ],
+      "skills": [
+        "adding-dbt-unit-test",
+        "answering-natural-language-questions-with-dbt",
+        "building-dbt-semantic-layer",
+        "configuring-dbt-mcp-server",
+        "creating-mermaid-dbt-dag",
+        "fetching-dbt-docs",
+        "migrating-dbt-core-to-fusion",
+        "migrating-dbt-project-across-platforms",
+        "powerbi-expert",
+        "running-dbt-commands",
+        "troubleshooting-dbt-job-errors",
+        "using-dbt-for-analytics-engineering",
+        "using-dbt-index",
+        "working-with-dbt-mesh"
+      ],
+      "agents": [
+        "dashboard_visualization_specialist",
+        "data_pipeline_engineer",
+        "data_science_modeler"
+      ],
+      "notes": "Adopt when the consumer workspace really performs data or BI work."
+    },
+    "frontend-artifacts": {
+      "description": "Frontend interface, local artifact, and browser validation workflows.",
+      "extends": [
+        "governed-codex"
+      ],
+      "skills": [
+        "frontend-design",
+        "webapp-testing"
+      ],
+      "agents": [],
+      "notes": "Curated art-heavy or scaffold-heavy skills remain excluded unless separately reviewed."
+    },
+    "full-reviewed": {
+      "description": "All core and optional capabilities that are approved for broad adoption.",
+      "extends": [
+        "governed-codex",
+        "data-bi",
+        "frontend-artifacts"
+      ],
+      "skills": [
+        "pdf",
+        "spreadsheet"
+      ],
+      "agents": [
+        "local_skill_builder",
+        "package_manager"
+      ],
+      "notes": "Does not include review, curated, deprecated, or archived capabilities."
+    }
+  }
+}

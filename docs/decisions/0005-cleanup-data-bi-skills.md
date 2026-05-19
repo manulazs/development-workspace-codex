@@ -1,5 +1,7 @@
 # 0005 - Cleanup Data And BI Skills
 
+Status: historical import/cleanup context. Current adoption is governed by `workspace-manifest.json`.
+
 ## Decision
 
 Clean up duplicated and overlapping skills, adapt selected third-party skills for Codex compatibility, and add data/BI-focused skills.
@@ -19,4 +21,4 @@ Clean up duplicated and overlapping skills, adapt selected third-party skills fo
 
 The official `openai/skills` repository no longer exposed `skills/.curated/spreadsheet` through the GitHub tree at the time of installation, although the skill remains published on `skills.sh`. The local `spreadsheet` skill was reconstructed from the published listing and source attribution is recorded in its frontmatter.
 
-All installed user skills passed `skill-creator/scripts/quick_validate.py` after cleanup.
+Repository skill sources passed the available skill validation at the time of cleanup.

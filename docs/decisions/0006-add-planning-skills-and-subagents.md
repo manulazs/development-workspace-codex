@@ -1,8 +1,10 @@
 # 0006 - Add Planning Skills And Subagents
 
+Status: updated by the current public-template subagent policy. The reusable outcome remains valid; personal/runtime-specific wording is superseded.
+
 ## Decision
 
-Add two manual-only planning skills and a first set of custom Codex subagents for Manuel's development workspace.
+Add two manual-only planning skills and a first set of reusable custom Codex subagent templates.
 
 ## Changes
 
@@ -14,6 +16,6 @@ Add two manual-only planning skills and a first set of custom Codex subagents fo
 
 ## Notes
 
-The planning skills are manual-only by design. Normal planning requests should not trigger them unless Manuel invokes `$plan-deep` or `$plan-deep-skills`.
+The planning skills are manual-only by design. Normal planning requests should not trigger them unless the user explicitly invokes `$plan-deep` or `$plan-deep-skills`.
 
-The custom agents use a quality-balanced policy: `gpt-5.4` for critical analytical/review/security work and `gpt-5.4-mini` with `xhigh` reasoning for documentation, package management, and version control support.
+The specific model names recorded here are historical. Current guidance should choose models by task risk, complexity, and consumer availability.

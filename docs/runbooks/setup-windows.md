@@ -1,54 +1,73 @@
 # Windows Setup And Validation
 
-Use this runbook for Windows PowerShell.
+Use this runbook to validate the public repository and optionally preview adoption into a Windows Codex runtime.
 
 ## Requirements
 
 - Git for Windows.
-- Windows PowerShell 5+.
-- Python 3.
-- Codex installed and configured separately.
-- Optional: `PyYAML` in the active Python environment for full system skill validation.
+- Windows PowerShell 5+ or PowerShell 7+.
+- Python 3 for manifest and migration validation.
+- Codex installed separately only if you plan to adopt a profile into a local runtime.
 
-## Inspect
+The repository itself does not require any preexisting `~/.codex` state.
+
+## Clone And Inspect
 
 ```powershell
+git clone https://github.com/manulazs/development-workspace-codex.git
+cd development-workspace-codex
 git status --short --branch
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
 ```
 
-## Preview Install
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -WhatIf
-```
-
-The preview prints planned copies without modifying `~/.codex`.
-
-## Install Repo Skills And Agents
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1
-```
-
-This copies:
-
-- `skills/*` to `~/.codex/skills/*`.
-- `.codex/agents/*.toml` to `~/.codex/agents/*.toml`.
-
-It does not delete extra files from `~/.codex`.
-
-## Validate After Install
+## Validate Repository Health
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
-python skills/migrate-to-codex/scripts/cli.py --validate-target .
 ```
 
-Restart Codex after installing or updating skills or agents.
+The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, and repository validators. It does not compare against the local Codex runtime.
+
+## Inspect Adoption Profiles
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -ListProfiles
+```
+
+Profiles are reusable recommendations:
+
+- `minimal`: docs and governance only.
+- `governed-codex`: core governed Codex capabilities.
+- `data-bi`: analytics engineering and BI capabilities.
+- `frontend-artifacts`: frontend and artifact validation capabilities.
+- `full-reviewed`: all broad-use core and optional capabilities.
+
+## Preview Optional Runtime Adoption
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
+```
+
+Use a custom target when testing:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -CodexHome .\.tmp\codex-home -WhatIf
+```
+
+The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
+
+## Install Into A Runtime
+
+Only run this when you explicitly want to copy a profile into your local Codex home:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex
+```
+
+Restart Codex after changing runtime skills or agents.
 
 ## Troubleshooting
 
-- If Git commands fail with `index.lock: Permission denied`, OneDrive or sandboxing may be blocking `.git` writes. Retry after processes exit or run the Git action with explicit approval.
-- If `PyYAML` is missing, install it in the active Python environment or treat full skill validation as unavailable.
-- If runtime drift is reported, run `scripts/install-workspace.ps1 -WhatIf` before installing.
+- If Git commands fail with `index.lock: Permission denied`, wait for OneDrive or editor processes to release `.git` files, then retry.
+- If Python is missing, install Python 3 and confirm `python --version`.
+- If `migrate-to-codex` validation is skipped, confirm Python is available and rerun the healthcheck.
+- If a profile fails to install, inspect `workspace-manifest.json` and ensure the profile does not reference `curated`, `review`, `deprecated`, or `archived` capabilities.

@@ -18,5 +18,5 @@ Rules:
 - Do not report speculative vulnerabilities without repository evidence.
 - Prefer concrete source, control, sink, impact, and validation details.
 - Call out proof gaps explicitly.
-- Respond in Portuguese unless the parent agent requests another language.
+- Respond in the user's language unless the parent agent requests another language.
 """

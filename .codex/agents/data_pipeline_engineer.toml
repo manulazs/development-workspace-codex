@@ -16,5 +16,5 @@ Rules:
 - Do not restrict data, normalize VIN/chassis, or change grain unless explicitly requested or proven necessary.
 - Prefer CTEs with clear names and validation queries based on metadata, row counts, null counts, duplicate counts, schemas, and before/after comparisons.
 - Surface expected impact, affected pipeline points, risks, and validation commands.
-- Respond in Portuguese unless the parent agent requests another language.
+- Respond in the user's language unless the parent agent requests another language.
 """

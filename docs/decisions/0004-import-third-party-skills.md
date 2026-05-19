@@ -1,8 +1,10 @@
 # 0004 - Import Third-Party Skills
 
+Status: superseded by `workspace-manifest.json` adoption profiles and the current public-template policy. This ADR records historical import context; it no longer means third-party skills should be copied into a local runtime by default.
+
 ## Decision
 
-Install a batch of third-party skills from Anthropic `skills`, Vercel Labs `agent-browser`, and JuliusBrussee `caveman` into both `~/.codex/skills` and this repository.
+Import a batch of third-party skill sources from Anthropic `skills`, Vercel Labs `agent-browser`, and JuliusBrussee `caveman` into this repository for review, attribution, and selective reuse.
 
 ## Reason
 
@@ -16,6 +18,6 @@ Keeping the imported copies here makes the workspace reproducible and auditable.
 - Vercel Labs: `agent-browser`
 - JuliusBrussee: `caveman`, `caveman-compress`, `caveman-commit`, `caveman-help`
 
-## Installation
+## Historical Installation Note
 
-Installed with `skill-installer` using the GitHub source repositories and the `git` transport method, then mirrored into the workspace repository for version control.
+These sources were originally installed with `skill-installer` and then mirrored into the repository. Current profile installers do not install `curated` or `review` capabilities by default.

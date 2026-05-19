@@ -6,7 +6,7 @@ Use Vercel Labs' `find-skills` skill as the base idea, but maintain a local adap
 
 ## Reason
 
-The original skill is useful for discovering skills in the open agent skills ecosystem, but Manuel's Codex environment should first reuse existing local, global, project, or built-in skills before searching externally.
+The original skill is useful for discovering skills in the open agent skills ecosystem, but a governed Codex workspace should first reuse existing repository, local, global, project, system, or plugin capabilities before searching externally.
 
 The adapted version also avoids silent installation. External skills should be reviewed and explicitly approved before installation.
 

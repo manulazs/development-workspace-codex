@@ -1,15 +1,15 @@
 ---
 name: plan-deep-skills
-description: Manual-only Plan Mode add-on. Use only when Manuel explicitly invokes $plan-deep-skills to create a deeper planning pass that also evaluates existing and external skills via find-skills before recommending task delegation. Do not auto-trigger for ordinary planning requests.
+description: Manual-only Plan Mode add-on. Use only when the user explicitly invokes $plan-deep-skills to create a deeper planning pass that also evaluates existing and external skills via find-skills before recommending task delegation. Do not auto-trigger for ordinary planning requests.
 metadata:
   short-description: Manual deep planning with skill discovery
 ---
 
 # Plan Deep Skills
 
-Use this skill only when Manuel explicitly invokes `$plan-deep-skills`.
+Use this skill only when the user explicitly invokes `$plan-deep-skills`.
 
-This skill extends `$plan-deep` with a skill-evaluation stage. It is still planning-only. Do not edit files, spawn subagents, install skills, or run destructive commands while using this skill. If the current collaboration mode is Plan Mode, follow Plan Mode rules strictly. If the runtime is not in Plan Mode, still treat this skill invocation as planning-only unless Manuel explicitly asks for implementation after the plan.
+This skill extends `$plan-deep` with a skill-evaluation stage. It is still planning-only. Do not edit files, spawn subagents, install skills, or run destructive commands while using this skill. If the current collaboration mode is Plan Mode, follow Plan Mode rules strictly. If the runtime is not in Plan Mode, still treat this skill invocation as planning-only unless the user explicitly asks for implementation after the plan.
 
 ## Objective
 
@@ -31,9 +31,9 @@ Create a decision-complete plan that:
 
 2. Check existing skills first.
    - Inspect skills listed in the current session.
-   - Check global skills under `~/.codex/skills`.
+   - Check consumer-runtime skills only when runtime inspection is relevant and allowed.
    - Check project-local skills under `skills/`, `.agents/skills`, or `.codex/skills`.
-   - Prefer local/custom skills when they encode Manuel's workflow or project-specific rules.
+   - Prefer local/custom skills when they encode explicit workflow or project-specific rules.
 
 3. Use `$find-skills` only if there is a real gap.
    - Search externally only when no existing skill is good enough.

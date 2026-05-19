@@ -1,14 +1,13 @@
-# macOS Setup And Validation
+# macOS/Linux Setup And Validation
 
-Use this runbook for macOS or Linux shells.
+Use this runbook to validate the public repository and optionally preview adoption into a macOS or Linux Codex runtime.
 
 ## Requirements
 
 - Git.
-- Bash 4+.
-- Python 3.
-- Codex installed and configured separately.
-- Optional: `PyYAML` in the active Python environment for full system skill validation.
+- Bash compatible with macOS default Bash 3.2 or newer.
+- Python 3 preferred; `python` is accepted when it points to Python 3.
+- Codex installed separately only if you plan to adopt a profile into a local runtime.
 
 On macOS, install missing basics with Homebrew when needed:
 
@@ -16,52 +15,71 @@ On macOS, install missing basics with Homebrew when needed:
 brew install git python
 ```
 
-## Inspect
+The repository itself does not require any preexisting `~/.codex` state.
+
+## Clone And Inspect
 
 ```bash
+git clone https://github.com/manulazs/development-workspace-codex.git
+cd development-workspace-codex
 git status --short --branch
-scripts/healthcheck.sh
 ```
 
-If the script is not executable after checkout, run:
+If shell scripts are not executable after checkout:
 
 ```bash
 chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
 ```
 
-## Preview Install
-
-```bash
-scripts/install-workspace.sh --dry-run
-```
-
-The dry run prints planned copies without modifying `~/.codex`.
-
-## Install Repo Skills And Agents
-
-```bash
-scripts/install-workspace.sh
-```
-
-This copies:
-
-- `skills/*` to `~/.codex/skills/*`.
-- `.codex/agents/*.toml` to `~/.codex/agents/*.toml`.
-
-It does not delete extra files from `~/.codex`.
-
-## Validate After Install
+## Validate Repository Health
 
 ```bash
 scripts/healthcheck.sh
-python skills/migrate-to-codex/scripts/cli.py --validate-target .
 ```
 
-Restart Codex after installing or updating skills or agents.
+The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, and repository validators. It does not compare against the local Codex runtime.
+
+## Inspect Adoption Profiles
+
+```bash
+scripts/install-workspace.sh --list-profiles
+```
+
+Profiles are reusable recommendations:
+
+- `minimal`: docs and governance only.
+- `governed-codex`: core governed Codex capabilities.
+- `data-bi`: analytics engineering and BI capabilities.
+- `frontend-artifacts`: frontend and artifact validation capabilities.
+- `full-reviewed`: all broad-use core and optional capabilities.
+
+## Preview Optional Runtime Adoption
+
+```bash
+scripts/install-workspace.sh --profile governed-codex --dry-run
+```
+
+Use a custom target when testing:
+
+```bash
+scripts/install-workspace.sh --profile governed-codex --codex-home ./.tmp/codex-home --dry-run
+```
+
+The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
+
+## Install Into A Runtime
+
+Only run this when you explicitly want to copy a profile into your local Codex home:
+
+```bash
+scripts/install-workspace.sh --profile governed-codex
+```
+
+Restart Codex after changing runtime skills or agents.
 
 ## Troubleshooting
 
-- If `python` is missing, install Python 3 and confirm `python --version`.
-- If `PyYAML` is missing, install it in the active Python environment or treat full skill validation as unavailable.
 - If `permission denied` appears, run `chmod +x scripts/*.sh`.
-- If Codex runtime drift is reported, run `scripts/install-workspace.sh --dry-run` before installing.
+- If Python is missing, install Python 3 and confirm `python3 --version`.
+- If `migrate-to-codex` validation is skipped, confirm Python is available and rerun the healthcheck.
+- If a profile fails to install, inspect `workspace-manifest.json` and ensure the profile does not reference `curated`, `review`, `deprecated`, or `archived` capabilities.

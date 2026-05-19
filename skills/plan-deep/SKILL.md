@@ -1,15 +1,15 @@
 ---
 name: plan-deep
-description: Manual-only Plan Mode add-on. Use only when Manuel explicitly invokes $plan-deep to create a deeper planning pass with context grounding, insights, task cataloging, and subagent delegation recommendations. Do not auto-trigger for ordinary planning requests.
+description: Manual-only Plan Mode add-on. Use only when the user explicitly invokes $plan-deep to create a deeper planning pass with context grounding, insights, task cataloging, and subagent delegation recommendations. Do not auto-trigger for ordinary planning requests.
 metadata:
   short-description: Manual deep planning with delegation matrix
 ---
 
 # Plan Deep
 
-Use this skill only when Manuel explicitly invokes `$plan-deep`.
+Use this skill only when the user explicitly invokes `$plan-deep`.
 
-This is a planning add-on, not an implementation workflow. Do not edit files, spawn subagents, install skills, or run destructive commands while using this skill. If the current collaboration mode is Plan Mode, follow Plan Mode rules strictly. If the runtime is not in Plan Mode, still treat this skill invocation as planning-only unless Manuel explicitly asks for implementation after the plan.
+This is a planning add-on, not an implementation workflow. Do not edit files, spawn subagents, install skills, or run destructive commands while using this skill. If the current collaboration mode is Plan Mode, follow Plan Mode rules strictly. If the runtime is not in Plan Mode, still treat this skill invocation as planning-only unless the user explicitly asks for implementation after the plan.
 
 ## Objective
 
@@ -44,7 +44,7 @@ Create a decision-complete plan that:
 
 5. Map agents.
    - Check built-in roles first: `default`, `explorer`, `worker`.
-   - Check existing custom agents under `.codex/agents` and `~/.codex/agents`.
+   - Check repository, project, or consumer-runtime custom agents when those sources are relevant and available.
    - When a stable project-local workflow clearly deserves reusable instructions, recommend `local_skill_builder` for a separate local skill creation task.
    - Recommend delegation only when the task can run in parallel or has a clear ownership boundary.
    - Do not recommend delegating work that blocks the immediate next critical-path step.

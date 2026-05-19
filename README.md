@@ -1,118 +1,115 @@
 # Development Workspace Codex
 
-Reusable, governed Codex workspace for custom skills, subagents, cross-platform setup, and self-improving development operations.
+Public, portable Codex workspace framework for governed skills, subagent templates, operational documentation, validation, and continuous improvement.
 
 ![Validate Workspace](https://github.com/manulazs/development-workspace-codex/actions/workflows/validate.yml/badge.svg)
 
-## What This Repository Is
+## What This Is
 
-This repository is the source of truth for a reusable Codex development workspace:
+This repository is a reusable template for teams or individuals who want a governed Codex-assisted development workspace.
 
-- custom or adapted Codex skills;
-- custom Codex subagents;
-- global instruction templates;
-- healthcheck and install scripts;
-- operational docs for governance, self-improvement, and capability inventory.
+It is not a copy of any user's local Codex runtime. It does not try to mirror `~/.codex`, validate a maintainer's private machine, or treat absence of local installation as a repository failure.
 
-The active runtime install is separate and lives under `~/.codex`.
+The repository contains:
 
-## Public Project Docs
-
-- `docs/README.md`: documentation index.
-- `CONTRIBUTING.md`: contribution workflow.
-- `CHANGELOG.md`: notable changes.
-- `SECURITY.md`: vulnerability and secret-handling policy.
-- `CODE_OF_CONDUCT.md`: participation rules.
-- `LICENSE`: Apache-2.0 license.
-
-## Contents
-
-- `skills/`: custom or adapted Codex skills.
-- `.codex/agents/`: custom Codex subagents.
-- `codex-global/`: templates for global Codex instructions.
-- `docs/decisions/`: short technical decisions explaining why the workspace is structured this way.
-- `docs/capability-inventory.md`: source of truth for tracked skills, agents, status, risk, and overlap.
-- `docs/runbooks/`: operational setup and validation procedures.
-- `docs/lessons/` and `docs/patterns/`: operational memory for recurring fixes and reusable workflows.
-- `scripts/`: cross-platform maintenance scripts.
-
-## Quickstart Windows
-
-```powershell
-git clone https://github.com/manulazs/development-workspace-codex.git
-cd development-workspace-codex
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -WhatIf
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1
-```
-
-Restart Codex after installing or updating skills or agents.
-
-Detailed steps: `docs/runbooks/setup-windows.md`.
-
-## Quickstart macOS/Linux
-
-```bash
-git clone https://github.com/manulazs/development-workspace-codex.git
-cd development-workspace-codex
-chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
-scripts/healthcheck.sh
-scripts/install-workspace.sh --dry-run
-scripts/install-workspace.sh
-```
-
-Restart Codex after installing or updating skills or agents.
-
-Detailed steps: `docs/runbooks/setup-macos.md`.
+- reusable Codex skill sources under `skills/`;
+- reusable custom subagent templates under `.codex/agents/`;
+- global instruction templates under `codex-global/`;
+- adoption profiles in `workspace-manifest.json`;
+- healthcheck and profile-based installation helpers under `scripts/`;
+- governance, setup, lifecycle, and audit documentation under `docs/`.
 
 ## Architecture
 
+| Layer | Responsibility |
+| --- | --- |
+| Public repository | Versioned template, policies, reusable capabilities, validation |
+| Consumer workspace | Project that chooses which profile or files to adopt |
+| Local runtime | Private user state such as `~/.codex`, outside repository control |
+
 ```mermaid
 flowchart LR
-  repo[Repository source] --> health[Healthcheck]
-  repo --> install[Install script]
-  install --> runtime[~/.codex runtime]
-  runtime --> use[Codex sessions]
-  use --> lessons[Lessons and patterns]
-  lessons --> inventory[Capability inventory]
-  inventory --> repo
+  repo[Public repository] --> manifest[Adoption manifest]
+  repo --> health[Repository healthcheck]
+  manifest --> preview[Install preview]
+  preview --> runtime[Optional local runtime]
+  repo --> docs[Governance docs]
+  docs --> review[Review and pruning]
+  review --> repo
 ```
 
-## Current Skills
+## Start Here
 
-The tracked skills are inventoried in `docs/capability-inventory.md`. Do not maintain a second manual list here; it will drift from `skills/`.
+- `docs/README.md`: documentation index.
+- `workspace-manifest.json`: reusable adoption profiles.
+- `docs/capability-inventory.md`: status, risk, overlap, and usage guidance for skills and agents.
+- `docs/subagents-policy.md`: when to use 0, 1, or multiple subagents.
+- `docs/self-improvement-lifecycle.md`: how lessons become reusable policies, skills, agents, or docs.
+- `docs/runbooks/setup-windows.md`: Windows setup.
+- `docs/runbooks/setup-macos.md`: macOS/Linux setup.
 
-Current categories:
+## Adoption Profiles
 
-- Local governance and planning skills.
-- dbt Labs analytics engineering skills.
-- Adapted third-party UI/artifact/browser skills.
-- Power BI and data visualization support skills.
-- Communication and git-helper skills retained for explicit use cases.
+Profiles describe what a consumer workspace may copy. They do not describe what is installed on this machine.
 
-## Current Custom Agents
+- `minimal`: docs, policies, templates, and repo validation only.
+- `governed-codex`: core planning, audit, migration, and review governance capabilities.
+- `data-bi`: analytics engineering, dbt, BI, and data-focused capabilities.
+- `frontend-artifacts`: frontend and local artifact validation capabilities.
+- `full-reviewed`: all core and optional capabilities approved for broad use.
 
-The tracked custom agents are also inventoried in `docs/capability-inventory.md`.
+Capabilities marked `curated`, `review`, `deprecated`, or `archived` are never installed by default profiles.
 
-- `agents_md_maintainer`: creates and maintains project `AGENTS.md` files.
-- `dashboard_visualization_specialist`: supports dashboards, Power BI, DAX, HTML Content visuals, and analytical UI.
-- `data_pipeline_engineer`: supports SQL, Databricks, dbt, joins, deduplication, validation, and analytics engineering.
-- `data_science_modeler`: supports EDA, modeling, metrics, statistical validation, and reproducible analysis.
-- `code_reviewer`: read-only reviewer that uses `codex review` when possible.
-- `security_auditor`: security scan and threat-modeling specialist.
-- `package_manager`: dependency, lockfile, version, and environment specialist.
-- `local_skill_builder`: creates project-local skills for recurring workflows and asks before global promotion.
-- `version_control_manager`: Git hygiene, commit, push, and repository state specialist.
+## Validate The Repository
+
+Windows:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
+```
+
+macOS/Linux:
+
+```bash
+chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
+scripts/healthcheck.sh
+```
+
+The healthcheck validates the repository itself: structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, and expected validators. It intentionally does not compare against `~/.codex`.
+
+## Optional Runtime Adoption
+
+Preview before copying anything:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
+```
+
+```bash
+scripts/install-workspace.sh --profile governed-codex --dry-run
+```
+
+List profiles:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -ListProfiles
+```
+
+```bash
+scripts/install-workspace.sh --list-profiles
+```
+
+The installer copies only the selected profile into the chosen Codex home. It never deletes local runtime files and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
 
 ## Governance
 
-- Run `scripts/healthcheck.ps1` before and after workspace changes.
-- Treat this repository as source of truth and `~/.codex` as runtime install.
-- Keep subagent use controlled by `docs/subagents-policy.md`.
-- Record recurring operational lessons in `docs/lessons/`.
-- Promote stable workflows to `docs/patterns/` or `docs/runbooks/`.
+- Keep `workspace-manifest.json` and `docs/capability-inventory.md` aligned with real files.
+- Add or materially change a skill only after checking whether an existing skill, agent, runbook, or policy already solves the problem.
+- Add or materially change a subagent only when delegation improves quality or risk control and the scope is independent.
 - Record structural decisions in `docs/decisions/`.
+- Capture recurring lessons in `docs/lessons/`, promote reusable workflows to `docs/patterns/` or `docs/runbooks/`, and prune obsolete content.
+- Do not commit secrets, private logs, local runtime state, cache files, sessions, auth files, or corporate data.
 
-## Repository Policy
+## Public Repository Policy
 
-This repository is prepared for public reuse under Apache-2.0. It may contain workflow preferences and local environment conventions, but it must not contain credentials, tokens, logs, private data exports, or Codex internal state files.
+This repository is prepared for public reuse under Apache-2.0. Any consumer workspace may fork it, remove irrelevant capabilities, add local policies, and choose an adoption profile. Local runtime synchronization is always an optional consumer operation, not a repository health requirement.

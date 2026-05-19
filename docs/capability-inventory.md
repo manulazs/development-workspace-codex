@@ -2,100 +2,101 @@
 
 Last reviewed: 2026-05-19
 
-This file is the source of truth for tracked workspace skills and custom agents. `README.md` should summarize this file instead of duplicating every operational detail.
+This inventory describes repository capabilities: skills, subagent templates, docs, and scripts that a consumer workspace may choose to adopt. It does not describe what is installed in any local Codex runtime.
+
+`workspace-manifest.json` is the machine-readable source for adoption profiles and status classification. This document is the human-readable source for purpose, risk, overlap, and usage guidance.
 
 ## Status Values
 
-- `keep`: approved for the repository.
-- `review`: useful, but overlap or risk should be reviewed before broad use.
-- `curated`: keep as source material; install or invoke only when the task clearly needs it.
-- `retire-candidate`: remove or archive if no validated use appears in the next review.
-- `archived`: removed from runtime-loadable locations but retained for history.
+| Status | Meaning | Default adoption |
+| --- | --- | --- |
+| `core` | Broadly useful governance capability with low ambiguity. | Included in governed profiles. |
+| `optional` | Useful for specific domains or workflows. | Included only by relevant profiles. |
+| `curated` | Kept as reference/source material or examples. | Never installed by default. |
+| `review` | Potentially useful but overlapping, risky, personal, or insufficiently generalized. | Requires explicit review before adoption. |
+| `deprecated` | Superseded and retained only for migration context. | Do not adopt. |
+| `archived` | Retired from runtime-loadable paths. | Do not adopt. |
 
-## Runtime Status
+There is intentionally no `installed locally` field. Local runtime state belongs to the consumer workspace, not this public repository.
 
-The repository and active Codex runtime are separate:
+## Adoption Profiles
 
-- Repository source: `skills/` and `.codex/agents/`.
-- Runtime install: `~/.codex/skills` and `~/.codex/agents`.
-
-Run `scripts/healthcheck.ps1` to compare them. Run `scripts/install-workspace.ps1 -WhatIf` before copying anything into the runtime profile.
-
-## Capability Lifecycle
-
-Use `docs/skill-template.md` before adding or materially changing a skill. Use `docs/agent-template.md` before adding or materially changing a custom agent.
-
-Creation requires:
-
-- Existing capability check against local skills, system skills, plugins, and custom agents.
-- Clear trigger, owner, risk, validation signal, and retention decision.
-- Inventory update in this file.
-- Validation through the platform healthcheck and relevant skill/agent validator.
-
-Archive or retire a capability when:
-
-- It duplicates a better native, plugin, skill, or agent capability.
-- It has no demonstrated use and adds maintenance overhead.
-- Its permission or command risk is higher than its value.
-- Its workflow is better represented as a runbook, pattern, or short `AGENTS.md` rule.
-
-Archived capabilities must be moved outside runtime-loadable paths: use `docs/archive/agents/` for agent history and `docs/archive/skills/` for skill history.
-
-## Skills
-
-| Skill | Origin | Purpose | Risk | Decision | Notes |
-| --- | --- | --- | --- | --- | --- |
-| `adding-dbt-unit-test` | dbt Labs | dbt unit-test authoring | Low | keep | Domain-specific and useful for analytics engineering. |
-| `agent-browser` | Vercel Labs | Specialized browser automation CLI | Medium | review | Overlaps built-in/browser plugin capabilities; use only for agent-browser-specific cases. |
-| `answering-natural-language-questions-with-dbt` | dbt Labs | Answer business data questions with dbt context | Medium | keep | Warehouse/API access can be sensitive; keep query scope explicit. |
-| `auditing-skills` | dbt Labs | Audit skill quality/security | Low | keep | Useful for capability governance. |
-| `building-dbt-semantic-layer` | dbt Labs | Build dbt semantic models/metrics | Low | keep | Domain-specific. |
-| `canvas-design` | Anthropic skills, adapted | Static visual art/design outputs | Medium | curated | Large font asset bundle; keep only while visual artifact work remains useful. |
-| `caveman` | JuliusBrussee caveman | Concise communication style | Low | review | Keep only if Manuel still uses this style explicitly. |
-| `caveman-commit` | JuliusBrussee caveman | Git commit workflow phrasing | Low | review | Overlaps normal git hygiene and `version_control_manager`. |
-| `caveman-compress` | JuliusBrussee caveman | Compress memory text files | Medium | review | Native compaction exists; use only for explicit caveman-format memory compression. |
-| `configuring-dbt-mcp-server` | dbt Labs | Configure/troubleshoot dbt MCP | Medium | keep | Handles credentials indirectly; never store secrets. |
-| `creating-mermaid-dbt-dag` | dbt Labs | Generate dbt lineage diagrams | Low | keep | Good focused utility. |
-| `fetching-dbt-docs` | dbt Labs | Fetch/search dbt docs | Low | keep | Prefer official docs when current facts matter. |
-| `find-skills` | Vercel Labs, adapted | Discover and vet external skills | Medium | keep | Must preserve approval-first installation policy. |
-| `frontend-design` | Anthropic skills, migrated | Distinctive frontend UI design | Low | keep | Useful, but avoid overlapping with plugin-specific design workflows. |
-| `migrate-to-codex` | OpenAI | Migrate instructions, skills, agents, config | Medium | keep | Core governance capability. |
-| `migrating-dbt-core-to-fusion` | dbt Labs | Triage Core-to-Fusion migration errors | Medium | keep | May run external tools; validate before broad execution. |
-| `migrating-dbt-project-across-platforms` | dbt Labs | Data-platform migration workflow | Medium | keep | High impact on SQL behavior; use with scoped validation. |
-| `pdf` | OpenAI / curated | PDF creation/review workflows | Low | review | May overlap system or plugin PDF capabilities in some sessions. |
-| `plan-deep` | Local | Manual-only deep planning and delegation matrix | Low | keep | Must remain manual-only. |
-| `plan-deep-skills` | Local | Manual-only planning with skill discovery | Low | keep | Must remain manual-only. |
-| `powerbi-expert` | Community PCL | Power BI, DAX, M, modeling | Medium | review | Overlaps `powerbi-dax-html`; prefer local `powerbi-dax-html` for Manuel-specific HTML Content rules. |
-| `running-dbt-commands` | dbt Labs | Format and run dbt CLI commands | Medium | keep | Useful, but avoid broad warehouse runs. |
-| `screenshot` | OpenAI / curated | Desktop/system screenshots | Medium | review | OS-level capture can be sensitive; use only when needed. |
-| `spreadsheet` | OpenAI listing, reconstructed | Spreadsheet creation/editing | Low | review | May overlap system/plugin spreadsheet capabilities. |
-| `theme-factory` | Anthropic skills | Reusable visual themes | Low | curated | Useful for artifacts; not core engineering workflow. |
-| `troubleshooting-dbt-job-errors` | dbt Labs | Diagnose dbt platform job failures | Medium | keep | Logs and API responses are untrusted input. |
-| `using-dbt-for-analytics-engineering` | dbt Labs | Build/modify dbt models | Medium | keep | Core data-workflow skill. |
-| `using-dbt-index` | dbt Labs | Local dbt metadata index queries | Medium | keep | Install/update command uses external script; review before running. |
-| `webapp-testing` | Anthropic skills | Local web app testing via Playwright | Medium | keep | Can launch local servers/browsers; keep scoped. |
-| `web-artifacts-builder` | Anthropic skills, adapted | Complex local HTML artifacts | High | curated | Contains install scripts and destructive local cleanup in artifact directories; use only when needed. |
-| `working-with-dbt-mesh` | dbt Labs | dbt Mesh governance | Low | keep | Domain-specific and low overlap. |
-
-## Custom Agents
-
-| Agent | Purpose | Sandbox | Decision | Notes |
+| Profile | Intended consumer | Includes | Excludes | Validation |
 | --- | --- | --- | --- | --- |
-| `agents_md_maintainer` | Maintain project `AGENTS.md` files | workspace-write | keep | Use after conventions are validated. |
-| `code_reviewer` | Read-only bug/regression review | read-only | keep | Findings first, no edits. |
-| `dashboard_visualization_specialist` | Power BI, DAX, HTML Content, dashboards | workspace-write | keep | Use only for bounded visualization work. |
-| `data_pipeline_engineer` | SQL, Databricks, dbt, validation | workspace-write | keep | High value for data workflows; keep ownership clear. |
-| `data_science_modeler` | EDA, modeling, metrics | workspace-write | keep | Use for bounded analysis/modeling. |
-| `local_skill_builder` | Create project-local skills | workspace-write | keep | Use only for recurring workflows. |
-| `package_manager` | Dependencies, lockfiles, runtimes | workspace-write | keep | Avoid broad upgrades unless requested. |
-| `security_auditor` | Threat modeling/security review | read-only | keep | Return reports to parent; do not edit product code. |
-| `version_control_manager` | Git hygiene, commit, push | workspace-write | review | Useful for large change sets; often main agent can handle directly. |
+| `minimal` | Evaluators, forks, and docs-only consumers | Policies, templates, docs, healthchecks | Runtime skill/agent copying | Repository healthcheck |
+| `governed-codex` | General governed Codex workspace | Core planning, audit, migration, review agents | Domain-specific and review capabilities | Repository healthcheck plus install preview |
+| `data-bi` | Analytics engineering, dbt, BI, dashboard workspaces | Governed base plus data/BI skills and agents | UI artifact and review capabilities | Repository healthcheck plus domain validation |
+| `frontend-artifacts` | Frontend app and artifact workflows | Governed base plus frontend testing/design skills | Curated art-heavy builders | Repository healthcheck plus browser/app tests |
+| `full-reviewed` | Broad adoption after capability review | Core and optional capabilities | `curated`, `review`, `deprecated`, `archived` | Repository healthcheck plus profile preview |
+
+## Skill Inventory
+
+| Capability | Status | Origin | Purpose | Risk | Platforms | Use when | Do not use when |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `adding-dbt-unit-test` | `optional` | dbt Labs | Author dbt unit tests. | Low | Cross-platform | A workspace actively maintains dbt models and needs test coverage. | The project does not use dbt. |
+| `agent-browser` | `review` | Vercel Labs | Specialized browser automation CLI workflows. | Medium | Cross-platform with tool dependencies | A task specifically requires this CLI behavior. | Built-in browser tooling or Playwright already covers the need. |
+| `answering-natural-language-questions-with-dbt` | `optional` | dbt Labs | Answer data questions using dbt project context. | Medium | Cross-platform | The workspace has dbt metadata and safe query access. | The request needs current facts but no validated data source is available. |
+| `auditing-skills` | `core` | dbt Labs | Audit skill quality, overlap, and security posture. | Low | Cross-platform | Reviewing skill changes or public readiness. | A simple docs typo is being fixed. |
+| `building-dbt-semantic-layer` | `optional` | dbt Labs | Build dbt semantic models and metrics. | Low | Cross-platform | The workspace uses dbt semantic layer concepts. | Metrics are owned by a different semantic layer. |
+| `canvas-design` | `curated` | Anthropic skill, adapted | Static visual design/artifact references. | Medium | Cross-platform | Mining examples or adapting visual workflows after review. | Installing default public governance capabilities. |
+| `caveman` | `review` | JuliusBrussee caveman | Strongly opinionated concise communication style. | Low | Cross-platform | A consumer explicitly wants that style. | The style would become a public default or conflict with project tone. |
+| `caveman-commit` | `review` | JuliusBrussee caveman | Commit-message helper with opinionated style. | Low | Cross-platform | A consumer explicitly adopts the style. | Normal git hygiene or templates are enough. |
+| `caveman-compress` | `review` | JuliusBrussee caveman | Compress memory-like text in a specific style. | Medium | Cross-platform | A consumer explicitly uses that memory format. | Native context compaction or normal summaries are sufficient. |
+| `configuring-dbt-mcp-server` | `optional` | dbt Labs | Configure and troubleshoot dbt MCP setup. | Medium | Cross-platform | The workspace uses dbt MCP and has safe credential handling. | Credentials would need to be stored in repo. |
+| `creating-mermaid-dbt-dag` | `optional` | dbt Labs | Generate Mermaid lineage diagrams from dbt context. | Low | Cross-platform | A dbt lineage diagram is useful for review or docs. | The project has no dbt lineage source. |
+| `fetching-dbt-docs` | `optional` | dbt Labs | Fetch or search dbt documentation. | Low | Cross-platform | Current dbt documentation is relevant. | Offline-only operation is required and docs are unavailable. |
+| `find-skills` | `core` | Vercel Labs, adapted | Discover, compare, and vet external skills. | Medium | Cross-platform | Considering a new skill or overlap review. | The task is already covered by existing repo capabilities. |
+| `frontend-design` | `optional` | Anthropic skill, migrated | Frontend UI design guidance. | Low | Cross-platform | Building or reviewing frontend experiences. | A plugin-specific Figma/Canva workflow is the actual target. |
+| `migrate-to-codex` | `core` | OpenAI | Migrate instructions, skills, agents, and config to Codex-compatible form. | Medium | Cross-platform | Adapting non-Codex capability sources. | Installing an unreviewed external skill unchanged. |
+| `migrating-dbt-core-to-fusion` | `optional` | dbt Labs | Triage dbt Core to Fusion migration issues. | Medium | Cross-platform | A dbt Fusion migration is in scope. | No migration is being attempted. |
+| `migrating-dbt-project-across-platforms` | `optional` | dbt Labs | Guide dbt project migration across data platforms. | Medium | Cross-platform | SQL/platform behavior changes need structured review. | The project is not changing platforms. |
+| `pdf` | `optional` | OpenAI/curated | PDF creation and review workflows. | Low | Cross-platform | PDF handling is a recurring workspace need. | Built-in or plugin PDF capability is sufficient. |
+| `plan-deep` | `core` | Local template | Manual deep planning and delegation matrix. | Low | Cross-platform | A user explicitly asks for deep planning before edits. | The user asked for direct implementation. |
+| `plan-deep-skills` | `core` | Local template | Planning workflow that includes skill discovery. | Low | Cross-platform | A plan needs capability selection or skill evaluation. | No skill decision is involved. |
+| `powerbi-expert` | `optional` | Community PCL | Power BI, DAX, M, modeling, and dashboard guidance. | Medium | Cross-platform | The consumer workspace does Power BI work. | A private local skill not versioned here is being assumed. |
+| `running-dbt-commands` | `optional` | dbt Labs | Prepare and run dbt CLI commands safely. | Medium | Cross-platform | dbt commands are part of the requested work. | Broad warehouse or destructive operations lack approval. |
+| `screenshot` | `review` | OpenAI/curated | OS screenshot workflows. | Medium | OS-sensitive | A task requires screenshots and privacy is acceptable. | A repository-only validation is enough. |
+| `spreadsheet` | `optional` | OpenAI listing, reconstructed | Spreadsheet creation and editing workflows. | Low | Cross-platform | Spreadsheet artifacts are recurring outputs. | Native app/plugin workflow is better. |
+| `theme-factory` | `curated` | Anthropic skill | Reusable visual theme source material. | Low | Cross-platform | Reviewing visual theme examples. | Installing default engineering governance profiles. |
+| `troubleshooting-dbt-job-errors` | `optional` | dbt Labs | Diagnose dbt platform job failures. | Medium | Cross-platform | dbt job logs and metadata are available. | Logs contain sensitive values that cannot be safely redacted. |
+| `using-dbt-for-analytics-engineering` | `optional` | dbt Labs | Build and modify dbt analytics engineering workflows. | Medium | Cross-platform | A workspace actively uses dbt. | The task is plain SQL or BI-only. |
+| `using-dbt-index` | `optional` | dbt Labs | Query a local dbt metadata index. | Medium | Cross-platform | A dbt index exists or can be safely generated. | The setup command would fetch or write without approval. |
+| `web-artifacts-builder` | `curated` | Anthropic skill, adapted | Build complex local HTML artifacts. | High | Cross-platform with dependencies | Reviewing or selectively adapting artifact workflows. | Default public profile installation. |
+| `webapp-testing` | `optional` | Anthropic skill | Test local web apps with browser validation. | Medium | Cross-platform with browser tooling | A frontend app needs runtime verification. | No app server or browser validation is needed. |
+| `working-with-dbt-mesh` | `optional` | dbt Labs | dbt Mesh governance workflows. | Low | Cross-platform | The workspace uses dbt Mesh. | Mesh is not part of the architecture. |
+
+## Subagent Template Inventory
+
+| Capability | Status | Purpose | Suggested model policy | Sandbox | Risk | Use when | Do not use when |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `agents_md_maintainer` | `core` | Maintain project `AGENTS.md` files. | Strong general/coding model when policy changes are subtle. | `workspace-write` | Medium | Project instructions need consistent updates. | A one-line docs edit is enough. |
+| `code_reviewer` | `core` | Read-only bug, regression, and missing-test review. | Strong model with deeper reasoning for risky diffs. | `read-only` | Low | Independent review improves quality. | The main task is still blocked on implementation. |
+| `dashboard_visualization_specialist` | `optional` | Dashboard, BI, DAX, HTML Content, and analytical UI support. | Strong visual/analytical model. | `workspace-write` | Medium | Visualization work is bounded and separate. | The change is pure backend or data modeling. |
+| `data_pipeline_engineer` | `optional` | SQL, Databricks, dbt, joins, deduplication, validation. | Strong Codex-oriented model for implementation. | `workspace-write` | Medium | Data pipeline work has clear file ownership. | Validation requires credentials unavailable to the agent. |
+| `data_science_modeler` | `optional` | EDA, modeling, metrics, and reproducible analysis. | Strong analytical model. | `workspace-write` | Medium | Modeling/analysis work is independently scoped. | The task is deterministic transformation only. |
+| `local_skill_builder` | `optional` | Create project-local skills from recurring workflows. | Strong model for instruction design. | `workspace-write` | Medium | A repeated pattern deserves a reusable skill. | A runbook or short policy is sufficient. |
+| `package_manager` | `optional` | Dependencies, lockfiles, package upgrades, runtimes. | Strong Codex-oriented model for risky upgrades. | `workspace-write` | Medium | Dependency work is isolated and testable. | Broad upgrades are not requested. |
+| `security_auditor` | `core` | Security review, threat modeling, and secret-risk analysis. | Strong model with high reasoning. | `read-only` | Low | Independent security review is needed. | The task is simple and no security-sensitive surface changed. |
+| `version_control_manager` | `review` | Git hygiene, commit preparation, push coordination. | Strong enough for repo-state reasoning. | `workspace-write` | Medium | A consumer explicitly wants delegated git operations. | Commit/push would happen without explicit user request. |
 
 ## Capability Selection Rules
 
-- Prefer built-in/system/plugin capabilities when they are current and sufficient.
-- Prefer local skills only when they encode Manuel-specific conventions or fill a real gap.
-- Do not invoke a custom agent if the main agent can complete the next step faster and safer.
-- Do not add a new skill or agent until this inventory shows the gap.
-- Review `review` and `curated` items quarterly.
-- Move obsolete capabilities to `docs/archive/` or remove them entirely; do not leave retired agents under `.codex/agents/` or retired skills under `skills/`.
+- Prefer `core` capabilities only when they reduce ambiguity or improve governance.
+- Prefer `optional` capabilities only when the workspace domain justifies them.
+- Do not install `curated`, `review`, `deprecated`, or `archived` capabilities through default profiles.
+- Do not create a skill for a one-off task.
+- Do not create a subagent when a skill, runbook, or main-agent workflow is enough.
+- Define precedence when two capabilities overlap; otherwise review, merge, or archive one.
+- Keep private or machine-specific runtime state out of this inventory.
+
+## Deprecation And Pruning
+
+A capability should be deprecated, archived, or removed when:
+
+- it duplicates a better native, plugin, skill, or agent capability;
+- it has no demonstrated recurring use;
+- its risk exceeds its operational value;
+- its workflow is better represented as a runbook, pattern, or short instruction;
+- it depends on personal preference that should not be public default policy.
+
+Pruning should reduce complexity. Reviews that only add new capabilities without removing stale ones are incomplete.

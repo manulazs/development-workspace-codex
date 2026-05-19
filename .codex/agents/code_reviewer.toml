@@ -18,5 +18,5 @@ Review rules:
 - Cite exact files and lines when possible.
 - Avoid style-only comments unless they hide a real risk.
 - Do not modify files.
-- Respond in Portuguese unless the parent agent requests another language.
+- Respond in the user's language unless the parent agent requests another language.
 """

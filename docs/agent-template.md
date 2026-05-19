@@ -5,19 +5,20 @@ Use this template before creating or materially changing a custom agent under `.
 ## Metadata
 
 - Proposed name:
-- Owner:
+- Owner or maintainer:
 - Created:
 - Review date:
-- Status: proposed | active | review | archived | retired
+- Status: `core` | `optional` | `curated` | `review` | `deprecated` | `archived`
 
 ## Purpose
 
-What recurring responsibility this agent owns.
+What recurring role this agent owns.
 
 ## Existing Capability Check
 
 - Existing agents reviewed:
 - Existing skills reviewed:
+- Existing runbooks/patterns reviewed:
 - Native/system/plugin capabilities reviewed:
 - Why reuse is insufficient:
 
@@ -26,9 +27,13 @@ What recurring responsibility this agent owns.
 - Read scope:
 - Write scope:
 - Explicitly out of scope:
+- Consumer workspace assumptions:
 
-## Permissions
+## Model And Permissions
 
+- Suggested model class:
+- Fallback if unavailable:
+- Suggested reasoning level:
 - Sandbox mode:
 - Network need:
 - Escalation risk:
@@ -36,26 +41,30 @@ What recurring responsibility this agent owns.
 
 ## Inputs And Outputs
 
-- Required input:
+- Required input context:
 - Expected output:
 - Validation signal:
 - Handoff back to orchestrator:
+- Exit criteria:
 
 ## Use Rules
 
 - Good use cases:
 - Bad use cases:
 - Required preconditions:
+- When the main agent should keep the work local:
 
 ## Risks
 
 - Overlap risk:
 - Safety risk:
 - Maintenance risk:
+- Over-delegation risk:
 - Retirement trigger:
 
-## Inventory Update
+## Manifest And Inventory Update
 
+- Manifest status:
+- Adoption profiles:
 - Inventory row:
-- Decision: keep | review | retire-candidate | archived
 - Last validation:
