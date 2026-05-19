@@ -95,6 +95,30 @@ foreach ($dir in $requiredDirs) {
     }
 }
 
+$requiredDocs = @(
+    "README.md",
+    "docs/README.md",
+    "docs/capability-inventory.md",
+    "docs/subagents-policy.md",
+    "docs/subagents-lifecycle.md",
+    "docs/self-improvement-lifecycle.md",
+    "docs/lessons/TEMPLATE.md",
+    "docs/patterns/TEMPLATE.md",
+    "docs/patterns/rejected/README.md",
+    "docs/audits/TEMPLATE.md",
+    "docs/decisions/TEMPLATE.md",
+    "docs/runbooks/setup-windows.md",
+    "docs/runbooks/setup-macos.md"
+)
+
+foreach ($doc in $requiredDocs) {
+    if (Test-Path $doc) {
+        Add-Result INFO "Required doc exists: $doc"
+    } else {
+        Add-Result FAIL "Required doc missing: $doc"
+    }
+}
+
 $skillFiles = @(Get-ChildItem "skills" -Directory -ErrorAction SilentlyContinue | ForEach-Object {
     Join-Path $_.FullName "SKILL.md"
 } | Where-Object { Test-Path $_ })

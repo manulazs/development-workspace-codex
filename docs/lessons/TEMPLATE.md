@@ -6,6 +6,7 @@
 - Project/workspace:
 - Related task:
 - Status: proposed | validated | retired
+- Promotion target: none | pattern | runbook | skill | agent | AGENTS.md | ADR
 
 ## Context
 
@@ -30,6 +31,10 @@ How the fix was validated.
 ## Reuse Rule
 
 When future agents should reuse this lesson, and when they should not.
+
+## Promotion Criteria
+
+What evidence would justify promoting this lesson to a pattern, runbook, skill, agent, permanent rule, or ADR.
 
 ## Risk
 

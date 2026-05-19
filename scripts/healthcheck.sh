@@ -75,6 +75,30 @@ for dir in "${required_dirs[@]}"; do
   fi
 done
 
+required_docs=(
+  "README.md"
+  "docs/README.md"
+  "docs/capability-inventory.md"
+  "docs/subagents-policy.md"
+  "docs/subagents-lifecycle.md"
+  "docs/self-improvement-lifecycle.md"
+  "docs/lessons/TEMPLATE.md"
+  "docs/patterns/TEMPLATE.md"
+  "docs/patterns/rejected/README.md"
+  "docs/audits/TEMPLATE.md"
+  "docs/decisions/TEMPLATE.md"
+  "docs/runbooks/setup-windows.md"
+  "docs/runbooks/setup-macos.md"
+)
+
+for doc in "${required_docs[@]}"; do
+  if [[ -f "$doc" ]]; then
+    add_result INFO "Required doc exists: $doc"
+  else
+    add_result FAIL "Required doc missing: $doc"
+  fi
+done
+
 mapfile -t skill_files < <(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -type f 2>/dev/null | sort)
 if [[ "${#skill_files[@]}" -eq 0 ]]; then
   add_result FAIL "No skills with SKILL.md found under skills/."
