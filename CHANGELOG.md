@@ -7,6 +7,9 @@ All notable changes to this workspace are tracked here.
 - Prepare public repository documentation.
 - Add cross-platform setup and validation scripts.
 - Formalize self-improvement, subagent, and capability lifecycles.
+- Add GitHub issue and pull request templates.
+- Add Windows/macOS GitHub Actions validation matrix.
+- Record final cross-platform officialization audit.
 
 ## 2026-05-19
 

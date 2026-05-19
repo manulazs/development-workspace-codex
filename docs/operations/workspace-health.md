@@ -7,13 +7,15 @@ Last reviewed: 2026-05-19
 - Repository path: `C:\Users\c36647b\OneDrive - CNH Industrial\Documentos\github\development-workspace-codex`
 - Branch: `main`
 - Remote: `origin`
-- Latest published governance commit: `3288234 govern workspace operations`
+- Latest published governance commit before this officialization round: `3288234 govern workspace operations`
+- Latest local validation commit before final audit: `1fea1a2 validate workspace across platforms`
 - Repository capabilities: 31 skills, 9 custom agents.
 - Current Windows validation: `scripts/healthcheck.ps1` passes with 0 failures.
 - Current agent validation: `migrate-to-codex --validate-target .` passes.
+- Current Windows install preview: `scripts/install-workspace.ps1 -WhatIf` previews 31 skills and 9 agents without mutation.
 - Known runtime gap: repo skills and custom agents are not installed into the active `~/.codex` profile.
 - Known validation gap: active Python lacks `PyYAML`, so full `quick_validate.py` validation is not available.
-- Known platform gap: macOS/Linux scripts and CI are not implemented yet.
+- Known platform gap: macOS/Linux scripts exist, but local execution was not possible on this Windows host because `bash`/`sh` are unavailable. GitHub Actions must validate `macos-latest` after push.
 
 ## Operational Gap
 
@@ -38,6 +40,7 @@ Yellow:
 - `quick_validate.py` cannot run because Python dependencies are missing.
 - README contains a manual capability list that differs from the repo.
 - Files over 5 MB are tracked without explicit justification.
+- GitHub Actions macOS validation has not run yet for the local officialization commits.
 
 Red:
 
