@@ -23,6 +23,7 @@ This directory contains the operating documentation for the public Codex workspa
 - `skills-provenance.md`: informational skill source, license, attribution, and script-risk matrix.
 - `agentic-controls.md`: distinction between recommending, spawning, creating, persisting, and installing capabilities.
 - `continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
+- `data-agent-pipeline.md`: data-development pipeline routing across discovery, engineering, cataloging, science, analysis, and visualization agents.
 - `subagents-policy.md`: policy for 0, 1, or multiple subagents.
 - `subagents-lifecycle.md`: lifecycle for creating, changing, merging, or retiring subagent templates.
 - `self-improvement-lifecycle.md`: public improvement loop and pruning rules.

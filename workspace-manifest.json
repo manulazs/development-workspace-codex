@@ -48,6 +48,8 @@
     "agents_md_maintainer": "core",
     "code_reviewer": "core",
     "dashboard_visualization_specialist": "optional",
+    "data_catalog_taxonomist": "optional",
+    "data_discovery_researcher": "optional",
     "data_pipeline_engineer": "optional",
     "data_science_modeler": "optional",
     "local_skill_builder": "optional",
@@ -103,6 +105,8 @@
       ],
       "agents": [
         "dashboard_visualization_specialist",
+        "data_catalog_taxonomist",
+        "data_discovery_researcher",
         "data_pipeline_engineer",
         "data_science_modeler"
       ],

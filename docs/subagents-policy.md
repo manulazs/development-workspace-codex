@@ -78,7 +78,10 @@ The subagent does not own the final answer.
 | Small code/doc edit | Main agent | No | The change is local and obvious |
 | Large code change with independent slices | Worker-style subagent | Yes, if authorized | Files overlap or design is unsettled |
 | Read-only codebase question | Explorer-style subagent | Yes, if authorized | The answer blocks the immediate next command |
+| Data discovery and source research | `data_discovery_researcher` | Yes, if bounded | The source contract, grain, and owner are already known |
 | SQL, Databricks, dbt logic | `data_pipeline_engineer` | Yes, if bounded | Source lineage is unclear and needs main-thread decisions |
+| Data catalog, taxonomy, glossary, lineage docs | `data_catalog_taxonomist` | Yes, if bounded | The task is transformation implementation or visual design |
+| Data science, statistical analysis, insight synthesis | `data_science_modeler` | Yes, if bounded | The request is only deterministic pipeline work |
 | Dashboard, BI, DAX, analytical UI | `dashboard_visualization_specialist` | Yes, if bounded | Semantic model decisions are not settled |
 | Review | `code_reviewer` | Yes, after implementation | No diff or acceptance criteria exists |
 | Security review | `security_auditor` | Yes, for read-only audit | Fix implementation is required in the same step |

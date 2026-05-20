@@ -14,7 +14,8 @@ from pathlib import Path
 STATUSES = {"core", "optional", "curated", "review", "deprecated", "archived"}
 CORE_GATED = {"core"}
 TOKEN_RE = re.compile(r"[a-z0-9]+")
-NAME_RE = re.compile(r"^[a-z][a-z0-9-]*[a-z0-9]$")
+SKILL_NAME_RE = re.compile(r"^[a-z][a-z0-9-]*[a-z0-9]$")
+AGENT_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*[a-z0-9]$")
 
 
 @dataclass(frozen=True)
@@ -122,11 +123,14 @@ def overlap_candidates(
     return sorted(candidates, key=lambda item: (-item[1], item[0].name))
 
 
-def require_valid_name(name: str) -> None:
-    if not NAME_RE.match(name):
+def require_valid_name(kind: str, name: str) -> None:
+    pattern = AGENT_NAME_RE if kind == "agent" else SKILL_NAME_RE
+    if not pattern.match(name):
+        expected = "lowercase snake_case" if kind == "agent" else "lowercase kebab-case"
         raise SystemExit(
-            "Capability name must be lowercase kebab-case, start with a letter, "
-            "and contain only letters, numbers, and hyphens."
+            f"{kind.capitalize()} name must be {expected}, start with a letter, "
+            "and contain only lowercase letters, numbers, "
+            + ("and underscores." if kind == "agent" else "and hyphens.")
         )
 
 
@@ -306,7 +310,11 @@ def main() -> None:
         description="Create governed skill or agent proposals with anti-duplication checks."
     )
     parser.add_argument("kind", choices=["skill", "agent"], help="Capability type.")
-    parser.add_argument("--name", required=True, help="Lowercase kebab-case capability name.")
+    parser.add_argument(
+        "--name",
+        required=True,
+        help="Capability name. Skills use lowercase kebab-case; agents use lowercase snake_case.",
+    )
     parser.add_argument("--purpose", required=True, help="One-sentence purpose.")
     parser.add_argument("--status", default="review", choices=sorted(STATUSES), help="Manifest status.")
     parser.add_argument("--root", default=".", help="Repository root.")
@@ -332,7 +340,7 @@ def main() -> None:
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
-    require_valid_name(args.name)
+    require_valid_name(args.kind, args.name)
 
     existing = collect_existing(root)
     overlaps = overlap_candidates(

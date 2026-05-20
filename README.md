@@ -75,7 +75,7 @@ Profiles describe what a consumer workspace may copy. They do not describe what 
 
 - `minimal`: docs, policies, templates, and repo validation only.
 - `governed-codex`: core planning, audit, migration, `caveman lite` communication, and review governance capabilities.
-- `data-bi`: analytics engineering, dbt, BI, and data-focused capabilities.
+- `data-bi`: data discovery, engineering, cataloging, science, analysis, BI, and visualization capabilities.
 - `frontend-artifacts`: frontend and local artifact validation capabilities.
 - `full-reviewed`: all core and optional capabilities approved for broad use.
 
