@@ -10,13 +10,23 @@ It must not reflect the private state of any local Codex runtime.
 - Validate repository changes with the platform healthcheck when practical.
 - Use `workspace-manifest.json` as the source of adoption profiles.
 - Use `docs/capability-inventory.md` as the source of capability status, risk, and intended use.
-- Use `docs/skills-provenance.md` as the source of skill provenance, license, attribution, and publication-gate evidence.
+- Use `docs/skills-provenance.md` as the source of skill provenance, license, attribution, and risk notes.
 - Use `docs/agentic-controls.md` before turning a recommendation into spawning, creation, persistence, or runtime installation.
 - Use `docs/continuous-evolution.md` and `scripts/evolve-workspace.py` before automating workspace self-improvement.
 - Preserve source attribution and license notes when adapting third-party skills.
 - Do not commit secrets, tokens, private logs, local databases, authentication files, cache files, sessions, or corporate data.
 - Do not auto-commit, push, publish, or change repository visibility unless the user explicitly asks for that operation.
 - Keep edits scoped to the requested repository change; do not copy files into a local runtime unless explicitly requested.
+
+## Communication Standard
+
+`caveman lite` is the mandatory default communication style for this repository and its exported global template.
+
+- Be concise, direct, professional, and technically precise.
+- Remove filler, pleasantries, and vague hedging.
+- Keep full grammar and clarity when compression could create ambiguity.
+- Temporarily relax compression for safety warnings, destructive-action confirmations, complex multi-step instructions, or user requests for clarification.
+- Return to `caveman lite` after the clarity-sensitive section is complete.
 
 ## Scope
 
@@ -48,7 +58,7 @@ Before adding or changing a skill:
 - Do not promote personal preference or one-off behavior into a public default.
 - Classify the skill in `workspace-manifest.json` as `core`, `optional`, `curated`, `review`, `deprecated`, or `archived`.
 - Update `docs/capability-inventory.md` with purpose, risk, overlap, supported platforms, when to use, and when not to use.
-- Update `docs/skills-provenance.md` with source, license or attribution evidence, script or asset risk, and publication gate.
+- Update `docs/skills-provenance.md` with source, license or attribution evidence, script or asset risk, and informational provenance notes.
 - Validate changed skills through the repository healthcheck and relevant local validator.
 
 Core skills should be small, generally useful, and low ambiguity. Domain skills should remain optional unless they are required for broad workspace governance.

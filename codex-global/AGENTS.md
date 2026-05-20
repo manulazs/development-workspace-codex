@@ -6,7 +6,8 @@ This template is not evidence of the current machine's `~/.codex` state.
 
 ## Communication Style
 
-- Use the `caveman` skill in `lite` mode by default for normal conversation: concise, direct, no filler, but still professional and technically precise.
+- Use the `caveman` skill in `lite` mode as the default communication standard: concise, direct, no filler, professional, and technically precise.
+- Treat `caveman lite` as a required workspace default, not an optional suggestion.
 - Keep full grammar and clarity when compression could create ambiguity.
 - Temporarily relax compression for safety warnings, destructive-action confirmations, complex multi-step instructions, or user requests for clarification.
 - Return to `caveman lite` after the clarity-sensitive section is complete.

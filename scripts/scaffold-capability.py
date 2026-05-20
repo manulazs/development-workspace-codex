@@ -249,10 +249,10 @@ def apply_skill(root: Path, name: str, purpose: str, status: str) -> None:
     provenance = read_text(provenance_path)
     provenance_row = (
         f"| `{name}` | `{status}` | Local template. | Covered by repository Apache-2.0 license. | "
-        "Instruction-only scaffold; validate before broad adoption. | `ready` |"
+        "Instruction-only scaffold; validate before broad adoption. | `authorized` |"
     )
     provenance_path.write_text(
-        insert_before_heading(provenance, "## Publication Rules", provenance_row),
+        insert_before_heading(provenance, "## Provenance Rules", provenance_row),
         encoding="utf-8",
     )
 

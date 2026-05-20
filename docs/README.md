@@ -20,7 +20,7 @@ This directory contains the operating documentation for the public Codex workspa
 - `../README.md`: public overview, architecture, quickstart, and governance summary.
 - `../workspace-manifest.json`: reusable adoption profiles; not local runtime state.
 - `capability-inventory.md`: inventory of skills and agents with status, risk, overlap, and usage guidance.
-- `skills-provenance.md`: skill source, license, attribution, script-risk, and publication-gate matrix.
+- `skills-provenance.md`: informational skill source, license, attribution, and script-risk matrix.
 - `agentic-controls.md`: distinction between recommending, spawning, creating, persisting, and installing capabilities.
 - `continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
 - `subagents-policy.md`: policy for 0, 1, or multiple subagents.

@@ -20,6 +20,11 @@ All notable changes to this workspace are tracked here.
 - Add `caveman lite` as the global template communication style and reclassify `caveman` as an optional adoption capability.
 - Add governed continuous-evolution automation with task cataloging, anti-duplication review, subagent handoff protocol, and validation gates.
 - Add capability scaffolding for governed skill and agent proposals with duplicate checks and core human gates.
+- Harden Python validation for Windows/OneDrive by validating syntax without writing bytecode.
+- Add safe Git index lock diagnostics to the Windows healthcheck.
+- Extend continuous evolution with recurring reports and optional validation snapshots.
+- Treat skill provenance as informational and remove provenance gates as active use/import blockers.
+- Make `caveman lite` the mandatory repository communication standard and promote `caveman` to the core profile.
 
 ## 2026-05-19
 

@@ -12,13 +12,13 @@ The workspace already had strong governance structure, but a public template nee
 
 ## Changes
 
-- Added `docs/skills-provenance.md` to track source, license, attribution, script risk, and publication gate per skill.
+- Added `docs/skills-provenance.md` to track source, license, attribution, and script risk per skill.
 - Added `docs/agentic-controls.md` to separate recommending, spawning, creating, persisting, and installing capabilities.
 - Added `scripts/validate-skills.py` so CI and healthchecks can validate skill metadata and documentation coverage without external dependencies.
 - Updated CI and healthchecks to run stricter repository validation and `full-reviewed` install previews.
 
 ## Consequences
 
-- Skills marked `needs-source-review` should not be treated as fully public-ready until upstream license and attribution evidence is recorded.
+- Superseded by later maintainer policy: provenance is informational and does not block authorized repository skills.
 - Agentic automation remains opt-in and bounded by runtime, user, and developer instructions.
 - Repository health still does not require local runtime synchronization.

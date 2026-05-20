@@ -8,7 +8,7 @@ This audit records the hardening pass that followed the public-template technica
 
 ## Changes Captured
 
-- Added `docs/skills-provenance.md` as the canonical skill provenance and publication-gate matrix.
+- Added `docs/skills-provenance.md` as the canonical informational skill provenance matrix.
 - Added `docs/agentic-controls.md` to distinguish recommending, spawning, creating, persisting, and retiring skills or subagents.
 - Added repository-local skill validation through `scripts/validate-skills.py`.
 - Strengthened CI and healthchecks to include strict repository validation, skill metadata validation, and `full-reviewed` install previews.
@@ -24,7 +24,7 @@ This audit records the hardening pass that followed the public-template technica
 
 ## Open Follow-Ups
 
-- Resolve every `needs-source-review` entry in `docs/skills-provenance.md` before claiming full public redistribution readiness.
+- Review `docs/skills-provenance.md` before broad redistribution and preserve bundled license or attribution files.
 - Capture fresh Windows evidence from CI or a Windows host with PowerShell available.
 - Decide whether `migrate-to-codex` remains `core` after documenting its target-write behavior.
 - Review `review` and `curated` capabilities on the published cadence and prune stale items rather than only adding more capabilities.

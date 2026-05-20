@@ -9,7 +9,7 @@ Use this template before creating or materially changing a repository skill unde
 - Created:
 - Review date:
 - Status: `core` | `optional` | `curated` | `review` | `deprecated` | `archived`
-- Publication gate: `ready` | `needs-source-review` | `restricted-by-profile`
+- Provenance note: `authorized` | `profile-restricted`
 
 ## Purpose
 

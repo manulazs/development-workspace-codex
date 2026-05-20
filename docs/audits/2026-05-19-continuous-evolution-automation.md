@@ -12,7 +12,7 @@ Review the new continuous-evolution automation layer for task cataloging, anti-d
 - The workspace now has a deterministic repository-local task catalog script.
 - The automation remains bounded to repository files and does not write to `~/.codex`.
 - The workflow explicitly separates automatic repository edits from human-gated core or sensitive changes.
-- Remaining provenance tasks are expected because several imported skills still need source/license review.
+- Provenance rows are informational. They should record source, license, attribution, and script-risk notes, but they do not block authorized repository skills.
 
 ## Required Validation
 
@@ -23,5 +23,5 @@ Review the new continuous-evolution automation layer for task cataloging, anti-d
 
 ## Open Follow-Ups
 
-- Resolve `needs-source-review` skill provenance entries before claiming broad public redistribution readiness.
+- Review provenance notes before broad redistribution and preserve bundled license or attribution files.
 - Consider a future CI check that compares generated task catalog output with committed catalog files.

@@ -43,7 +43,7 @@ flowchart LR
 - `docs/README.md`: documentation index.
 - `workspace-manifest.json`: reusable adoption profiles.
 - `docs/capability-inventory.md`: status, risk, overlap, and usage guidance for skills and agents.
-- `docs/skills-provenance.md`: source, license, attribution, and publication gates for skills.
+- `docs/skills-provenance.md`: informational source, license, attribution, and risk notes for skills.
 - `docs/agentic-controls.md`: control boundaries for recommending, spawning, creating, and persisting skills or subagents.
 - `docs/continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
 - `docs/subagents-policy.md`: when to use 0, 1, or multiple subagents.
@@ -74,14 +74,14 @@ Only copy capabilities into a runtime after choosing a profile explicitly. The m
 Profiles describe what a consumer workspace may copy. They do not describe what is installed on this machine.
 
 - `minimal`: docs, policies, templates, and repo validation only.
-- `governed-codex`: core planning, audit, migration, and review governance capabilities.
+- `governed-codex`: core planning, audit, migration, `caveman lite` communication, and review governance capabilities.
 - `data-bi`: analytics engineering, dbt, BI, and data-focused capabilities.
 - `frontend-artifacts`: frontend and local artifact validation capabilities.
 - `full-reviewed`: all core and optional capabilities approved for broad use.
 
 Capabilities marked `curated`, `review`, `deprecated`, or `archived` are never installed by default profiles.
 
-`caveman` is an optional communication-style capability. The bundled global template uses `caveman lite` as a concise default, but consumers should keep or remove that section based on their team tone and clarity requirements.
+`caveman lite` is the mandatory communication standard for this repository and its exported global template. It means concise, direct, no filler, professional, and technically precise. Temporarily use fuller prose when safety, destructive operations, legal clarity, or complex instructions require it.
 
 ## Validate The Repository
 
@@ -99,7 +99,7 @@ scripts/healthcheck.sh --strict
 python scripts/validate-skills.py --strict
 ```
 
-The healthcheck validates the repository itself: structure, docs, manifest coverage, skill frontmatter, provenance coverage, agent TOML, installer safety, basic secret patterns, and expected validators. It intentionally does not compare against `~/.codex`.
+The healthcheck validates the repository itself: structure, docs, manifest coverage, skill frontmatter, provenance coverage, agent TOML, installer safety, basic secret patterns, bytecode-free Python syntax, and expected validators. It intentionally does not compare against `~/.codex`.
 
 ## Optional Runtime Adoption
 
@@ -128,7 +128,7 @@ The installer copies only the selected profile into the chosen Codex home. It ne
 ## Governance
 
 - Keep `workspace-manifest.json` and `docs/capability-inventory.md` aligned with real files.
-- Keep `docs/skills-provenance.md` aligned with skill source, license, attribution, and script-risk evidence.
+- Keep `docs/skills-provenance.md` aligned with skill source, license, attribution, and script-risk notes. Provenance is informational and does not block authorized repository skills.
 - Add or materially change a skill only after checking whether an existing skill, agent, runbook, or policy already solves the problem.
 - Add or materially change a subagent only when delegation improves quality or risk control and the scope is independent.
 - Use `docs/agentic-controls.md` to distinguish recommending a capability from spawning, creating, persisting, or installing it.
@@ -143,4 +143,4 @@ The installer copies only the selected profile into the chosen Codex home. It ne
 
 This repository is prepared for public reuse under Apache-2.0. Any consumer workspace may fork it, remove irrelevant capabilities, add local policies, and choose an adoption profile. Local runtime synchronization is always an optional consumer operation, not a repository health requirement.
 
-Before claiming a fork is fully public-ready, resolve every `needs-source-review` entry in `docs/skills-provenance.md`, run both platform healthchecks, and verify that default profiles do not install `curated`, `review`, `deprecated`, or `archived` capabilities.
+Before claiming a fork is fully public-ready, run both platform healthchecks, review provenance notes for bundled sources and licenses, and verify that default profiles do not install `curated`, `review`, `deprecated`, or `archived` capabilities.

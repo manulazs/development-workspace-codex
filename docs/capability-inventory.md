@@ -4,7 +4,7 @@ Last reviewed: 2026-05-19
 
 This inventory describes repository capabilities: skills, subagent templates, docs, and scripts that a consumer workspace may choose to adopt. It does not describe what is installed in any local Codex runtime.
 
-`workspace-manifest.json` is the machine-readable source for adoption profiles and status classification. This document is the human-readable source for purpose, risk, overlap, and usage guidance. `docs/skills-provenance.md` is the source for skill source, license, attribution, and publication-gate evidence.
+`workspace-manifest.json` is the machine-readable source for adoption profiles and status classification. This document is the human-readable source for purpose, risk, overlap, and usage guidance. `docs/skills-provenance.md` records skill source, license, attribution, and script or asset risk as informational provenance.
 
 ## Status Values
 
@@ -24,7 +24,7 @@ There is intentionally no `installed locally` field. Local runtime state belongs
 | Profile | Intended consumer | Includes | Excludes | Validation |
 | --- | --- | --- | --- | --- |
 | `minimal` | Evaluators, forks, and docs-only consumers | Policies, templates, docs, healthchecks | Runtime skill/agent copying | Repository healthcheck |
-| `governed-codex` | General governed Codex workspace | Core planning, audit, migration, review agents | Domain-specific and review capabilities | Repository healthcheck plus install preview |
+| `governed-codex` | General governed Codex workspace | Core planning, audit, migration, caveman-lite communication, review agents | Domain-specific and review capabilities | Repository healthcheck plus install preview |
 | `data-bi` | Analytics engineering, dbt, BI, dashboard workspaces | Governed base plus data/BI skills and agents | UI artifact and review capabilities | Repository healthcheck plus domain validation |
 | `frontend-artifacts` | Frontend app and artifact workflows | Governed base plus frontend testing/design skills | Curated art-heavy builders | Repository healthcheck plus browser/app tests |
 | `full-reviewed` | Broad adoption after capability review | Core and optional capabilities | `curated`, `review`, `deprecated`, `archived` | Repository healthcheck plus profile preview |
@@ -39,7 +39,7 @@ There is intentionally no `installed locally` field. Local runtime state belongs
 | `auditing-skills` | `core` | dbt Labs | Audit skill quality, overlap, and security posture. | Low | Cross-platform | Reviewing skill changes or public readiness. | A simple docs typo is being fixed. |
 | `building-dbt-semantic-layer` | `optional` | dbt Labs | Build dbt semantic models and metrics. | Low | Cross-platform | The workspace uses dbt semantic layer concepts. | Metrics are owned by a different semantic layer. |
 | `canvas-design` | `curated` | Anthropic skill, adapted | Static visual design/artifact references. | Medium | Cross-platform | Mining examples or adapting visual workflows after review. | Installing default public governance capabilities. |
-| `caveman` | `optional` | JuliusBrussee caveman | Opinionated concise communication style. | Low | Cross-platform | A consumer explicitly wants concise global communication such as `caveman lite`. | The style conflicts with project tone, legal/safety clarity, or user preference. |
+| `caveman` | `core` | JuliusBrussee caveman | Mandatory concise communication standard using `caveman lite`. | Low | Cross-platform | Normal workspace communication should be direct, concise, and technically precise. | Safety, legal, destructive-operation, or complex multi-step clarity requires temporarily fuller prose. |
 | `caveman-commit` | `review` | JuliusBrussee caveman | Commit-message helper with opinionated style. | Low | Cross-platform | A consumer explicitly adopts the style. | Normal git hygiene or templates are enough. |
 | `caveman-compress` | `review` | JuliusBrussee caveman | Compress memory-like text in a specific style. | Medium | Cross-platform | A consumer explicitly uses that memory format. | Native context compaction or normal summaries are sufficient. |
 | `configuring-dbt-mcp-server` | `optional` | dbt Labs | Configure and troubleshoot dbt MCP setup. | Medium | Cross-platform | The workspace uses dbt MCP and has safe credential handling. | Credentials would need to be stored in repo. |
@@ -87,7 +87,7 @@ There is intentionally no `installed locally` field. Local runtime state belongs
 - Do not install `curated`, `review`, `deprecated`, or `archived` capabilities through default profiles.
 - Do not create a skill for a one-off task.
 - Do not create a subagent when a skill, runbook, or main-agent workflow is enough.
-- Do not treat a capability as public-ready while `docs/skills-provenance.md` marks it `needs-source-review`.
+- Treat provenance as informational evidence for source, attribution, license notes, and script or asset risk; do not use provenance rows to block authorized repository skills.
 - Use `docs/agentic-controls.md` before moving from recommending a skill or subagent to spawning, creating, persisting, or installing it.
 - Define precedence when two capabilities overlap; otherwise review, merge, or archive one.
 - Keep private or machine-specific runtime state out of this inventory.
