@@ -370,7 +370,10 @@ def main() -> None:
 
     if args.dry_run:
         print(f"[dry-run] {args.kind} scaffold would be applied: {args.name}")
-        print("[dry-run] manifest, inventory, provenance, and proposal files would be updated.")
+        if args.kind == "skill":
+            print("[dry-run] manifest, inventory, provenance, and proposal files would be updated.")
+        else:
+            print("[dry-run] manifest, inventory, and proposal files would be updated.")
         return
 
     if args.kind == "skill":

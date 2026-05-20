@@ -25,7 +25,7 @@ There is intentionally no `installed locally` field. Local runtime state belongs
 | --- | --- | --- | --- | --- |
 | `minimal` | Evaluators, forks, and docs-only consumers | Policies, templates, docs, healthchecks | Runtime skill/agent copying | Repository healthcheck |
 | `governed-codex` | General governed Codex workspace | Core planning, audit, migration, caveman-lite communication, review agents | Domain-specific and review capabilities | Repository healthcheck plus install preview |
-| `data-bi` | Analytics engineering, dbt, BI, dashboard workspaces | Governed base plus data/BI skills and agents | UI artifact and review capabilities | Repository healthcheck plus domain validation |
+| `data-bi` | Data discovery, analytics engineering, dbt, BI, dashboard, and data science workspaces | Governed base plus data/BI skills and agents covering discovery, engineering, cataloging, science, analysis, and visualization | UI artifact and review capabilities | Repository healthcheck plus domain validation |
 | `frontend-artifacts` | Frontend app and artifact workflows | Governed base plus frontend testing/design skills | Curated art-heavy builders | Repository healthcheck plus browser/app tests |
 | `full-reviewed` | Broad adoption after capability review | Core and optional capabilities | `curated`, `review`, `deprecated`, `archived` | Repository healthcheck plus profile preview |
 

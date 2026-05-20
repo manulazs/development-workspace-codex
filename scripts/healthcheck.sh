@@ -194,11 +194,14 @@ else
   if "$PYTHON_BIN" - "workspace-manifest.json" > "$manifest_report" <<'PY'
 import json
 import os
+import re
 import sys
 
 manifest_path = sys.argv[1]
 allowed = {"core", "optional", "curated", "review", "deprecated", "archived"}
 blocked = {"curated", "review", "deprecated", "archived"}
+skill_name_re = re.compile(r"^[a-z][a-z0-9-]*[a-z0-9]$")
+agent_name_re = re.compile(r"^[a-z][a-z0-9_]*[a-z0-9]$")
 
 def emit(level, message):
     print(f"{level}\t{message}")
@@ -229,18 +232,26 @@ for status in manifest.get("statuses", {}):
         emit("FAIL", f"Manifest declares unsupported status: {status}")
 
 for skill in repo_skills:
+    if not skill_name_re.match(skill):
+        emit("FAIL", f"Skill directory uses invalid name format: {skill}")
     if skill not in manifest_skills:
         emit("FAIL", f"Manifest does not classify skill: {skill}")
 for skill, status in manifest_skills.items():
+    if not skill_name_re.match(skill):
+        emit("FAIL", f"Manifest skill uses invalid name format: {skill}")
     if skill not in repo_skills:
         emit("FAIL", f"Manifest references missing skill directory: {skill}")
     if status not in allowed:
         emit("FAIL", f"Manifest skill '{skill}' has unsupported status '{status}'.")
 
 for agent in repo_agents:
+    if not agent_name_re.match(agent):
+        emit("FAIL", f"Agent file uses invalid name format: {agent}")
     if agent not in manifest_agents:
         emit("FAIL", f"Manifest does not classify agent: {agent}")
 for agent, status in manifest_agents.items():
+    if not agent_name_re.match(agent):
+        emit("FAIL", f"Manifest agent uses invalid name format: {agent}")
     if agent not in repo_agents:
         emit("FAIL", f"Manifest references missing agent file: {agent}")
     if status not in allowed:

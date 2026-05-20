@@ -219,6 +219,8 @@ if (Test-Path "workspace-manifest.json") {
 if ($null -ne $manifest) {
     $allowedStatuses = @("core", "optional", "curated", "review", "deprecated", "archived")
     $installBlockedStatuses = @("curated", "review", "deprecated", "archived")
+    $skillNamePattern = '^[a-z][a-z0-9-]*[a-z0-9]$'
+    $agentNamePattern = '^[a-z][a-z0-9_]*[a-z0-9]$'
 
     foreach ($statusProperty in $manifest.statuses.PSObject.Properties) {
         if ($allowedStatuses -notcontains $statusProperty.Name) {
@@ -230,11 +232,17 @@ if ($null -ne $manifest) {
     $manifestAgents = @($manifest.agents.PSObject.Properties.Name | Sort-Object)
 
     foreach ($skill in $repoSkills) {
+        if ($skill -notmatch $skillNamePattern) {
+            Add-Result FAIL "Skill directory uses invalid name format: $skill"
+        }
         if ($manifestSkills -notcontains $skill) {
             Add-Result FAIL "Manifest does not classify skill: $skill"
         }
     }
     foreach ($skill in $manifestSkills) {
+        if ($skill -notmatch $skillNamePattern) {
+            Add-Result FAIL "Manifest skill uses invalid name format: $skill"
+        }
         if ($repoSkills -notcontains $skill) {
             Add-Result FAIL "Manifest references missing skill directory: $skill"
         }
@@ -245,11 +253,17 @@ if ($null -ne $manifest) {
     }
 
     foreach ($agent in $repoAgents) {
+        if ($agent -notmatch $agentNamePattern) {
+            Add-Result FAIL "Agent file uses invalid name format: $agent"
+        }
         if ($manifestAgents -notcontains $agent) {
             Add-Result FAIL "Manifest does not classify agent: $agent"
         }
     }
     foreach ($agent in $manifestAgents) {
+        if ($agent -notmatch $agentNamePattern) {
+            Add-Result FAIL "Manifest agent uses invalid name format: $agent"
+        }
         if ($repoAgents -notcontains $agent) {
             Add-Result FAIL "Manifest references missing agent file: $agent"
         }

@@ -40,7 +40,7 @@ Profiles are reusable recommendations:
 
 - `minimal`: docs and governance only.
 - `governed-codex`: core governed Codex capabilities.
-- `data-bi`: analytics engineering and BI capabilities.
+- `data-bi`: data discovery, engineering, cataloging, science, analysis, BI, and visualization capabilities.
 - `frontend-artifacts`: frontend and artifact validation capabilities.
 - `full-reviewed`: all broad-use core and optional capabilities.
 

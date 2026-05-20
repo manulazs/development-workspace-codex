@@ -26,6 +26,7 @@ All notable changes to this workspace are tracked here.
 - Treat skill provenance as informational and remove provenance gates as active use/import blockers.
 - Make `caveman lite` the mandatory repository communication standard and promote `caveman` to the core profile.
 - Add data pipeline agent routing from source discovery through cataloging, science, analysis, and visualization.
+- Add repository healthcheck validation for skill and agent naming conventions.
 
 ## 2026-05-19
 
