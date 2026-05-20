@@ -9,6 +9,7 @@ Use this template before creating or materially changing a repository skill unde
 - Created:
 - Review date:
 - Status: `core` | `optional` | `curated` | `review` | `deprecated` | `archived`
+- Publication gate: `ready` | `needs-source-review` | `restricted-by-profile`
 
 ## Purpose
 
@@ -42,6 +43,15 @@ When an agent should use this skill.
 - Assumptions a consumer workspace must satisfy:
 - Runtime state that must not be versioned:
 
+## Provenance
+
+- Source:
+- Source URL:
+- Upstream license:
+- Local license or attribution file:
+- Adaptation summary:
+- Redistribution notes:
+
 ## Safety
 
 - External commands:
@@ -70,4 +80,5 @@ When an agent should use this skill.
 - Manifest status:
 - Adoption profiles:
 - Inventory row:
+- Provenance row:
 - Last validation:

@@ -5,6 +5,7 @@ DRY_RUN=0
 SKIP_SKILLS=0
 SKIP_AGENTS=0
 LIST_PROFILES=0
+FORCE=0
 PROFILE="minimal"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 
@@ -16,14 +17,15 @@ Options:
   --profile NAME       Adoption profile to install. Defaults to minimal.
   --list-profiles      List reusable adoption profiles and exit.
   --dry-run, -n        Show actions without copying files.
+  --force              Overwrite existing runtime skill and agent files.
   --codex-home PATH    Target Codex home. Defaults to $CODEX_HOME or ~/.codex.
   --skip-skills        Do not copy profile skills.
   --skip-agents        Do not copy profile agents.
   -h, --help           Show this help.
 
 This installer copies only the selected adoption profile. It never deletes files
-from the target runtime and it does not compare the repo with local ~/.codex
-state.
+from the target runtime. Existing files are skipped by default; use --force only
+after reviewing the dry-run output.
 EOF
 }
 
@@ -40,6 +42,10 @@ while [ "$#" -gt 0 ]; do
       ;;
     --dry-run|-n)
       DRY_RUN=1
+      shift
+      ;;
+    --force)
+      FORCE=1
       shift
       ;;
     --codex-home)
@@ -108,6 +114,14 @@ run_or_echo() {
 copy_dir_contents() {
   source="$1"
   target="$2"
+  if [ -e "$target" ] && [ "$FORCE" -ne 1 ]; then
+    if [ "$DRY_RUN" -eq 1 ]; then
+      echo "[dry-run] skip existing directory without --force: $target"
+    else
+      echo "[skip] existing directory without --force: $target"
+    fi
+    return
+  fi
   run_or_echo mkdir -p "$target"
   if [ "$DRY_RUN" -eq 1 ]; then
     echo "[dry-run] copy contents from $source to $target"
@@ -120,6 +134,14 @@ copy_file() {
   source="$1"
   target="$2"
   target_dir="$(dirname "$target")"
+  if [ -e "$target" ] && [ "$FORCE" -ne 1 ]; then
+    if [ "$DRY_RUN" -eq 1 ]; then
+      echo "[dry-run] skip existing file without --force: $target"
+    else
+      echo "[skip] existing file without --force: $target"
+    fi
+    return
+  fi
   run_or_echo mkdir -p "$target_dir"
   run_or_echo cp "$source" "$target"
 }
@@ -224,6 +246,7 @@ echo "Profile   : $PROFILE"
 echo
 echo "This repository is a portable template. It does not verify or require any existing local Codex runtime state."
 echo "codex-global/AGENTS.md is a source template; adapt it before copying into a consumer runtime."
+echo "Existing runtime files are skipped unless --force is provided."
 echo
 
 skill_count=0
@@ -263,8 +286,11 @@ fi
 
 echo
 echo "Repository validation:"
-echo "  scripts/healthcheck.sh"
+echo "  scripts/healthcheck.sh --strict"
+echo "  python scripts/validate-skills.py --strict"
+echo "  python scripts/evolve-workspace.py --strict"
 echo
 echo "Safe preview examples:"
 echo "  scripts/install-workspace.sh --profile governed-codex --dry-run"
+echo "  scripts/install-workspace.sh --profile full-reviewed --dry-run"
 echo "  scripts/install-workspace.sh --list-profiles"

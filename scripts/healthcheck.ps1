@@ -66,6 +66,7 @@ $requiredDirs = @(
     "docs/runbooks",
     "docs/operations",
     "docs/audits",
+    "docs/evolution",
     "docs/lessons",
     "docs/patterns",
     "scripts"
@@ -90,6 +91,9 @@ $requiredDocs = @(
     "workspace-manifest.json",
     "docs/README.md",
     "docs/capability-inventory.md",
+    "docs/skills-provenance.md",
+    "docs/agentic-controls.md",
+    "docs/continuous-evolution.md",
     "docs/skill-template.md",
     "docs/agent-template.md",
     "docs/subagents-policy.md",
@@ -297,6 +301,34 @@ if ((Test-Path $migrateCli) -and (Test-CommandExists "python")) {
     Add-Result WARN "python is not available; skipped migrate-to-codex validation."
 } else {
     Add-Result WARN "migrate-to-codex validator not found at $migrateCli."
+}
+
+$skillValidator = "scripts/validate-skills.py"
+if ((Test-Path $skillValidator) -and (Test-CommandExists "python")) {
+    $skillValidationOutput = & python $skillValidator --strict 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Add-Result FAIL "Repository skill validation failed: $($skillValidationOutput -join ' ')"
+    } else {
+        Add-Result INFO "Repository skill validation passed."
+    }
+} elseif (-not (Test-CommandExists "python")) {
+    Add-Result WARN "python is not available; skipped repository skill validation."
+} else {
+    Add-Result WARN "Repository skill validator not found at $skillValidator."
+}
+
+$evolutionValidator = "scripts/evolve-workspace.py"
+if ((Test-Path $evolutionValidator) -and (Test-CommandExists "python")) {
+    $evolutionValidationOutput = & python $evolutionValidator --strict 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Add-Result FAIL "Continuous evolution validation failed: $($evolutionValidationOutput -join ' ')"
+    } else {
+        Add-Result INFO "Continuous evolution validation passed."
+    }
+} elseif (-not (Test-CommandExists "python")) {
+    Add-Result WARN "python is not available; skipped continuous evolution validation."
+} else {
+    Add-Result WARN "Continuous evolution validator not found at $evolutionValidator."
 }
 
 foreach ($installer in @("scripts/install-workspace.ps1", "scripts/install-workspace.sh")) {

@@ -4,7 +4,7 @@ Last reviewed: 2026-05-19
 
 This inventory describes repository capabilities: skills, subagent templates, docs, and scripts that a consumer workspace may choose to adopt. It does not describe what is installed in any local Codex runtime.
 
-`workspace-manifest.json` is the machine-readable source for adoption profiles and status classification. This document is the human-readable source for purpose, risk, overlap, and usage guidance.
+`workspace-manifest.json` is the machine-readable source for adoption profiles and status classification. This document is the human-readable source for purpose, risk, overlap, and usage guidance. `docs/skills-provenance.md` is the source for skill source, license, attribution, and publication-gate evidence.
 
 ## Status Values
 
@@ -39,15 +39,16 @@ There is intentionally no `installed locally` field. Local runtime state belongs
 | `auditing-skills` | `core` | dbt Labs | Audit skill quality, overlap, and security posture. | Low | Cross-platform | Reviewing skill changes or public readiness. | A simple docs typo is being fixed. |
 | `building-dbt-semantic-layer` | `optional` | dbt Labs | Build dbt semantic models and metrics. | Low | Cross-platform | The workspace uses dbt semantic layer concepts. | Metrics are owned by a different semantic layer. |
 | `canvas-design` | `curated` | Anthropic skill, adapted | Static visual design/artifact references. | Medium | Cross-platform | Mining examples or adapting visual workflows after review. | Installing default public governance capabilities. |
-| `caveman` | `review` | JuliusBrussee caveman | Strongly opinionated concise communication style. | Low | Cross-platform | A consumer explicitly wants that style. | The style would become a public default or conflict with project tone. |
+| `caveman` | `optional` | JuliusBrussee caveman | Opinionated concise communication style. | Low | Cross-platform | A consumer explicitly wants concise global communication such as `caveman lite`. | The style conflicts with project tone, legal/safety clarity, or user preference. |
 | `caveman-commit` | `review` | JuliusBrussee caveman | Commit-message helper with opinionated style. | Low | Cross-platform | A consumer explicitly adopts the style. | Normal git hygiene or templates are enough. |
 | `caveman-compress` | `review` | JuliusBrussee caveman | Compress memory-like text in a specific style. | Medium | Cross-platform | A consumer explicitly uses that memory format. | Native context compaction or normal summaries are sufficient. |
 | `configuring-dbt-mcp-server` | `optional` | dbt Labs | Configure and troubleshoot dbt MCP setup. | Medium | Cross-platform | The workspace uses dbt MCP and has safe credential handling. | Credentials would need to be stored in repo. |
+| `continuous-evolution` | `core` | Local template | Governed task cataloging, anti-duplication, subagent routing, validation, and human-gated workspace evolution. | Medium | Cross-platform | The workspace is being maintained as a self-improving Codex environment. | A one-off repo edit is enough or the user forbids automation. |
 | `creating-mermaid-dbt-dag` | `optional` | dbt Labs | Generate Mermaid lineage diagrams from dbt context. | Low | Cross-platform | A dbt lineage diagram is useful for review or docs. | The project has no dbt lineage source. |
 | `fetching-dbt-docs` | `optional` | dbt Labs | Fetch or search dbt documentation. | Low | Cross-platform | Current dbt documentation is relevant. | Offline-only operation is required and docs are unavailable. |
 | `find-skills` | `core` | Vercel Labs, adapted | Discover, compare, and vet external skills. | Medium | Cross-platform | Considering a new skill or overlap review. | The task is already covered by existing repo capabilities. |
 | `frontend-design` | `optional` | Anthropic skill, migrated | Frontend UI design guidance. | Low | Cross-platform | Building or reviewing frontend experiences. | A plugin-specific Figma/Canva workflow is the actual target. |
-| `migrate-to-codex` | `core` | OpenAI | Migrate instructions, skills, agents, and config to Codex-compatible form. | Medium | Cross-platform | Adapting non-Codex capability sources. | Installing an unreviewed external skill unchanged. |
+| `migrate-to-codex` | `core` | OpenAI | Migrate instructions, skills, agents, and config to Codex-compatible form. | Medium; can write selected target artifacts after explicit target selection | Cross-platform | Adapting non-Codex capability sources with plan, dry-run, doctor, and validation steps. | Installing an unreviewed external skill unchanged or writing to a global runtime without explicit approval. |
 | `migrating-dbt-core-to-fusion` | `optional` | dbt Labs | Triage dbt Core to Fusion migration issues. | Medium | Cross-platform | A dbt Fusion migration is in scope. | No migration is being attempted. |
 | `migrating-dbt-project-across-platforms` | `optional` | dbt Labs | Guide dbt project migration across data platforms. | Medium | Cross-platform | SQL/platform behavior changes need structured review. | The project is not changing platforms. |
 | `pdf` | `optional` | OpenAI/curated | PDF creation and review workflows. | Low | Cross-platform | PDF handling is a recurring workspace need. | Built-in or plugin PDF capability is sufficient. |
@@ -86,6 +87,8 @@ There is intentionally no `installed locally` field. Local runtime state belongs
 - Do not install `curated`, `review`, `deprecated`, or `archived` capabilities through default profiles.
 - Do not create a skill for a one-off task.
 - Do not create a subagent when a skill, runbook, or main-agent workflow is enough.
+- Do not treat a capability as public-ready while `docs/skills-provenance.md` marks it `needs-source-review`.
+- Use `docs/agentic-controls.md` before moving from recommending a skill or subagent to spawning, creating, persisting, or installing it.
 - Define precedence when two capabilities overlap; otherwise review, merge, or archive one.
 - Keep private or machine-specific runtime state out of this inventory.
 

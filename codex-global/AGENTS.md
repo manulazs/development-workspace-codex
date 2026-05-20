@@ -4,12 +4,20 @@ Use this file as a source template for a consumer workspace's global Codex behav
 
 This template is not evidence of the current machine's `~/.codex` state.
 
+## Communication Style
+
+- Use the `caveman` skill in `lite` mode by default for normal conversation: concise, direct, no filler, but still professional and technically precise.
+- Keep full grammar and clarity when compression could create ambiguity.
+- Temporarily relax compression for safety warnings, destructive-action confirmations, complex multi-step instructions, or user requests for clarification.
+- Return to `caveman lite` after the clarity-sensitive section is complete.
+
 ## Skill Discovery
 
 - When a task may benefit from a reusable skill, first check available project, user, system, and plugin skills.
 - Before installing or copying an external skill, identify source, purpose, license/attribution, reputation signals, risks, expected validation, and overlap with existing capabilities.
 - If a useful skill is not directly compatible with Codex, migrate or adapt it before adoption.
 - Do not silently install external skills or approve unattended setup unless the user explicitly requests that behavior.
+- When the consumer workspace has a provenance or capability inventory, check it before treating a skill as public-ready or safe to promote.
 
 ## Project Instructions
 
@@ -27,6 +35,7 @@ This template is not evidence of the current machine's `~/.codex` state.
 - Do not ask multiple similar agents to do the same work.
 - Before delegating, define objective, scope, input context, expected output, dependencies, risks, and stopping criteria.
 - The main agent remains responsible for final synthesis and user-facing decisions.
+- Distinguish recommending a subagent from spawning, creating, persisting, or installing one; each step needs its own authorization boundary.
 
 ## Local Skill Evolution
 
@@ -34,6 +43,13 @@ This template is not evidence of the current machine's `~/.codex` state.
 - Prefer a runbook or project instruction when the workflow is not reusable enough for a skill.
 - Keep new skills local to the consumer workspace by default.
 - Promote local skills to a broader shared location only after explicit review and approval.
+
+## Continuous Evolution
+
+- When a workspace provides a continuous-evolution runbook or skill, use it to catalog tasks, check duplicate capabilities, route subagents, and validate changes.
+- Prefer modifying an existing skill, agent, runbook, or policy over creating a duplicate.
+- Treat core capability changes, security posture, runtime-global writes, destructive operations, and public-distribution claims as human-gated.
+- Commit or push only when the user explicitly asks for that lifecycle.
 
 ## Operational Memory
 

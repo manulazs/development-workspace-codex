@@ -43,10 +43,30 @@ flowchart LR
 - `docs/README.md`: documentation index.
 - `workspace-manifest.json`: reusable adoption profiles.
 - `docs/capability-inventory.md`: status, risk, overlap, and usage guidance for skills and agents.
+- `docs/skills-provenance.md`: source, license, attribution, and publication gates for skills.
+- `docs/agentic-controls.md`: control boundaries for recommending, spawning, creating, and persisting skills or subagents.
+- `docs/continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
 - `docs/subagents-policy.md`: when to use 0, 1, or multiple subagents.
 - `docs/self-improvement-lifecycle.md`: how lessons become reusable policies, skills, agents, or docs.
 - `docs/runbooks/setup-windows.md`: Windows setup.
 - `docs/runbooks/setup-macos.md`: macOS/Linux setup.
+
+## Adopt In 10 Minutes
+
+Evaluate the template without touching a local Codex runtime:
+
+```bash
+git clone https://github.com/manulazs/development-workspace-codex.git
+cd development-workspace-codex
+scripts/healthcheck.sh --strict
+python scripts/evolve-workspace.py --strict
+scripts/install-workspace.sh --list-profiles
+scripts/install-workspace.sh --profile governed-codex --dry-run
+```
+
+On Windows, use the matching PowerShell commands from `docs/runbooks/setup-windows.md`.
+
+Only copy capabilities into a runtime after choosing a profile explicitly. The maintainer's local `~/.codex` may contain extra review or curated capabilities and is not the public baseline.
 
 ## Adoption Profiles
 
@@ -60,6 +80,8 @@ Profiles describe what a consumer workspace may copy. They do not describe what 
 
 Capabilities marked `curated`, `review`, `deprecated`, or `archived` are never installed by default profiles.
 
+`caveman` is an optional communication-style capability. The bundled global template uses `caveman lite` as a concise default, but consumers should keep or remove that section based on their team tone and clarity requirements.
+
 ## Validate The Repository
 
 Windows:
@@ -72,10 +94,11 @@ macOS/Linux:
 
 ```bash
 chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
-scripts/healthcheck.sh
+scripts/healthcheck.sh --strict
+python scripts/validate-skills.py --strict
 ```
 
-The healthcheck validates the repository itself: structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, and expected validators. It intentionally does not compare against `~/.codex`.
+The healthcheck validates the repository itself: structure, docs, manifest coverage, skill frontmatter, provenance coverage, agent TOML, installer safety, basic secret patterns, and expected validators. It intentionally does not compare against `~/.codex`.
 
 ## Optional Runtime Adoption
 
@@ -99,17 +122,24 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps
 scripts/install-workspace.sh --list-profiles
 ```
 
-The installer copies only the selected profile into the chosen Codex home. It never deletes local runtime files and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
+The installer copies only the selected profile into the chosen Codex home. It never deletes local runtime files, skips existing runtime files by default, and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically. Use `--force` or `-Force` only after reviewing a dry-run or `-WhatIf` preview.
 
 ## Governance
 
 - Keep `workspace-manifest.json` and `docs/capability-inventory.md` aligned with real files.
+- Keep `docs/skills-provenance.md` aligned with skill source, license, attribution, and script-risk evidence.
 - Add or materially change a skill only after checking whether an existing skill, agent, runbook, or policy already solves the problem.
 - Add or materially change a subagent only when delegation improves quality or risk control and the scope is independent.
+- Use `docs/agentic-controls.md` to distinguish recommending a capability from spawning, creating, persisting, or installing it.
+- Use `docs/continuous-evolution.md` and `scripts/evolve-workspace.py` to catalog improvement work before creating or changing skills and agents.
+- Keep global communication-style preferences explicit in `codex-global/AGENTS.md`; do not hide personal tone preferences inside unrelated skills or agents.
 - Record structural decisions in `docs/decisions/`.
 - Capture recurring lessons in `docs/lessons/`, promote reusable workflows to `docs/patterns/` or `docs/runbooks/`, and prune obsolete content.
+- Treat self-improvement as a governed review loop, not autonomous mutation.
 - Do not commit secrets, private logs, local runtime state, cache files, sessions, auth files, or corporate data.
 
 ## Public Repository Policy
 
 This repository is prepared for public reuse under Apache-2.0. Any consumer workspace may fork it, remove irrelevant capabilities, add local policies, and choose an adoption profile. Local runtime synchronization is always an optional consumer operation, not a repository health requirement.
+
+Before claiming a fork is fully public-ready, resolve every `needs-source-review` entry in `docs/skills-provenance.md`, run both platform healthchecks, and verify that default profiles do not install `curated`, `review`, `deprecated`, or `archived` capabilities.

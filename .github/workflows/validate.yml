@@ -30,13 +30,19 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
 
       - name: Run Windows install dry-run
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
+          powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf
+
+      - name: Validate skill metadata
+        shell: bash
+        run: |
+          python scripts/validate-skills.py --strict
+          python scripts/evolve-workspace.py --strict
 
       - name: Validate shell script syntax
         if: runner.os != 'Windows'
@@ -50,13 +56,13 @@ jobs:
         shell: bash
         run: |
           chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
-          scripts/healthcheck.sh
+          scripts/healthcheck.sh --strict
 
       - name: Run macOS/Linux install dry-run
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          scripts/install-workspace.sh --profile governed-codex --dry-run
+          scripts/install-workspace.sh --profile full-reviewed --dry-run
 
       - name: Validate custom agents
         shell: bash

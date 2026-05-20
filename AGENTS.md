@@ -10,6 +10,9 @@ It must not reflect the private state of any local Codex runtime.
 - Validate repository changes with the platform healthcheck when practical.
 - Use `workspace-manifest.json` as the source of adoption profiles.
 - Use `docs/capability-inventory.md` as the source of capability status, risk, and intended use.
+- Use `docs/skills-provenance.md` as the source of skill provenance, license, attribution, and publication-gate evidence.
+- Use `docs/agentic-controls.md` before turning a recommendation into spawning, creation, persistence, or runtime installation.
+- Use `docs/continuous-evolution.md` and `scripts/evolve-workspace.py` before automating workspace self-improvement.
 - Preserve source attribution and license notes when adapting third-party skills.
 - Do not commit secrets, tokens, private logs, local databases, authentication files, cache files, sessions, or corporate data.
 - Do not auto-commit, push, publish, or change repository visibility unless the user explicitly asks for that operation.
@@ -23,7 +26,7 @@ Track:
 - Custom subagent templates under `.codex/agents/`.
 - Global instruction templates under `codex-global/`.
 - Adoption profiles in `workspace-manifest.json`.
-- Governance, setup, audits, lessons, patterns, and decisions under `docs/`.
+- Governance, setup, provenance, agentic controls, audits, lessons, patterns, and decisions under `docs/`.
 - Repository validation and optional profile installers under `scripts/`.
 
 Do not track:
@@ -45,6 +48,7 @@ Before adding or changing a skill:
 - Do not promote personal preference or one-off behavior into a public default.
 - Classify the skill in `workspace-manifest.json` as `core`, `optional`, `curated`, `review`, `deprecated`, or `archived`.
 - Update `docs/capability-inventory.md` with purpose, risk, overlap, supported platforms, when to use, and when not to use.
+- Update `docs/skills-provenance.md` with source, license or attribution evidence, script or asset risk, and publication gate.
 - Validate changed skills through the repository healthcheck and relevant local validator.
 
 Core skills should be small, generally useful, and low ambiguity. Domain skills should remain optional unless they are required for broad workspace governance.
@@ -60,6 +64,8 @@ Delegation is an operational decision, not a default.
 - Every subagent template should define objective, scope, suggested model class, reasoning level, sandbox, required inputs, expected output, risks, when to use, when not to use, and exit criteria.
 
 The detailed policy is `docs/subagents-policy.md`. Agent creation, reuse, validation, and retirement are governed by `docs/subagents-lifecycle.md`.
+
+`docs/agentic-controls.md` defines the boundary between recommending, spawning, creating, persisting, and installing subagents. Do not treat a policy recommendation as authorization to spawn or persist a subagent.
 
 ## Model Policy
 
@@ -79,3 +85,5 @@ use -> observe -> lesson -> pattern -> skill/agent/doc -> validate -> review -> 
 ```
 
 Do not create a new skill or agent for a single occurrence. Capture lessons only when they are reusable, and remove stale or redundant content during review.
+
+This is a governed improvement loop. Continuous evolution may automate repository-local cataloging, narrow edits, validation, and delegated reviews, but core, sensitive, runtime-global, destructive, or public-distribution changes remain human-gated.

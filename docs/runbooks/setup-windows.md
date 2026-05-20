@@ -22,10 +22,12 @@ git status --short --branch
 ## Validate Repository Health
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
+python scripts/validate-skills.py --strict
+python scripts/evolve-workspace.py --strict
 ```
 
-The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, and repository validators. It does not compare against the local Codex runtime.
+The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, continuous-evolution drift, and repository validators. It does not compare against the local Codex runtime.
 
 ## Inspect Adoption Profiles
 
@@ -45,7 +47,10 @@ Profiles are reusable recommendations:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf
 ```
+
+Live adoption skips existing runtime files by default. Use `-Force` only after reviewing the `-WhatIf` output.
 
 Use a custom target when testing:
 
@@ -54,6 +59,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps
 ```
 
 The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
+
+Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` and resolve any `needs-source-review` skills that the fork intends to distribute.
 
 ## Install Into A Runtime
 

@@ -29,14 +29,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
 macOS/Linux:
 
 ```bash
-scripts/healthcheck.sh
-scripts/install-workspace.sh --profile governed-codex --dry-run
+scripts/healthcheck.sh --strict
+python scripts/validate-skills.py --strict
+python scripts/evolve-workspace.py --strict
+scripts/install-workspace.sh --profile full-reviewed --dry-run
 ```
 
 Windows install preview:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
+python scripts/validate-skills.py --strict
+python scripts/evolve-workspace.py --strict
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf
 ```
 
 Agent validation:
@@ -52,6 +57,7 @@ python skills/migrate-to-codex/scripts/cli.py --validate-target .
 - Document external commands, network use, destructive actions, and secret risk.
 - Update `workspace-manifest.json`.
 - Update `docs/capability-inventory.md`.
+- Update `docs/skills-provenance.md`.
 - Validate before committing.
 
 ## Adding Subagents
@@ -62,6 +68,7 @@ python skills/migrate-to-codex/scripts/cli.py --validate-target .
 - Prefer read-only for audit and review roles.
 - Update `workspace-manifest.json`.
 - Update `docs/capability-inventory.md`.
+- Update `docs/agentic-controls.md` if the change affects recommendation, spawn, creation, persistence, or runtime-adoption boundaries.
 
 ## Self-Improvement
 

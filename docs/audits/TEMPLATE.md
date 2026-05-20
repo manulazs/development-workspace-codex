@@ -3,6 +3,7 @@
 ## Metadata
 
 - Date:
+- Status: current and open | current and actioned | historical | superseded
 - Scope:
 - Auditor:
 - Related commits:

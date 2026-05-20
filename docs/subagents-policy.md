@@ -2,6 +2,10 @@
 
 This repository treats subagents as reusable templates for controlled delegation. Delegation is justified only when it improves quality, risk coverage, or maintainability enough to offset context and integration cost.
 
+Use `docs/agentic-controls.md` to distinguish four different actions: recommending a subagent, spawning a subagent, creating a new subagent template, and persisting that template into a repository or runtime. Policy permission to recommend is not permission to spawn or persist.
+
+Use `docs/continuous-evolution.md` for the orchestrator/subagent handoff protocol when delegation is part of workspace evolution.
+
 ## Default
 
 - Use 0 subagents for small, linear, tightly coupled, or low-risk work.

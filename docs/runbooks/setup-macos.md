@@ -34,10 +34,12 @@ chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
 ## Validate Repository Health
 
 ```bash
-scripts/healthcheck.sh
+scripts/healthcheck.sh --strict
+python scripts/validate-skills.py --strict
+python scripts/evolve-workspace.py --strict
 ```
 
-The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, and repository validators. It does not compare against the local Codex runtime.
+The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, continuous-evolution drift, and repository validators. It does not compare against the local Codex runtime.
 
 ## Inspect Adoption Profiles
 
@@ -57,7 +59,10 @@ Profiles are reusable recommendations:
 
 ```bash
 scripts/install-workspace.sh --profile governed-codex --dry-run
+scripts/install-workspace.sh --profile full-reviewed --dry-run
 ```
+
+Live adoption skips existing runtime files by default. Use `--force` only after reviewing the dry-run output.
 
 Use a custom target when testing:
 
@@ -66,6 +71,8 @@ scripts/install-workspace.sh --profile governed-codex --codex-home ./.tmp/codex-
 ```
 
 The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
+
+Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` and resolve any `needs-source-review` skills that the fork intends to distribute.
 
 ## Install Into A Runtime
 

@@ -76,6 +76,7 @@ docs/decisions
 docs/runbooks
 docs/operations
 docs/audits
+docs/evolution
 docs/lessons
 docs/patterns
 scripts
@@ -100,6 +101,9 @@ CODE_OF_CONDUCT.md
 workspace-manifest.json
 docs/README.md
 docs/capability-inventory.md
+docs/skills-provenance.md
+docs/agentic-controls.md
+docs/continuous-evolution.md
 docs/skill-template.md
 docs/agent-template.md
 docs/subagents-policy.md
@@ -298,6 +302,32 @@ elif [ -z "${PYTHON_BIN:-}" ]; then
   add_result WARN "Python 3 is not available; skipped migrate-to-codex validation."
 else
   add_result WARN "migrate-to-codex validator not found at $migrate_cli."
+fi
+
+skill_validator="scripts/validate-skills.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$skill_validator" ]; then
+  if "$PYTHON_BIN" "$skill_validator" --strict >/tmp/codex-workspace-skill-validate.log 2>&1; then
+    add_result INFO "Repository skill validation passed."
+  else
+    add_result FAIL "Repository skill validation failed. See /tmp/codex-workspace-skill-validate.log."
+  fi
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped repository skill validation."
+else
+  add_result WARN "Repository skill validator not found at $skill_validator."
+fi
+
+evolution_validator="scripts/evolve-workspace.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$evolution_validator" ]; then
+  if "$PYTHON_BIN" "$evolution_validator" --strict >/tmp/codex-workspace-evolution-validate.log 2>&1; then
+    add_result INFO "Continuous evolution validation passed."
+  else
+    add_result FAIL "Continuous evolution validation failed. See /tmp/codex-workspace-evolution-validate.log."
+  fi
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped continuous evolution validation."
+else
+  add_result WARN "Continuous evolution validator not found at $evolution_validator."
 fi
 
 for installer in scripts/install-workspace.ps1 scripts/install-workspace.sh; do

@@ -17,10 +17,11 @@
     "auditing-skills": "core",
     "building-dbt-semantic-layer": "optional",
     "canvas-design": "curated",
-    "caveman": "review",
+    "caveman": "optional",
     "caveman-commit": "review",
     "caveman-compress": "review",
     "configuring-dbt-mcp-server": "optional",
+    "continuous-evolution": "core",
     "creating-mermaid-dbt-dag": "optional",
     "fetching-dbt-docs": "optional",
     "find-skills": "core",
@@ -65,6 +66,7 @@
       "description": "Core governance and planning capabilities for a Codex workspace.",
       "skills": [
         "auditing-skills",
+        "continuous-evolution",
         "find-skills",
         "migrate-to-codex",
         "plan-deep",
@@ -125,6 +127,7 @@
         "frontend-artifacts"
       ],
       "skills": [
+        "caveman",
         "pdf",
         "spreadsheet"
       ],

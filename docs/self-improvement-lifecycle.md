@@ -2,6 +2,8 @@
 
 This public workspace template should improve from repeated evidence, not from one-off preferences. Improvement must reduce future ambiguity, rework, or operational risk without accumulating dead documentation.
 
+This lifecycle is not unbounded self-mutation. It is a governed review loop that an agent or maintainer follows when evidence justifies a reusable change. `docs/continuous-evolution.md` defines which parts may be automated and which parts remain human-gated.
+
 ## Flow
 
 ```text
@@ -121,6 +123,13 @@ Create an audit under `docs/audits/`:
 - quarterly for capability inventory review.
 
 An audit should state scope, validations run, findings, risks, decisions, and follow-up actions. Historical audits must clearly say whether they are current, superseded, or actioned.
+
+Use these status labels consistently:
+
+- `current and open`: active findings or follow-ups remain.
+- `current and actioned`: the audit is current and all required actions are complete.
+- `historical`: retained as evidence but not current policy.
+- `superseded`: replaced by newer policy or implementation.
 
 Pruning is mandatory. A review that only adds content without removing or reclassifying stale content is incomplete.
 

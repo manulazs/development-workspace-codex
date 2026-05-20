@@ -1,0 +1,3 @@
+name: continuous-evolution
+description: Governed continuous workspace evolution with task cataloging, anti-duplication checks, subagent routing, validation, and human gates.
+version: 1.0.0

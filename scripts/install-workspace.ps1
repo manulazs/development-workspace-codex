@@ -4,7 +4,8 @@ param(
     [string]$Profile = "minimal",
     [switch]$ListProfiles,
     [switch]$SkipSkills,
-    [switch]$SkipAgents
+    [switch]$SkipAgents,
+    [switch]$Force
 )
 
 $ErrorActionPreference = "Stop"
@@ -62,6 +63,11 @@ function Copy-DirectoryExact {
         [Parameter(Mandatory = $true)][string]$Target
     )
 
+    if ((Test-Path $Target) -and -not $Force) {
+        Write-Host "[skip] existing directory without -Force: $Target"
+        return
+    }
+
     if ($PSCmdlet.ShouldProcess($Target, "Copy directory contents from $Source")) {
         if (-not (Test-Path $Target)) {
             New-Item -ItemType Directory -Force -Path $Target | Out-Null
@@ -77,6 +83,11 @@ function Copy-FileExact {
         [Parameter(Mandatory = $true)][string]$Source,
         [Parameter(Mandatory = $true)][string]$Target
     )
+
+    if ((Test-Path $Target) -and -not $Force) {
+        Write-Host "[skip] existing file without -Force: $Target"
+        return
+    }
 
     if ($PSCmdlet.ShouldProcess($Target, "Copy file from $Source")) {
         $targetDirectory = Split-Path -Parent $Target
@@ -187,6 +198,7 @@ Write-Host "Profile   : $Profile"
 Write-Host ""
 Write-Host "This repository is a portable template. It does not verify or require any existing local Codex runtime state."
 Write-Host "codex-global/AGENTS.md is a source template; adapt it before copying into a consumer runtime."
+Write-Host "Existing runtime files are skipped unless -Force is provided."
 Write-Host ""
 
 if (-not $SkipSkills) {
@@ -225,8 +237,11 @@ if (-not $SkipAgents) {
 
 Write-Host ""
 Write-Host "Repository validation:"
-Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1"
+Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict"
+Write-Host "  python scripts/validate-skills.py --strict"
+Write-Host "  python scripts/evolve-workspace.py --strict"
 Write-Host ""
 Write-Host "Safe preview examples:"
 Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf"
+Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf"
 Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -ListProfiles"

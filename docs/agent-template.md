@@ -53,6 +53,7 @@ What recurring role this agent owns.
 - Bad use cases:
 - Required preconditions:
 - When the main agent should keep the work local:
+- Whether this role may be recommended only, spawned, created, persisted, or installed:
 
 ## Risks
 
@@ -67,4 +68,5 @@ What recurring role this agent owns.
 - Manifest status:
 - Adoption profiles:
 - Inventory row:
+- Agentic controls affected:
 - Last validation:

@@ -16,6 +16,9 @@ All notable changes to this workspace are tracked here.
 - Add GitHub issue and pull request templates.
 - Add Windows/macOS GitHub Actions validation matrix.
 - Record final cross-platform officialization audit.
+- Add skill provenance gates, agentic control boundaries, repository-local skill validation, and stricter CI dry-run coverage.
+- Add `caveman lite` as the global template communication style and reclassify `caveman` as an optional adoption capability.
+- Add governed continuous-evolution automation with task cataloging, anti-duplication review, subagent handoff protocol, and validation gates.
 
 ## 2026-05-19
 
