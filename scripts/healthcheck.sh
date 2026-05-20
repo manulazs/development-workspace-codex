@@ -77,6 +77,7 @@ docs/runbooks
 docs/operations
 docs/audits
 docs/evolution
+docs/evolution/reports
 docs/lessons
 docs/patterns
 scripts
@@ -330,17 +331,21 @@ else
   add_result WARN "Continuous evolution validator not found at $evolution_validator."
 fi
 
-scaffold_validator="scripts/scaffold-capability.py"
-if [ -n "${PYTHON_BIN:-}" ] && [ -f "$scaffold_validator" ]; then
-  if "$PYTHON_BIN" -m py_compile "$scaffold_validator" >/tmp/codex-workspace-scaffold-validate.log 2>&1; then
-    add_result INFO "Capability scaffold validation passed."
+python_syntax_validator="scripts/validate-python-syntax.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$python_syntax_validator" ]; then
+  if "$PYTHON_BIN" "$python_syntax_validator" \
+    scripts/validate-skills.py \
+    scripts/evolve-workspace.py \
+    scripts/scaffold-capability.py \
+    "$python_syntax_validator" >/tmp/codex-workspace-python-syntax.log 2>&1; then
+    add_result INFO "Python syntax validation passed without bytecode writes."
   else
-    add_result FAIL "Capability scaffold validation failed. See /tmp/codex-workspace-scaffold-validate.log."
+    add_result FAIL "Python syntax validation failed. See /tmp/codex-workspace-python-syntax.log."
   fi
 elif [ -z "${PYTHON_BIN:-}" ]; then
-  add_result WARN "Python 3 is not available; skipped capability scaffold validation."
+  add_result WARN "Python 3 is not available; skipped Python syntax validation."
 else
-  add_result WARN "Capability scaffold validator not found at $scaffold_validator."
+  add_result WARN "Python syntax validator not found at $python_syntax_validator."
 fi
 
 for installer in scripts/install-workspace.ps1 scripts/install-workspace.sh; do

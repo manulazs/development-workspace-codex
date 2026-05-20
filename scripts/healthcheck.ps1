@@ -56,6 +56,28 @@ if (-not (Test-CommandExists "git")) {
     } else {
         Add-Result INFO "Git worktree detected."
     }
+
+    $gitIndexLock = Join-Path ".git" "index.lock"
+    if (Test-Path -LiteralPath $gitIndexLock) {
+        $lockItem = Get-Item -LiteralPath $gitIndexLock
+        $lockAge = New-TimeSpan -Start $lockItem.LastWriteTime -End (Get-Date)
+        Add-Result WARN ("Git index lock exists: {0}; size={1} bytes; last_write={2}; age_minutes={3}. Healthcheck does not remove Git locks. Avoid git add/commit/reset until the active Git operation is understood or the stale lock is explicitly cleared." -f $gitIndexLock, $lockItem.Length, $lockItem.LastWriteTime.ToString("s"), [Math]::Round($lockAge.TotalMinutes, 1))
+
+        $gitProcesses = @(Get-Process git -ErrorAction SilentlyContinue)
+        if ($gitProcesses.Count -gt 0) {
+            foreach ($process in $gitProcesses) {
+                $startTime = "unknown"
+                try {
+                    $startTime = $process.StartTime.ToString("s")
+                } catch {
+                    $startTime = "unavailable"
+                }
+                Add-Result WARN ("Visible Git process while index lock exists: pid={0}; start={1}; path={2}" -f $process.Id, $startTime, $process.Path)
+            }
+        } else {
+            Add-Result INFO "No visible git.exe process while .git/index.lock exists. Confirm with OS tools before manual cleanup."
+        }
+    }
 }
 
 $requiredDirs = @(
@@ -67,6 +89,7 @@ $requiredDirs = @(
     "docs/operations",
     "docs/audits",
     "docs/evolution",
+    "docs/evolution/reports",
     "docs/lessons",
     "docs/patterns",
     "scripts"
@@ -331,18 +354,24 @@ if ((Test-Path $evolutionValidator) -and (Test-CommandExists "python")) {
     Add-Result WARN "Continuous evolution validator not found at $evolutionValidator."
 }
 
-$scaffoldValidator = "scripts/scaffold-capability.py"
-if ((Test-Path $scaffoldValidator) -and (Test-CommandExists "python")) {
-    $scaffoldValidationOutput = & python -m py_compile $scaffoldValidator 2>&1
+$pythonSyntaxValidator = "scripts/validate-python-syntax.py"
+$pythonSyntaxTargets = @(
+    "scripts/validate-skills.py",
+    "scripts/evolve-workspace.py",
+    "scripts/scaffold-capability.py",
+    $pythonSyntaxValidator
+)
+if ((Test-Path $pythonSyntaxValidator) -and (Test-CommandExists "python")) {
+    $syntaxValidationOutput = & python $pythonSyntaxValidator @pythonSyntaxTargets 2>&1
     if ($LASTEXITCODE -ne 0) {
-        Add-Result FAIL "Capability scaffold validation failed: $($scaffoldValidationOutput -join ' ')"
+        Add-Result FAIL "Python syntax validation failed: $($syntaxValidationOutput -join ' ')"
     } else {
-        Add-Result INFO "Capability scaffold validation passed."
+        Add-Result INFO "Python syntax validation passed without bytecode writes."
     }
 } elseif (-not (Test-CommandExists "python")) {
-    Add-Result WARN "python is not available; skipped capability scaffold validation."
+    Add-Result WARN "python is not available; skipped Python syntax validation."
 } else {
-    Add-Result WARN "Capability scaffold validator not found at $scaffoldValidator."
+    Add-Result WARN "Python syntax validator not found at $pythonSyntaxValidator."
 }
 
 foreach ($installer in @("scripts/install-workspace.ps1", "scripts/install-workspace.sh")) {

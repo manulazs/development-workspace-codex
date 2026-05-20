@@ -6,8 +6,10 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
+import sys
 from dataclasses import asdict, dataclass
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 
@@ -20,6 +22,18 @@ HUMAN_GATED_SEGMENTS = {
     "installer-safety",
 }
 TOKEN_RE = re.compile(r"[a-z0-9]+")
+DEFAULT_VALIDATION_COMMANDS = [
+    [
+        sys.executable,
+        "scripts/validate-python-syntax.py",
+        "scripts/validate-skills.py",
+        "scripts/evolve-workspace.py",
+        "scripts/scaffold-capability.py",
+        "scripts/validate-python-syntax.py",
+    ],
+    [sys.executable, "scripts/validate-skills.py", "--strict"],
+    [sys.executable, "skills/migrate-to-codex/scripts/cli.py", "--validate-target", "."],
+]
 
 
 @dataclass(frozen=True)
@@ -42,6 +56,13 @@ class EvolutionTask:
     automation_level: str
     human_approval_required: bool
     validation: list[str]
+
+
+@dataclass(frozen=True)
+class ValidationResult:
+    command: str
+    exit_code: int
+    output_tail: str
 
 
 def read_text(path: Path) -> str:
@@ -99,21 +120,6 @@ def parse_toml_like_agent(agent_file: Path) -> dict[str, str]:
         if match:
             values[key] = match.group(1)
     return values
-
-
-def parse_provenance_gates(root: Path) -> dict[str, str]:
-    gates: dict[str, str] = {}
-    text = read_text(root / "docs" / "skills-provenance.md")
-    for line in text.splitlines():
-        if not line.startswith("| `"):
-            continue
-        cells = [cell.strip() for cell in line.strip("|").split("|")]
-        if len(cells) < 6:
-            continue
-        skill = cells[0].strip("`")
-        gate = cells[-1].strip("`")
-        gates[skill] = gate
-    return gates
 
 
 def collect_capabilities(root: Path, manifest: dict[str, object]) -> list[Capability]:
@@ -218,7 +224,6 @@ def generate_tasks(root: Path) -> list[EvolutionTask]:
         profiles = {}
 
     inventory_text = read_text(root / "docs" / "capability-inventory.md")
-    gates = parse_provenance_gates(root)
     tasks: list[EvolutionTask] = []
 
     installer_specs = [
@@ -319,23 +324,6 @@ def generate_tasks(root: Path) -> list[EvolutionTask]:
                     )
                 )
 
-    for skill, gate in sorted(gates.items()):
-        status = manifest_skills.get(skill, "unclassified")
-        if gate == "needs-source-review":
-            tasks.append(
-                task(
-                    f"EVOL-PROVENANCE-{skill}",
-                    "P1" if status in {"core", "optional"} else "P2",
-                    "skill-provenance",
-                    f"Resolve source/license evidence for `{skill}`.",
-                    "docs/skills-provenance.md marks the skill as needs-source-review.",
-                    "main-agent",
-                    ["security_auditor"],
-                    "human-gated" if status == "core" else "auto-fix-proposal",
-                    ["python scripts/validate-skills.py --strict"],
-                )
-            )
-
     checked_pairs: set[tuple[str, str]] = set()
     for index, left in enumerate(capabilities):
         for right in capabilities[index + 1 :]:
@@ -368,7 +356,7 @@ def generate_tasks(root: Path) -> list[EvolutionTask]:
                 "P3",
                 "maintenance",
                 "No structural evolution tasks detected.",
-                "Manifest, inventory, provenance, profiles, and overlap checks found no immediate gaps.",
+                "Manifest, inventory, profiles, and overlap checks found no immediate gaps.",
                 "main-agent",
                 [],
                 "catalog-only",
@@ -439,16 +427,104 @@ def render_markdown(tasks: list[EvolutionTask]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def run_validations(root: Path) -> list[ValidationResult]:
+    results: list[ValidationResult] = []
+    for command in DEFAULT_VALIDATION_COMMANDS:
+        completed = subprocess.run(
+            command,
+            cwd=root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+        )
+        output = completed.stdout.strip()
+        tail = "\n".join(output.splitlines()[-12:]) if output else ""
+        display_command = ["python" if index == 0 and value == sys.executable else value for index, value in enumerate(command)]
+        results.append(
+            ValidationResult(
+                command=" ".join(display_command),
+                exit_code=completed.returncode,
+                output_tail=tail,
+            )
+        )
+    return results
+
+
+def render_report(tasks: list[EvolutionTask], validation_results: list[ValidationResult]) -> str:
+    priorities: dict[str, int] = {}
+    for item in tasks:
+        priorities[item.priority] = priorities.get(item.priority, 0) + 1
+
+    lines = [
+        "# Continuous Evolution Report",
+        "",
+        f"Generated: {datetime.now().isoformat(timespec='seconds')}",
+        "",
+        "This report is generated from repository-visible state. It does not authorize runtime-global writes, commits, pushes, destructive cleanup, or profile installation.",
+        "",
+        "## Summary",
+        "",
+        f"- Tasks detected: {len(tasks)}",
+        "- Priorities: "
+        + (", ".join(f"{priority}={count}" for priority, count in sorted(priorities.items())) or "none"),
+        f"- P0 structural blockers: {sum(1 for item in tasks if item.priority == 'P0')}",
+        f"- Human-gated tasks: {sum(1 for item in tasks if item.human_approval_required)}",
+        "",
+        "## Task Segments",
+        "",
+    ]
+
+    segment_counts: dict[str, int] = {}
+    for item in tasks:
+        segment_counts[item.segment] = segment_counts.get(item.segment, 0) + 1
+    for segment, count in sorted(segment_counts.items()):
+        lines.append(f"- `{segment}`: {count}")
+    if not segment_counts:
+        lines.append("- none")
+
+    lines.extend(["", "## Validation Snapshot", ""])
+    if validation_results:
+        lines.extend(["| Command | Exit code | Output tail |", "| --- | --- | --- |"])
+        for result in validation_results:
+            output = result.output_tail.replace("|", "\\|").replace("\n", "<br>")
+            lines.append(f"| `{result.command}` | {result.exit_code} | {output or '-'} |")
+    else:
+        lines.append("No validations were run. Use `--run-validation` to capture a validation snapshot.")
+
+    lines.extend(["", "## Next Actions", ""])
+    blocking = [item for item in tasks if item.priority in {"P0", "P1"}]
+    if blocking:
+        for item in blocking[:10]:
+            gate = "human approval required" if item.human_approval_required else item.automation_level
+            lines.append(f"- `{item.task_id}`: {item.title} ({gate}).")
+    else:
+        lines.append("- No P0/P1 evolution tasks detected.")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def write_report(root: Path, tasks: list[EvolutionTask], validation_results: list[ValidationResult]) -> Path:
+    target_dir = root / "docs" / "evolution" / "reports"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target = target_dir / f"{date.today().isoformat()}-continuous-evolution.md"
+    target.write_text(render_report(tasks, validation_results), encoding="utf-8")
+    return target
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Catalog governed continuous-evolution tasks.")
     parser.add_argument("--root", default=".", help="Repository root. Defaults to current directory.")
     parser.add_argument("--write-catalog", action="store_true", help="Write docs/evolution/task-catalog.md and .json.")
+    parser.add_argument("--write-report", action="store_true", help="Write docs/evolution/reports/<date>-continuous-evolution.md.")
+    parser.add_argument("--run-validation", action="store_true", help="Run a bounded validation snapshot for the evolution report.")
     parser.add_argument("--json", action="store_true", help="Print task catalog as JSON.")
     parser.add_argument("--strict", action="store_true", help="Fail when P0 evolution tasks exist.")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
     tasks = generate_tasks(root)
+    validation_results = run_validations(root) if args.run_validation else []
 
     if args.write_catalog:
         target_dir = root / "docs" / "evolution"
@@ -459,12 +535,20 @@ def main() -> None:
             encoding="utf-8",
         )
 
+    report_path = None
+    if args.write_report:
+        report_path = write_report(root, tasks, validation_results)
+
     if args.json:
         print(json.dumps([asdict(item) for item in tasks], indent=2, ensure_ascii=False))
     else:
         print(render_markdown(tasks))
+        if report_path is not None:
+            print(f"Evolution report written: {report_path.relative_to(root).as_posix()}")
 
     if args.strict and any(item.priority == "P0" for item in tasks):
+        raise SystemExit(1)
+    if args.run_validation and any(result.exit_code != 0 for result in validation_results):
         raise SystemExit(1)
 
 
