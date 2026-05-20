@@ -60,6 +60,7 @@ git clone https://github.com/manulazs/development-workspace-codex.git
 cd development-workspace-codex
 scripts/healthcheck.sh --strict
 python scripts/evolve-workspace.py --strict
+python scripts/scaffold-capability.py skill --name example-skill --purpose "Reusable example workflow." --mode proposal --dry-run
 scripts/install-workspace.sh --list-profiles
 scripts/install-workspace.sh --profile governed-codex --dry-run
 ```

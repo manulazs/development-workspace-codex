@@ -32,6 +32,7 @@ This directory contains the operating documentation for the public Codex workspa
 - `runbooks/setup-macos.md`: macOS/Linux setup and optional adoption preview.
 - `operations/workspace-health.md`: what repository health means and what it excludes.
 - `evolution/`: generated task catalogs and machine-readable evolution state.
+- `../scripts/scaffold-capability.py`: governed skill/agent proposal and scaffold helper with duplicate checks.
 
 ## Governance Areas
 

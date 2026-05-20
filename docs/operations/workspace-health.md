@@ -80,6 +80,7 @@ Green:
 - Healthcheck passes with 0 failures.
 - `scripts/validate-skills.py --strict` passes with 0 failures.
 - `scripts/evolve-workspace.py --strict` has no P0 structural tasks.
+- `scripts/scaffold-capability.py` can create non-runtime-loadable proposals and blocks duplicate apply attempts.
 - Install preview is profile-based and non-destructive.
 - No obvious secret patterns are tracked.
 

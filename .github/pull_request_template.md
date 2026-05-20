@@ -21,6 +21,7 @@ Why is this change needed?
 - [ ] `scripts/healthcheck.sh`
 - [ ] `python scripts/validate-skills.py --strict`
 - [ ] `python scripts/evolve-workspace.py --strict`
+- [ ] `python scripts/scaffold-capability.py skill --name continuous-evolution --purpose "Existing governed evolution workflow." --mode proposal --dry-run`
 - [ ] `scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf` or `scripts/install-workspace.sh --profile full-reviewed --dry-run`
 - [ ] `python skills/migrate-to-codex/scripts/cli.py --validate-target .`
 - [ ] `git diff --check`

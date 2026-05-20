@@ -19,6 +19,7 @@ All notable changes to this workspace are tracked here.
 - Add skill provenance gates, agentic control boundaries, repository-local skill validation, and stricter CI dry-run coverage.
 - Add `caveman lite` as the global template communication style and reclassify `caveman` as an optional adoption capability.
 - Add governed continuous-evolution automation with task cataloging, anti-duplication review, subagent handoff protocol, and validation gates.
+- Add capability scaffolding for governed skill and agent proposals with duplicate checks and core human gates.
 
 ## 2026-05-19
 

@@ -331,6 +331,20 @@ if ((Test-Path $evolutionValidator) -and (Test-CommandExists "python")) {
     Add-Result WARN "Continuous evolution validator not found at $evolutionValidator."
 }
 
+$scaffoldValidator = "scripts/scaffold-capability.py"
+if ((Test-Path $scaffoldValidator) -and (Test-CommandExists "python")) {
+    $scaffoldValidationOutput = & python -m py_compile $scaffoldValidator 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Add-Result FAIL "Capability scaffold validation failed: $($scaffoldValidationOutput -join ' ')"
+    } else {
+        Add-Result INFO "Capability scaffold validation passed."
+    }
+} elseif (-not (Test-CommandExists "python")) {
+    Add-Result WARN "python is not available; skipped capability scaffold validation."
+} else {
+    Add-Result WARN "Capability scaffold validator not found at $scaffoldValidator."
+}
+
 foreach ($installer in @("scripts/install-workspace.ps1", "scripts/install-workspace.sh")) {
     if (-not (Test-Path $installer)) {
         Add-Result FAIL "Installer missing: $installer"

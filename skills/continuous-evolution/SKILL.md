@@ -34,6 +34,8 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
    - `propose` can create task catalog entries, plans, or reviewable patches.
    - `apply` can modify repository-local files only when the user authorized implementation and the task is not human-gated.
    - Never write to `~/.codex`, install profiles live, or run migration writes against a global runtime as an implied side effect.
+   - Use `python scripts/scaffold-capability.py ... --mode proposal` before creating a new skill or agent.
+   - Use `--mode apply` only when duplicate checks pass and required human gates are satisfied.
 
 5. Avoid duplication before creating anything.
    - Check existing skills, agents, runbooks, patterns, docs, system skills, and plugin capabilities.
@@ -85,9 +87,13 @@ When a skill changes, update:
 - `docs/evolution/task-catalog.md` through the evolution script;
 - validation docs or runbooks when commands change.
 
+For new skills, prefer `scripts/scaffold-capability.py` so creation, duplicate checks, manifest updates, inventory rows, and provenance rows stay aligned.
+
 When an agent changes, update:
 
 - `workspace-manifest.json`;
 - `docs/capability-inventory.md`;
 - `docs/subagents-policy.md` or `docs/subagents-lifecycle.md` when the policy changes;
 - `docs/evolution/task-catalog.md` through the evolution script.
+
+For new agents, prefer `scripts/scaffold-capability.py` so creation, duplicate checks, manifest updates, and inventory rows stay aligned.

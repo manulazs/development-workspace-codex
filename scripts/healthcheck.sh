@@ -330,6 +330,19 @@ else
   add_result WARN "Continuous evolution validator not found at $evolution_validator."
 fi
 
+scaffold_validator="scripts/scaffold-capability.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$scaffold_validator" ]; then
+  if "$PYTHON_BIN" -m py_compile "$scaffold_validator" >/tmp/codex-workspace-scaffold-validate.log 2>&1; then
+    add_result INFO "Capability scaffold validation passed."
+  else
+    add_result FAIL "Capability scaffold validation failed. See /tmp/codex-workspace-scaffold-validate.log."
+  fi
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped capability scaffold validation."
+else
+  add_result WARN "Capability scaffold validator not found at $scaffold_validator."
+fi
+
 for installer in scripts/install-workspace.ps1 scripts/install-workspace.sh; do
   if [ ! -f "$installer" ]; then
     add_result FAIL "Installer missing: $installer"

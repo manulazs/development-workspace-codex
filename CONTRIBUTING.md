@@ -32,6 +32,7 @@ macOS/Linux:
 scripts/healthcheck.sh --strict
 python scripts/validate-skills.py --strict
 python scripts/evolve-workspace.py --strict
+python scripts/scaffold-capability.py skill --name continuous-evolution --purpose "Existing governed evolution workflow." --mode proposal --dry-run
 scripts/install-workspace.sh --profile full-reviewed --dry-run
 ```
 
@@ -41,6 +42,7 @@ Windows install preview:
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
 python scripts/validate-skills.py --strict
 python scripts/evolve-workspace.py --strict
+python scripts/scaffold-capability.py skill --name continuous-evolution --purpose "Existing governed evolution workflow." --mode proposal --dry-run
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf
 ```
 

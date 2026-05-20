@@ -19,8 +19,8 @@ This repository supports governed continuous evolution: agents may catalog tasks
 Continuous evolution follows `observe -> propose -> apply`.
 
 - `observe`: automatic catalog generation, validation, and read-only analysis.
-- `propose`: generate task entries, plans, or patches for review.
-- `apply`: modify repository-local files only when the user has authorized implementation and the task is not human-gated.
+- `propose`: generate task entries, plans, capability proposals, or patches for review.
+- `apply`: modify repository-local files only when the user has authorized implementation, duplicate checks pass, and the task is not human-gated.
 
 Runtime-global paths are manual-only. Automation must not write to `~/.codex`, install profiles into a live runtime, run installer live mode, or use `migrate-to-codex` against a global target unless the user gives a separate explicit approval for that operation.
 
@@ -78,6 +78,24 @@ The main agent integrates outputs, resolves conflicts, runs validation, and deci
 - Create a new agent only when the responsibility is a stable role with independent ownership and permission posture.
 - If two capabilities overlap, record the decision: merge, keep both with clear boundaries, reclassify, or archive one.
 - Run `python scripts/evolve-workspace.py --strict` before claiming the workspace is structurally ready.
+
+## Capability Scaffolding
+
+Use `scripts/scaffold-capability.py` when a recurring workflow or role may deserve a new skill or agent.
+
+Proposal mode is safe and non-runtime-loadable:
+
+```bash
+python scripts/scaffold-capability.py skill --name example-skill --purpose "Reusable example workflow." --mode proposal --dry-run
+```
+
+Apply mode creates repository-local files and updates baseline metadata, but it is blocked by default when a capability already exists, overlap is detected, or `core` status lacks explicit human approval:
+
+```bash
+python scripts/scaffold-capability.py skill --name example-skill --purpose "Reusable example workflow." --status optional --mode apply --dry-run
+```
+
+Do not use scaffolding to bypass the inventory, provenance, manifest, validation, or human-gate requirements.
 
 ## Installer Safety
 
