@@ -17,10 +17,12 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
    - Read `AGENTS.md`, `workspace-manifest.json`, `docs/capability-inventory.md`, `docs/skills-provenance.md`, `docs/agentic-controls.md`, and `docs/self-improvement-lifecycle.md`.
    - Respect dirty worktrees. Do not revert unrelated changes.
 
-2. Build the task catalog.
-   - Run `python scripts/evolve-workspace.py --write-catalog`.
+2. Build the task catalog and report.
+   - Run `python scripts/evolve-workspace.py --write-catalog --write-report`.
+   - Add `--run-validation` when the report should capture a bounded validation snapshot.
    - Treat `docs/evolution/task-catalog.md` as the current task map.
-   - Segment tasks by manifest integrity, inventory integrity, provenance, profile safety, duplication review, validation, docs, and pruning.
+   - Treat `docs/evolution/reports/` as the recurring evidence trail.
+   - Segment tasks by manifest integrity, inventory integrity, provenance notes, profile safety, duplication review, validation, docs, and pruning.
    - Treat installer safety and runtime-global boundaries as human-gated.
 
 3. Decide automation level.
@@ -59,7 +61,7 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
 
 8. Validate and commit in batches when requested.
    - Run targeted validation after each material batch.
-   - Run full validation before final push: `python scripts/evolve-workspace.py --strict`, `python scripts/validate-skills.py --strict`, `bash scripts/healthcheck.sh --strict`, install dry-run, and relevant skill validators.
+   - Run full validation before final push: `python scripts/evolve-workspace.py --strict`, `python scripts/validate-skills.py --strict`, bytecode-free Python syntax validation, platform healthcheck, install dry-run, and relevant skill validators.
    - Commit coherent validated batches when the user has explicitly asked for commits.
    - Push only after final validation and only when the user asked for push.
 
@@ -83,8 +85,9 @@ When a skill changes, update:
 
 - `workspace-manifest.json`;
 - `docs/capability-inventory.md`;
-- `docs/skills-provenance.md`;
+- `docs/skills-provenance.md` for informational provenance notes;
 - `docs/evolution/task-catalog.md` through the evolution script;
+- `docs/evolution/reports/` when running recurring maintenance;
 - validation docs or runbooks when commands change.
 
 For new skills, prefer `scripts/scaffold-capability.py` so creation, duplicate checks, manifest updates, inventory rows, and provenance rows stay aligned.

@@ -18,6 +18,7 @@ Current commands:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1
+python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
 python scripts/validate-skills.py --strict
 python scripts/evolve-workspace.py --strict
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -ListProfiles

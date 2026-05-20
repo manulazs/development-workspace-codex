@@ -72,7 +72,7 @@ scripts/install-workspace.sh --profile governed-codex --codex-home ./.tmp/codex-
 
 The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
 
-Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` and resolve any `needs-source-review` skills that the fork intends to distribute.
+Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` for source, license, attribution, and script-risk notes. These notes are informational and do not block authorized repository skills.
 
 ## Install Into A Runtime
 

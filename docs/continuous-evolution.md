@@ -2,13 +2,13 @@
 
 Last reviewed: 2026-05-19
 
-This repository supports governed continuous evolution: agents may catalog tasks, segment work, update repository-local skills or agents when criteria are met, delegate bounded work to subagents, validate results, and record decisions. It is not permission for unbounded runtime-global mutation.
+This repository supports governed continuous evolution: agents may catalog tasks, segment work, write evolution reports, update repository-local skills or agents when criteria are met, delegate bounded work to subagents, validate results, and record decisions. It is not permission for unbounded runtime-global mutation.
 
 ## Autonomy Levels
 
 | Level | Meaning | Example |
 | --- | --- | --- |
-| `catalog-only` | Record state without editing behavior. | Refresh `docs/evolution/task-catalog.md`. |
+| `catalog-only` | Record state without editing behavior. | Refresh `docs/evolution/task-catalog.md` and an evolution report. |
 | `auto-fix-proposal` | Draft or recommend a change, then review before persistence. | Propose merging overlapping skills. |
 | `auto-edit-allowed` | Apply narrow repository-local edits when validation is clear. | Add missing manifest, inventory, or provenance entries for a new skill. |
 | `human-gated` | Require explicit user approval before applying or merging. | Change core capability status, global runtime behavior, security policy, or installer behavior. |
@@ -18,7 +18,7 @@ This repository supports governed continuous evolution: agents may catalog tasks
 
 Continuous evolution follows `observe -> propose -> apply`.
 
-- `observe`: automatic catalog generation, validation, and read-only analysis.
+- `observe`: automatic catalog generation, optional validation snapshots, generated reports, and read-only analysis.
 - `propose`: generate task entries, plans, capability proposals, or patches for review.
 - `apply`: modify repository-local files only when the user has authorized implementation, duplicate checks pass, and the task is not human-gated.
 
@@ -34,7 +34,7 @@ Evolution work should be cataloged into these segments:
 | --- | --- | --- | --- |
 | Manifest integrity | Main agent | `code_reviewer` | No, unless core profile behavior changes. |
 | Inventory integrity | Main agent | `agents_md_maintainer` | No, unless risk classification changes materially. |
-| Skill provenance | Main agent | `security_auditor` | Yes for core skills, external licenses, or redistribution claims. |
+| Skill provenance | Main agent | `security_auditor` | No for repository skill use; yes for external redistribution claims or license changes. |
 | Profile safety | Main agent | `security_auditor` | Yes. |
 | Duplication review | Main agent | `explorer`, `code_reviewer` | Yes when deleting, archiving, or merging. |
 | Skill evolution | `local_skill_builder` or main agent | `local_skill_builder`, `security_auditor` | Yes for global/public promotion. |
@@ -78,6 +78,8 @@ The main agent integrates outputs, resolves conflicts, runs validation, and deci
 - Create a new agent only when the responsibility is a stable role with independent ownership and permission posture.
 - If two capabilities overlap, record the decision: merge, keep both with clear boundaries, reclassify, or archive one.
 - Run `python scripts/evolve-workspace.py --strict` before claiming the workspace is structurally ready.
+- Run `python scripts/evolve-workspace.py --write-catalog --write-report` during recurring maintenance to leave a current task map and report.
+- Add `--run-validation` only when a report should capture a bounded validation snapshot. Healthchecks call `evolve-workspace.py --strict` without validation recursion.
 
 ## Capability Scaffolding
 

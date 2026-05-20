@@ -23,6 +23,7 @@ git status --short --branch
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
+python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
 python scripts/validate-skills.py --strict
 python scripts/evolve-workspace.py --strict
 ```
@@ -60,7 +61,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps
 
 The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
 
-Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` and resolve any `needs-source-review` skills that the fork intends to distribute.
+Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` for source, license, attribution, and script-risk notes. These notes are informational and do not block authorized repository skills.
 
 ## Install Into A Runtime
 
@@ -74,7 +75,7 @@ Restart Codex after changing runtime skills or agents.
 
 ## Troubleshooting
 
-- If Git commands fail with `index.lock: Permission denied`, wait for OneDrive or editor processes to release `.git` files, then retry.
+- If Git commands fail with `index.lock: Permission denied`, stop Git write operations first. Check `.git/index.lock` age and size, run `Get-Process git -ErrorAction SilentlyContinue`, and confirm no editor, terminal, or Git operation is active. If command-line inspection is blocked by Windows permissions, use Task Manager or Process Explorer. Remove `.git/index.lock` only after confirming it is stale and only through an explicit maintainer-approved command.
 - If Python is missing, install Python 3 and confirm `python --version`.
 - If `migrate-to-codex` validation is skipped, confirm Python is available and rerun the healthcheck.
 - If a profile fails to install, inspect `workspace-manifest.json` and ensure the profile does not reference `curated`, `review`, `deprecated`, or `archived` capabilities.

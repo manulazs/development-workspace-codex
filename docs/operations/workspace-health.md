@@ -21,7 +21,8 @@ The standard healthcheck validates:
 - `docs/capability-inventory.md` mentions all tracked skills and agents;
 - install scripts support safe preview (`-WhatIf` or `--dry-run`);
 - basic tracked-file secret patterns;
-- repository-local validators when their dependencies are available.
+- bytecode-free Python syntax validation;
+- repository-local validators when their dependencies are available;
 - continuous-evolution task catalog checks for P0 structural drift.
 
 The standard healthcheck intentionally does not validate:
@@ -30,7 +31,7 @@ The standard healthcheck intentionally does not validate:
 - whether a consumer has restarted Codex after local adoption;
 - local auth, sessions, caches, logs, or private runtime state;
 - private corporate data or tools outside the repository;
-- external legal verification for third-party skills beyond the evidence recorded in `docs/skills-provenance.md`.
+- external legal verification for third-party skills beyond the informational evidence recorded in `docs/skills-provenance.md`.
 
 ## Commands
 
@@ -39,6 +40,7 @@ Windows:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
 python scripts/validate-skills.py --strict
+python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
 python scripts/evolve-workspace.py --strict
 ```
 
@@ -47,6 +49,7 @@ macOS/Linux:
 ```bash
 scripts/healthcheck.sh --strict
 python scripts/validate-skills.py --strict
+python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
 python scripts/evolve-workspace.py --strict
 ```
 
@@ -79,6 +82,7 @@ Green:
 - Manifest, inventory, docs, skills, agents, and installers are aligned.
 - Healthcheck passes with 0 failures.
 - `scripts/validate-skills.py --strict` passes with 0 failures.
+- `scripts/validate-python-syntax.py` validates repository Python scripts without writing `__pycache__`.
 - `scripts/evolve-workspace.py --strict` has no P0 structural tasks.
 - `scripts/scaffold-capability.py` can create non-runtime-loadable proposals and blocks duplicate apply attempts.
 - Install preview is profile-based and non-destructive.
@@ -102,7 +106,7 @@ Red:
 ## Maintenance Cadence
 
 - Run the repository healthcheck before and after structural changes.
-- Regenerate `docs/evolution/task-catalog.md` after structural capability changes.
+- Regenerate `docs/evolution/task-catalog.md` and write a report under `docs/evolution/reports/` after structural capability changes.
 - Update `workspace-manifest.json`, `docs/capability-inventory.md`, and `docs/skills-provenance.md` in the same change set when skills change.
 - Update `workspace-manifest.json`, `docs/capability-inventory.md`, and `docs/agentic-controls.md` when agentic control boundaries change.
 - Review `review` and `curated` capabilities periodically.
