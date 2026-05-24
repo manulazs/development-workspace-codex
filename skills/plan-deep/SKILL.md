@@ -11,6 +11,18 @@ Use this skill only when the user explicitly invokes `$plan-deep`.
 
 This is a planning add-on, not an implementation workflow. Do not edit files, spawn subagents, install skills, or run destructive commands while using this skill. If the current collaboration mode is Plan Mode, follow Plan Mode rules strictly. If the runtime is not in Plan Mode, still treat this skill invocation as planning-only unless the user explicitly asks for implementation after the plan.
 
+## Planning vs Implementation Delegation Boundary
+
+Planning must not spawn subagents. Planning may only recommend, map, and justify subagents.
+
+However, if the final plan identifies independent tasks where subagents would reduce context load, reduce token consumption, improve validation, or parallelize work safely, mark those tasks as recommended for subagent execution during implementation. Once implementation begins outside Plan Mode, the main agent may spawn those subagents according to the plan, subject to available tools, user permissions, and active runtime instructions.
+
+Distinguish:
+
+- `logical owner`: the role responsible for the task in the plan;
+- `recommended implementation subagent`: a real available subagent to spawn during implementation;
+- `role-only`: a conceptual owner that should not be spawned unless it is created or mapped to an existing subagent.
+
 ## Objective
 
 Create a decision-complete plan that:
@@ -46,12 +58,14 @@ Create a decision-complete plan that:
    - Check built-in roles first: `default`, `explorer`, `worker`.
    - Check repository, project, or consumer-runtime custom agents when those sources are relevant and available.
    - When a stable project-local workflow clearly deserves reusable instructions, recommend `local_skill_builder` for a separate local skill creation task.
-   - Recommend delegation only when the task can run in parallel or has a clear ownership boundary.
+   - Recommend implementation-time subagent execution when the task can run independently and provides token savings, domain isolation, independent validation, repetitive/mechanical execution, or low conflict risk.
    - Do not recommend delegating work that blocks the immediate next critical-path step.
+   - Do not recommend subagents for trivial tasks, tightly coupled work, unavailable tools, missing permissions, or work where coordination cost exceeds benefit.
 
 6. Identify agent gaps.
    - If no existing agent is suitable, propose a concise custom-agent creation step before delegation.
    - Include the proposed agent name, responsibility, model, reasoning effort, sandbox mode, and why the gap is real.
+   - Do not invent unavailable agents without labeling them as `create/provision before implementation`, `generic worker fallback`, or `role-only, do not spawn`.
 
 ## Final Plan Shape
 
@@ -63,7 +77,10 @@ Include:
 - key insights;
 - implementation approach;
 - task delegation matrix with task, owner/agent, reason, input, output, dependencies, and risk;
+- `Subagent Execution Plan` when separable tasks exist, with agent, implementation phase, scope, read/write scope, expected output, validation, token/quality benefit, dependencies, conflict risk, and fallback if unavailable;
 - validation and acceptance criteria;
 - assumptions and defaults.
+
+If no implementation-time subagent is recommended, include `Subagent Execution Plan: none` with a short reason.
 
 Keep the plan compact but complete enough for another agent to implement without deciding architecture, ownership, or validation strategy.

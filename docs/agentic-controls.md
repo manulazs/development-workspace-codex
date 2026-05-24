@@ -30,6 +30,7 @@ Use `docs/continuous-evolution.md` for the automation boundary that connects the
 ## Hard Rules
 
 - The repository may recommend delegation, but it does not authorize spawning by itself.
+- A `Subagent Execution Plan` in a planning-skill output is an implementation-time recommendation. It is stronger than a role label, but it still depends on active runtime tools, permissions, and user/developer instructions before any spawn occurs.
 - New subagents and repository skills require evidence that an existing skill, agent, runbook, pattern, plugin, or native workflow is insufficient.
 - Runtime-global writes, including `~/.codex`, are consumer operations and must not happen as a side effect of repository healthchecks.
 - `migrate-to-codex` is powerful by design: once a source and target are selected, it can write generated Codex artifacts into that target. Use dry-run, plan, doctor, and validate commands before writing to a shared or global target.

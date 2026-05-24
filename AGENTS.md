@@ -71,6 +71,7 @@ Delegation is an operational decision, not a default.
 - Use 1 subagent for an independent audit, review, or bounded side task.
 - Use multiple subagents only when scopes are genuinely independent and integration cost is justified.
 - The main agent remains responsible for synthesis, final judgment, and user-facing output.
+- Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Every subagent template should define objective, scope, suggested model class, reasoning level, sandbox, required inputs, expected output, risks, when to use, when not to use, and exit criteria.
 
 The detailed policy is `docs/subagents-policy.md`. Agent creation, reuse, validation, and retirement are governed by `docs/subagents-lifecycle.md`.

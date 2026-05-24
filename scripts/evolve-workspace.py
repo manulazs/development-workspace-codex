@@ -440,7 +440,10 @@ def run_validations(root: Path) -> list[ValidationResult]:
         )
         output = completed.stdout.strip()
         tail = "\n".join(output.splitlines()[-12:]) if output else ""
-        display_command = ["python" if index == 0 and value == sys.executable else value for index, value in enumerate(command)]
+        display_command = [
+            Path(sys.executable).name if index == 0 and value == sys.executable else value
+            for index, value in enumerate(command)
+        ]
         results.append(
             ValidationResult(
                 command=" ".join(display_command),

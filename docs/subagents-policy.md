@@ -12,6 +12,15 @@ Use `docs/continuous-evolution.md` for the orchestrator/subagent handoff protoco
 - Keep task framing, synthesis, conflict control, and final decisions in the main Codex thread.
 - Do not delegate just because a specialized agent exists.
 - Runtime, developer, or user instructions always prevail. If the active platform requires explicit authorization before spawning subagents, request it first.
+- Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
+
+## Planning To Implementation
+
+Planning skills may recommend subagents but must not spawn them during planning. When a final plan contains a `Subagent Execution Plan`, treat it as an implementation-time routing instruction, not as automatic authorization.
+
+During implementation, prefer spawning the recommended subagent when the task is independent and provides at least one clear benefit: lower main-context load, lower token use, domain isolation, independent validation, safe parallelism, or repetitive mechanical execution.
+
+Do not spawn when the task is trivial, tightly coupled to the immediate critical path, likely to conflict with active edits, blocked by missing tools or permissions, or cheaper to complete locally.
 
 ## Use 1 Subagent When
 
@@ -83,10 +92,12 @@ The subagent does not own the final answer.
 | Data catalog, taxonomy, glossary, lineage docs | `data_catalog_taxonomist` | Yes, if bounded | The task is transformation implementation or visual design |
 | Data science, statistical analysis, insight synthesis | `data_science_modeler` | Yes, if bounded | The request is only deterministic pipeline work |
 | Dashboard, BI, DAX, analytical UI | `dashboard_visualization_specialist` | Yes, if bounded | Semantic model decisions are not settled |
+| Markdown docs, README, changelog, runbooks | `markdown_writer` | Yes, if bounded | Product behavior or commands are not validated |
 | Review | `code_reviewer` | Yes, after implementation | No diff or acceptance criteria exists |
+| QA, acceptance criteria, test gaps, release readiness | `qa_reviewer` | Yes, after implementation or before release | No implementation or acceptance criteria exists |
 | Security review | `security_auditor` | Yes, for read-only audit | Fix implementation is required in the same step |
-| Dependency changes | `package_manager` | Yes, if isolated | Upgrade scope is broad or risky |
-| Git staging/commit/push | `version_control_manager` | Rarely | The user did not explicitly request git operations |
+| Dependency install, package conflicts, runtime setup | `package_manager` | Yes, if isolated | Upgrade scope is broad or risky |
+| Git staging, commit grouping, release-safe push prep | `version_control_manager` | Rarely | The user did not explicitly request git operations |
 | Project instructions | `agents_md_maintainer` | Yes, after conventions emerge | Facts are not yet validated |
 | Skill creation | `local_skill_builder` | Yes, when recurring | The workflow is one-off |
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Plan Deep Skills"
   short_description: "Deep manual planning with skill discovery"
-  default_prompt: "Use plan-deep-skills to analyze this task, evaluate existing and external skills, and recommend a skill-aware delegation plan without implementing changes."
+  default_prompt: "Use plan-deep-skills to analyze this task, evaluate existing and external skills, and recommend a skill-aware delegation plan plus a Subagent Execution Plan without implementing changes."

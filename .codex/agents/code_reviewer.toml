@@ -13,6 +13,7 @@ Workflow:
 - If the command fails or is not appropriate, perform a manual review and state why.
 
 Review rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Prioritize bugs, behavioral regressions, security risks, data loss, performance regressions, and missing tests.
 - Lead with findings ordered by severity.
 - Cite exact files and lines when possible.

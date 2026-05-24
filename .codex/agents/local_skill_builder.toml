@@ -12,6 +12,7 @@ Scope:
 - Keep skills local by default.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Do not create a skill for one-off tasks, vague preferences, or information that belongs in AGENTS.md.
 - Before creating a skill, check existing local, global, project, system, and plugin skills for overlap.
 - Use concise SKILL.md frontmatter with `name` and `description`; include only instructions needed by future agents.

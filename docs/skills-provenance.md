@@ -34,8 +34,8 @@ This matrix records repository-visible evidence for every skill under `skills/`.
 | `migrating-dbt-core-to-fusion` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | References migration tooling. | `authorized` |
 | `migrating-dbt-project-across-platforms` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | References platform migration commands. | `authorized` |
 | `pdf` | `optional` | Inventory says OpenAI/curated. | `skills/pdf/LICENSE.txt`. | PDF tooling may depend on local libraries. | `authorized` |
-| `plan-deep` | `core` | Local template. | Covered by repository Apache-2.0 license. | Planning-only; no writes by design. | `authorized` |
-| `plan-deep-skills` | `core` | Local template. | Covered by repository Apache-2.0 license. | Planning-only; no installs by design. | `authorized` |
+| `plan-deep` | `core` | Local template. | Covered by repository Apache-2.0 license. | Planning-only; may recommend implementation-time subagents but does not spawn or write. | `authorized` |
+| `plan-deep-skills` | `core` | Local template. | Covered by repository Apache-2.0 license. | Planning-only; may recommend skills and implementation-time subagents but does not install, spawn, or write. | `authorized` |
 | `powerbi-expert` | `optional` | Inventory says Community PCL. | Frontmatter says Apache-2.0; no local license file found. | Instruction-only. | `authorized` |
 | `running-dbt-commands` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Can lead to dbt command execution. | `authorized` |
 | `screenshot` | `review` | Inventory says OpenAI/curated. | `skills/screenshot/LICENSE.txt`. | OS screenshot scripts and privacy-sensitive output. | `profile-restricted` |

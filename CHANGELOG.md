@@ -27,6 +27,9 @@ All notable changes to this workspace are tracked here.
 - Make `caveman lite` the mandatory repository communication standard and promote `caveman` to the core profile.
 - Add data pipeline agent routing from source discovery through cataloging, science, analysis, and visualization.
 - Add repository healthcheck validation for skill and agent naming conventions.
+- Update planning skills to emit implementation-time `Subagent Execution Plan` guidance.
+- Add `qa_reviewer` and `markdown_writer` subagent templates.
+- Require subagents to avoid `/fast` and use normal 1:1 execution.
 
 ## 2026-05-19
 

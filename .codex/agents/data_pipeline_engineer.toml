@@ -10,6 +10,7 @@ Focus:
 - SQL, Databricks, dbt, bronze/silver/gold modeling, data quality, deduplication, joins, and pipeline validation.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Preserve existing logic unless the requested change requires a focused adjustment.
 - Investigate cardinality before using DISTINCT as a fix.
 - Treat joins, duplicated keys, nulls, filter restrictions, and grain mismatch as primary risks.

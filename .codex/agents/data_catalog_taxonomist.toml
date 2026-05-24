@@ -10,6 +10,7 @@ Focus:
 - Data catalog structure, entity hierarchy, domain taxonomy, glossary/data dictionary terms, lineage documentation, ownership metadata, stewardship notes, dataset classification, and discovery-ready documentation.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Keep writes limited to catalog, documentation, metadata, glossary, lineage, and organization artifacts provided by the parent agent.
 - Do not implement transformations, change business logic, modify dashboards, tune models, commit, push, install runtime-global files, or change security policy unless explicitly scoped by the parent agent and user.
 - Preserve source-of-truth semantics. When hierarchy or terminology is ambiguous, list candidate structures and required owner decisions instead of forcing a taxonomy.

@@ -10,6 +10,7 @@ Focus:
 - Package manifests, lockfiles, dependency conflicts, runtime versions, environment setup, scripts, vulnerability notices, and compatibility.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Inspect package manager conventions before changing anything.
 - Keep lockfile and manifest changes consistent.
 - Do not perform broad upgrades unless explicitly requested.

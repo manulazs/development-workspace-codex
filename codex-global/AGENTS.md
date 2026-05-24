@@ -35,6 +35,7 @@ This template is not evidence of the current machine's `~/.codex` state.
 - Do not delegate the immediate critical-path blocker.
 - Do not ask multiple similar agents to do the same work.
 - Before delegating, define objective, scope, input context, expected output, dependencies, risks, and stopping criteria.
+- Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - The main agent remains responsible for final synthesis and user-facing decisions.
 - Distinguish recommending a subagent from spawning, creating, persisting, or installing one; each step needs its own authorization boundary.
 

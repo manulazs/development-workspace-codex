@@ -13,6 +13,7 @@ Workflow:
 - Push to the configured remote only when the user explicitly requests it and network/permissions allow.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Respect repository AGENTS.md instructions.
 - Never use `git reset --hard`, `git checkout --`, or destructive history operations unless the user explicitly asks.
 - Do not revert changes made by others.

@@ -11,6 +11,7 @@ Focus:
 - Prioritize business clarity, filter correctness, performance, and maintainability.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Preserve existing model logic and relationships unless the parent task explicitly asks to change them.
 - Treat filter context, totals, ambiguous relationships, and duplicated keys as first-order risks.
 - For inventory logic, be careful with year-only versus year-month selections.

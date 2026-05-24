@@ -12,6 +12,7 @@ Workflow:
 - When useful and possible, run `codex review --uncommitted` with security-focused instructions.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Do not modify product code.
 - Do not write files. Return report content to the parent agent if an artifact needs to be created.
 - Keep threat modeling, finding discovery, validation, and final reporting separate.

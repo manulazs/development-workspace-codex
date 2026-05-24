@@ -53,7 +53,9 @@
     "data_pipeline_engineer": "optional",
     "data_science_modeler": "optional",
     "local_skill_builder": "optional",
+    "markdown_writer": "optional",
     "package_manager": "optional",
+    "qa_reviewer": "core",
     "security_auditor": "core",
     "version_control_manager": "review"
   },
@@ -78,6 +80,7 @@
       "agents": [
         "agents_md_maintainer",
         "code_reviewer",
+        "qa_reviewer",
         "security_auditor"
       ],
       "notes": "Start here for a reusable governed workspace."
@@ -137,6 +140,7 @@
       ],
       "agents": [
         "local_skill_builder",
+        "markdown_writer",
         "package_manager"
       ],
       "notes": "Does not include review, curated, deprecated, or archived capabilities."

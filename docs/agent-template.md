@@ -37,6 +37,7 @@ What recurring role this agent owns.
 - Sandbox mode:
 - Network need:
 - Escalation risk:
+- Fast-mode policy: never use `/fast`; use normal 1:1 subagent execution only.
 - Sensitive data risk:
 
 ## Inputs And Outputs

@@ -11,6 +11,19 @@ Use this skill only when the user explicitly invokes `$plan-deep-skills`.
 
 This skill extends `$plan-deep` with a skill-evaluation stage. It is still planning-only. Do not edit files, spawn subagents, install skills, or run destructive commands while using this skill. If the current collaboration mode is Plan Mode, follow Plan Mode rules strictly. If the runtime is not in Plan Mode, still treat this skill invocation as planning-only unless the user explicitly asks for implementation after the plan.
 
+## Planning vs Implementation Delegation Boundary
+
+Planning must not spawn subagents, edit files, install skills, or run destructive commands. Planning may only recommend, map, and justify subagents and skills.
+
+However, if the final plan identifies independent tasks where subagents would reduce context load, reduce token consumption, improve validation, or parallelize work safely, mark those tasks as recommended for subagent execution during implementation. Once implementation begins outside Plan Mode, the main agent may spawn those subagents according to the plan, subject to available tools, user permissions, active runtime instructions, and skill availability.
+
+Distinguish:
+
+- `logical owner`: the role responsible for the task in the plan;
+- `recommended implementation subagent`: a real available subagent to spawn during implementation;
+- `skill`: an existing or proposed skill the subagent or main agent should use;
+- `role-only`: a conceptual owner that should not be spawned unless it is created or mapped to an existing subagent.
+
 ## Objective
 
 Create a decision-complete plan that:
@@ -49,6 +62,9 @@ Create a decision-complete plan that:
    - For each task, identify agent, skill, inputs, output, validation, dependencies, and risk.
    - Recommend new custom agents or local skills only when the gap is material.
    - When a project-local skill should be created during implementation, assign that task to `local_skill_builder`.
+   - Recommend implementation-time subagent execution when the task can run independently and provides token savings, domain isolation, independent validation, repetitive/mechanical execution, or low conflict risk.
+   - Do not recommend subagents for trivial tasks, tightly coupled work, unavailable tools, missing permissions, or work where coordination cost exceeds benefit.
+   - Do not invent unavailable agents without labeling them as `create/provision before implementation`, `generic worker fallback`, or `role-only, do not spawn`.
    - Do not delegate or install during planning.
 
 ## Final Plan Shape
@@ -62,7 +78,10 @@ Include:
 - skill inventory decision: existing skill, external skill candidate, conversion needed, or no skill needed;
 - implementation approach;
 - task delegation matrix with task, owner/agent, skill, reason, input, output, dependencies, and risk;
+- `Subagent Execution Plan` when separable tasks exist, with agent, implementation phase, scope, read/write scope, expected output, validation, token/quality benefit, dependencies, conflict risk, fallback if unavailable, and skill to use;
 - validation and acceptance criteria;
 - assumptions and defaults.
+
+If no implementation-time subagent is recommended, include `Subagent Execution Plan: none` with a short reason.
 
 Keep the plan compact but complete enough for another agent to implement without deciding architecture, ownership, skill installation, or validation strategy.

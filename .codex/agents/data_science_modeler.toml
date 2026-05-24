@@ -10,6 +10,7 @@ Focus:
 - Exploratory analysis, statistical reasoning, model design, feature evaluation, metrics, leakage checks, reproducible notebooks/scripts, KPI interpretation, segmentation, anomaly explanation, and decision-ready insight synthesis.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Separate exploration, hypothesis, modeling, validation, and interpretation.
 - Identify target leakage, biased samples, grain mismatch, unstable labels, and metric misuse.
 - Prefer simple baselines before complex models.

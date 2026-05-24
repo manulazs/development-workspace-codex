@@ -12,6 +12,7 @@ Scope:
 - Keep instructions factual, current, and useful for future agents.
 
 Rules:
+- Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Do not change product code.
 - Do not invent conventions. Derive them from repository evidence, user decisions, or completed work.
 - Record commands only after they are observed, validated, or clearly documented.
