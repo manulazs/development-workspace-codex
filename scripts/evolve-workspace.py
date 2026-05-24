@@ -53,6 +53,10 @@ class EvolutionTask:
     evidence: str
     recommended_owner: str
     recommended_subagents: list[str]
+    owner_scope: str
+    context_budget: str
+    return_budget: str
+    fork_context: bool
     automation_level: str
     human_approval_required: bool
     validation: list[str]
@@ -62,7 +66,8 @@ class EvolutionTask:
 class ValidationResult:
     command: str
     exit_code: int
-    output_tail: str
+    summary: str
+    evidence: str
 
 
 def read_text(path: Path) -> str:
@@ -194,6 +199,10 @@ def task(
     subagents: list[str],
     automation_level: str,
     validation: list[str],
+    owner_scope: str = "Repository-local task scope from title and evidence.",
+    context_budget: str = "small",
+    return_budget: str = "summary, evidence paths, validation status, residual risk, next action",
+    fork_context: bool = False,
 ) -> EvolutionTask:
     human_required = segment in HUMAN_GATED_SEGMENTS or automation_level == "human-gated"
     return EvolutionTask(
@@ -204,6 +213,10 @@ def task(
         evidence=evidence,
         recommended_owner=owner,
         recommended_subagents=subagents,
+        owner_scope=owner_scope,
+        context_budget=context_budget,
+        return_budget=return_budget,
+        fork_context=fork_context,
         automation_level=automation_level,
         human_approval_required=human_required,
         validation=validation,
@@ -287,6 +300,58 @@ def generate_tasks(root: Path) -> list[EvolutionTask]:
                     ["bash scripts/healthcheck.sh --strict"],
                 )
             )
+
+    agent_policy_specs = [
+        (
+            "FAST-MODE",
+            "P0",
+            ["Never use `/fast`", "normal 1:1 subagent execution"],
+            "Require normal 1:1 execution for custom subagents.",
+            "Subagent template is missing the no-fast-mode invariant.",
+        ),
+        (
+            "CONTEXT-PACKAGE",
+            "P1",
+            ["compact context packages"],
+            "Require compact parent-provided context packages for custom subagents.",
+            "Subagent template is missing explicit context-efficiency guidance.",
+        ),
+        (
+            "RETURN-CONTRACT",
+            "P1",
+            ["Return concise evidence", "residual risk", "next action"],
+            "Require compact return contracts for custom subagents.",
+            "Subagent template is missing explicit compact-return guidance.",
+        ),
+        (
+            "MODEL-FALLBACK",
+            "P1",
+            ["configured model is unavailable", "closest available model class"],
+            "Require model fallback guidance for custom subagents.",
+            "Subagent template is missing generic model fallback guidance.",
+        ),
+    ]
+    for agent_file in sorted((root / ".codex" / "agents").glob("*.toml")):
+        agent_text = read_text(agent_file)
+        agent_name = agent_file.stem
+        for suffix, priority, required_terms, title, evidence in agent_policy_specs:
+            if not all(term in agent_text for term in required_terms):
+                tasks.append(
+                    task(
+                        f"EVOL-AGENT-{suffix}-{agent_name}",
+                        priority,
+                        "agent-policy",
+                        f"{title} `{agent_name}`.",
+                        f"{evidence} File: `{agent_file.relative_to(root)}`.",
+                        "main-agent",
+                        ["agents_md_maintainer", "code_reviewer"],
+                        "auto-edit-allowed",
+                        [
+                            "python scripts/evolve-workspace.py --strict",
+                            "python skills/migrate-to-codex/scripts/cli.py --validate-target .",
+                        ],
+                    )
+                )
 
     for profile_name, raw_profile in profiles.items():
         if not isinstance(raw_profile, dict):
@@ -387,8 +452,8 @@ def render_markdown(tasks: list[EvolutionTask]) -> str:
         "",
         "## Tasks",
         "",
-        "| ID | Priority | Segment | Title | Owner | Subagents | Automation | Human approval | Validation |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| ID | Priority | Segment | Title | Owner | Subagents | Owner scope | Context budget | Return budget | Fork context | Automation | Human approval | Validation |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for item in tasks:
         subagents = ", ".join(item.recommended_subagents) if item.recommended_subagents else "-"
@@ -396,6 +461,7 @@ def render_markdown(tasks: list[EvolutionTask]) -> str:
         approval = "yes" if item.human_approval_required else "no"
         lines.append(
             "| {task_id} | {priority} | {segment} | {title} | {owner} | {subagents} | "
+            "{owner_scope} | `{context_budget}` | {return_budget} | `{fork_context}` | "
             "`{automation}` | {approval} | {validation} |".format(
                 task_id=item.task_id,
                 priority=item.priority,
@@ -403,6 +469,10 @@ def render_markdown(tasks: list[EvolutionTask]) -> str:
                 title=item.title.replace("|", "\\|"),
                 owner=item.recommended_owner,
                 subagents=subagents,
+                owner_scope=item.owner_scope.replace("|", "\\|"),
+                context_budget=item.context_budget,
+                return_budget=item.return_budget.replace("|", "\\|"),
+                fork_context=str(item.fork_context).lower(),
                 automation=item.automation_level,
                 approval=approval,
                 validation=validation,
@@ -439,7 +509,11 @@ def run_validations(root: Path) -> list[ValidationResult]:
             check=False,
         )
         output = completed.stdout.strip()
-        tail = "\n".join(output.splitlines()[-12:]) if output else ""
+        lines = output.splitlines()
+        tail = "\n".join(lines[-4:]) if output else ""
+        if len(tail) > 700:
+            tail = tail[-700:]
+        summary = "pass" if completed.returncode == 0 else "fail"
         display_command = [
             Path(sys.executable).name if index == 0 and value == sys.executable else value
             for index, value in enumerate(command)
@@ -448,7 +522,8 @@ def run_validations(root: Path) -> list[ValidationResult]:
             ValidationResult(
                 command=" ".join(display_command),
                 exit_code=completed.returncode,
-                output_tail=tail,
+                summary=summary,
+                evidence=tail,
             )
         )
     return results
@@ -488,10 +563,10 @@ def render_report(tasks: list[EvolutionTask], validation_results: list[Validatio
 
     lines.extend(["", "## Validation Snapshot", ""])
     if validation_results:
-        lines.extend(["| Command | Exit code | Output tail |", "| --- | --- | --- |"])
+        lines.extend(["| Command | Exit code | Evidence |", "| --- | --- | --- |"])
         for result in validation_results:
-            output = result.output_tail.replace("|", "\\|").replace("\n", "<br>")
-            lines.append(f"| `{result.command}` | {result.exit_code} | {output or '-'} |")
+            evidence = result.evidence.replace("|", "\\|").replace("\n", "<br>")
+            lines.append(f"| `{result.command}` | {result.exit_code} | {result.summary}; {evidence or '-'} |")
     else:
         lines.append("No validations were run. Use `--run-validation` to capture a validation snapshot.")
 

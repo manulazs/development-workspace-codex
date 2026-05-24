@@ -9,6 +9,10 @@
     "recommended_subagents": [
       "code_reviewer"
     ],
+    "owner_scope": "Repository-local task scope from title and evidence.",
+    "context_budget": "small",
+    "return_budget": "summary, evidence paths, validation status, residual risk, next action",
+    "fork_context": false,
     "automation_level": "auto-fix-proposal",
     "human_approval_required": false,
     "validation": [

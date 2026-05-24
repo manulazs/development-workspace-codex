@@ -117,6 +117,7 @@ $requiredDocs = @(
     "docs/skills-provenance.md",
     "docs/agentic-controls.md",
     "docs/continuous-evolution.md",
+    "docs/subagent-context-protocol.md",
     "docs/skill-template.md",
     "docs/agent-template.md",
     "docs/subagents-policy.md",

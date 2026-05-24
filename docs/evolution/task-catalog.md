@@ -15,9 +15,9 @@ This catalog is generated from repository-visible metadata. It guides the main a
 
 ## Tasks
 
-| ID | Priority | Segment | Title | Owner | Subagents | Automation | Human approval | Validation |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| EVOL-OVERLAP-SKILL-plan-deep-plan-deep-skills | P2 | duplication-review | Review overlap between `plan-deep` and `plan-deep-skills`. | main-agent | code_reviewer | `auto-fix-proposal` | no | `python scripts/evolve-workspace.py --strict` |
+| ID | Priority | Segment | Title | Owner | Subagents | Owner scope | Context budget | Return budget | Fork context | Automation | Human approval | Validation |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| EVOL-OVERLAP-SKILL-plan-deep-plan-deep-skills | P2 | duplication-review | Review overlap between `plan-deep` and `plan-deep-skills`. | main-agent | code_reviewer | Repository-local task scope from title and evidence. | `small` | summary, evidence paths, validation status, residual risk, next action | `false` | `auto-fix-proposal` | no | `python scripts/evolve-workspace.py --strict` |
 
 ## Evidence
 
