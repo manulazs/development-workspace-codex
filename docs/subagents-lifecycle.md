@@ -42,6 +42,7 @@ Each subagent should define:
 - Suggested reasoning level.
 - Sandbox mode and permission rationale.
 - Required input context.
+- Context budget and return budget.
 - Expected output format.
 - Validation signal.
 - When to use.
@@ -79,7 +80,9 @@ What recurring role this agent owns.
 
 ## Inputs And Outputs
 - Required input context:
+- Context budget:
 - Expected output:
+- Return budget:
 - Validation signal:
 - Exit criteria:
 
@@ -101,6 +104,7 @@ Before committing a new or changed subagent:
 - Compare it with `.codex/agents/` and `docs/capability-inventory.md`.
 - Confirm status in `workspace-manifest.json`.
 - Validate custom agents with `migrate-to-codex --validate-target .`.
+- Confirm the agent instructions include compact context/return behavior aligned with `docs/subagent-context-protocol.md`.
 - Confirm the permission level matches the role. Prefer read-only for audit and review agents.
 - Add or update the capability inventory entry with status, purpose, overlap, risk, platforms, and usage guidance.
 - Document structural policy changes in `docs/decisions/` when governance changes.

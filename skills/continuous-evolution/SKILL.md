@@ -55,8 +55,10 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
    - Do not ask similar agents to solve the same task.
 
 7. Maintain the handoff protocol.
-   - Send objective, justification, read scope, write scope, out-of-scope items, constraints, expected output, validation signal, risks, and stopping criteria.
+   - Send objective, justification, context budget, read scope, write scope, out-of-scope items, constraints, expected output, validation signal, risks, stopping criteria, and return budget.
+   - Prefer `fork_context: false` and bounded file lists unless the subagent genuinely needs full thread context.
    - Require subagents to cite changed files when they edit, or evidence paths when read-only.
+   - Require compact returns: result, evidence, changed files, validation, residual risk, and next action.
    - The main agent integrates outputs and owns final decisions.
 
 8. Validate and commit in batches when requested.

@@ -36,6 +36,8 @@ This template is not evidence of the current machine's `~/.codex` state.
 - Do not ask multiple similar agents to do the same work.
 - Before delegating, define objective, scope, input context, expected output, dependencies, risks, and stopping criteria.
 - Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
+- Prefer compact subagent context packages over full-thread forks. Include context budget, read/write scope, validation signal, return budget, and stopping criteria.
+- Subagents should return decisions, evidence paths, changed files, validation, residual risk, and next action; avoid raw logs, broad file excerpts, and repeated context.
 - The main agent remains responsible for final synthesis and user-facing decisions.
 - Distinguish recommending a subagent from spawning, creating, persisting, or installing one; each step needs its own authorization boundary.
 

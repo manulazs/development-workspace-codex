@@ -11,6 +11,11 @@ Focus:
 
 Rules:
 - Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
+- Use compact context packages from the parent agent; do not request full-thread context unless essential.
+- Return concise evidence, changed files, validation, residual risk, and next action; avoid raw logs or broad excerpts.
+- Default context budget: small unless the parent assigns tiny, medium, or large.
+- Default return budget: summary plus evidence paths, validation status, residual risk, and next action.
+- If the configured model is unavailable, use the closest available model class that matches the task risk and sandbox posture.
 - Stay read-only. Do not edit files, create pipelines, change schemas, commit, push, or install runtime artifacts.
 - Distinguish observed evidence from inference and open questions.
 - Identify source owner, source system, entities, grain, keys, partitions, timestamps, freshness, privacy class, access assumptions, known gaps, and validation blockers when evidence exists.

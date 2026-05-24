@@ -47,6 +47,7 @@ flowchart LR
 - `docs/agentic-controls.md`: control boundaries for recommending, spawning, creating, and persisting skills or subagents.
 - `docs/continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
 - `docs/subagents-policy.md`: when to use 0, 1, or multiple subagents.
+- `docs/subagent-context-protocol.md`: context budgets, return budgets, and compact handoffs for efficient subagent use.
 - `docs/self-improvement-lifecycle.md`: how lessons become reusable policies, skills, agents, or docs.
 - `docs/runbooks/setup-windows.md`: Windows setup.
 - `docs/runbooks/setup-macos.md`: macOS/Linux setup.
@@ -132,6 +133,7 @@ The installer copies only the selected profile into the chosen Codex home. It ne
 - Add or materially change a skill only after checking whether an existing skill, agent, runbook, or policy already solves the problem.
 - Add or materially change a subagent only when delegation improves quality or risk control and the scope is independent.
 - Use `docs/agentic-controls.md` to distinguish recommending a capability from spawning, creating, persisting, or installing it.
+- Use `docs/subagent-context-protocol.md` to keep subagent context packages and returns compact.
 - Use `docs/continuous-evolution.md` and `scripts/evolve-workspace.py` to catalog improvement work before creating or changing skills and agents.
 - Keep global communication-style preferences explicit in `codex-global/AGENTS.md`; do not hide personal tone preferences inside unrelated skills or agents.
 - Record structural decisions in `docs/decisions/`.

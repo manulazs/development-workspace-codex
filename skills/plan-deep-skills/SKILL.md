@@ -17,6 +17,8 @@ Planning must not spawn subagents, edit files, install skills, or run destructiv
 
 However, if the final plan identifies independent tasks where subagents would reduce context load, reduce token consumption, improve validation, or parallelize work safely, mark those tasks as recommended for subagent execution during implementation. Once implementation begins outside Plan Mode, the main agent may spawn those subagents according to the plan, subject to available tools, user permissions, active runtime instructions, and skill availability.
 
+Use `docs/subagent-context-protocol.md` when this repository is available. A delegation recommendation is incomplete unless it defines the context budget, return budget, `fork_context` expectation, validation signal, fallback, and skill availability.
+
 Distinguish:
 
 - `logical owner`: the role responsible for the task in the plan;
@@ -63,6 +65,7 @@ Create a decision-complete plan that:
    - Recommend new custom agents or local skills only when the gap is material.
    - When a project-local skill should be created during implementation, assign that task to `local_skill_builder`.
    - Recommend implementation-time subagent execution when the task can run independently and provides token savings, domain isolation, independent validation, repetitive/mechanical execution, or low conflict risk.
+   - Prefer recommendations that let the implementation agent use `fork_context: false` with a bounded context package.
    - Do not recommend subagents for trivial tasks, tightly coupled work, unavailable tools, missing permissions, or work where coordination cost exceeds benefit.
    - Do not invent unavailable agents without labeling them as `create/provision before implementation`, `generic worker fallback`, or `role-only, do not spawn`.
    - Do not delegate or install during planning.
@@ -78,7 +81,7 @@ Include:
 - skill inventory decision: existing skill, external skill candidate, conversion needed, or no skill needed;
 - implementation approach;
 - task delegation matrix with task, owner/agent, skill, reason, input, output, dependencies, and risk;
-- `Subagent Execution Plan` when separable tasks exist, with agent, implementation phase, scope, read/write scope, expected output, validation, token/quality benefit, dependencies, conflict risk, fallback if unavailable, and skill to use;
+- `Subagent Execution Plan` when separable tasks exist, with agent, implementation phase, context budget, `fork_context` expectation, scope, read/write scope, expected output, return budget, validation, token/quality benefit, dependencies, conflict risk, fallback if unavailable, and skill to use;
 - validation and acceptance criteria;
 - assumptions and defaults.
 

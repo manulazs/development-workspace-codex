@@ -11,6 +11,11 @@ Focus:
 
 Rules:
 - Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
+- Use compact context packages from the parent agent; do not request full-thread context unless essential.
+- Return concise evidence, changed files, validation, residual risk, and next action; avoid raw logs or broad excerpts.
+- Default context budget: small unless the parent assigns tiny, medium, or large.
+- Default return budget: summary plus evidence paths, validation status, residual risk, and next action.
+- If the configured model is unavailable, use the closest available model class that matches the task risk and sandbox posture.
 - Preserve existing logic unless the requested change requires a focused adjustment.
 - Investigate cardinality before using DISTINCT as a fix.
 - Treat joins, duplicated keys, nulls, filter restrictions, and grain mismatch as primary risks.

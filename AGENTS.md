@@ -72,9 +72,11 @@ Delegation is an operational decision, not a default.
 - Use multiple subagents only when scopes are genuinely independent and integration cost is justified.
 - The main agent remains responsible for synthesis, final judgment, and user-facing output.
 - Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
-- Every subagent template should define objective, scope, suggested model class, reasoning level, sandbox, required inputs, expected output, risks, when to use, when not to use, and exit criteria.
+- Prefer compact subagent context packages over full-thread forks. Include objective, context budget, read/write scope, expected output, validation signal, return budget, and stopping criteria.
+- Subagents should return decisions, evidence paths, changed files, validation, residual risk, and next action; avoid raw logs, broad file excerpts, and repeated context.
+- Every subagent template should define objective, scope, suggested model class, reasoning level, sandbox, required inputs, context budget, return budget, expected output, risks, when to use, when not to use, and exit criteria.
 
-The detailed policy is `docs/subagents-policy.md`. Agent creation, reuse, validation, and retirement are governed by `docs/subagents-lifecycle.md`.
+The detailed policy is `docs/subagents-policy.md`. Compact context and return contracts are governed by `docs/subagent-context-protocol.md`. Agent creation, reuse, validation, and retirement are governed by `docs/subagents-lifecycle.md`.
 
 `docs/agentic-controls.md` defines the boundary between recommending, spawning, creating, persisting, and installing subagents. Do not treat a policy recommendation as authorization to spawn or persist a subagent.
 

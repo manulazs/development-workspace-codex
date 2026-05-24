@@ -1,6 +1,6 @@
 # Capability Inventory
 
-Last reviewed: 2026-05-19
+Last reviewed: 2026-05-24
 
 This inventory describes repository capabilities: skills, subagent templates, docs, and scripts that a consumer workspace may choose to adopt. It does not describe what is installed in any local Codex runtime.
 

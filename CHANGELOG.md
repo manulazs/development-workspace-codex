@@ -30,6 +30,7 @@ All notable changes to this workspace are tracked here.
 - Update planning skills to emit implementation-time `Subagent Execution Plan` guidance.
 - Add `qa_reviewer` and `markdown_writer` subagent templates.
 - Require subagents to avoid `/fast` and use normal 1:1 execution.
+- Add a subagent context protocol with context budgets, return budgets, `fork_context` guidance, compact return contracts, and evolution validation for subagent efficiency rules.
 
 ## 2026-05-19
 

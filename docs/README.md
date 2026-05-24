@@ -11,9 +11,10 @@ This directory contains the operating documentation for the public Codex workspa
 5. Use `agentic-controls.md` before treating a recommendation as an action.
 6. Use `continuous-evolution.md` before automating task cataloging, skill evolution, agent evolution, or subagent routing.
 7. Use `subagents-policy.md` before delegating work to subagents.
-8. Use `self-improvement-lifecycle.md` before turning lessons into rules, skills, agents, or docs.
-9. Use the platform runbook for setup and optional runtime adoption.
-10. Record structural decisions in `decisions/`.
+8. Use `subagent-context-protocol.md` to keep delegated context, returns, and handoffs compact.
+9. Use `self-improvement-lifecycle.md` before turning lessons into rules, skills, agents, or docs.
+10. Use the platform runbook for setup and optional runtime adoption.
+11. Record structural decisions in `decisions/`.
 
 ## Canonical Docs
 
@@ -25,6 +26,7 @@ This directory contains the operating documentation for the public Codex workspa
 - `continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
 - `data-agent-pipeline.md`: data-development pipeline routing across discovery, engineering, cataloging, science, analysis, and visualization agents.
 - `subagents-policy.md`: policy for 0, 1, or multiple subagents.
+- `subagent-context-protocol.md`: context budgets, return budgets, fork-context guidance, and integration rules for efficient subagent use.
 - `subagents-lifecycle.md`: lifecycle for creating, changing, merging, or retiring subagent templates.
 - `self-improvement-lifecycle.md`: public improvement loop and pruning rules.
 - `skill-template.md`: proposal template for new or changed skills.

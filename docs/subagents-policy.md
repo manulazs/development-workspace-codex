@@ -4,7 +4,7 @@ This repository treats subagents as reusable templates for controlled delegation
 
 Use `docs/agentic-controls.md` to distinguish four different actions: recommending a subagent, spawning a subagent, creating a new subagent template, and persisting that template into a repository or runtime. Policy permission to recommend is not permission to spawn or persist.
 
-Use `docs/continuous-evolution.md` for the orchestrator/subagent handoff protocol when delegation is part of workspace evolution.
+Use `docs/subagent-context-protocol.md` for compact context packages, return budgets, and integration rules. Use `docs/continuous-evolution.md` for the orchestrator/subagent handoff protocol when delegation is part of workspace evolution.
 
 ## Default
 
@@ -13,6 +13,7 @@ Use `docs/continuous-evolution.md` for the orchestrator/subagent handoff protoco
 - Do not delegate just because a specialized agent exists.
 - Runtime, developer, or user instructions always prevail. If the active platform requires explicit authorization before spawning subagents, request it first.
 - Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
+- Use the smallest context package that can succeed. Prefer `fork_context: false` and bounded file lists unless the subagent genuinely needs full thread context.
 
 ## Planning To Implementation
 
@@ -21,6 +22,19 @@ Planning skills may recommend subagents but must not spawn them during planning.
 During implementation, prefer spawning the recommended subagent when the task is independent and provides at least one clear benefit: lower main-context load, lower token use, domain isolation, independent validation, safe parallelism, or repetitive mechanical execution.
 
 Do not spawn when the task is trivial, tightly coupled to the immediate critical path, likely to conflict with active edits, blocked by missing tools or permissions, or cheaper to complete locally.
+
+## Context And Token Efficiency
+
+Delegation should reduce net work. Before spawning, choose a context budget from `docs/subagent-context-protocol.md`: `tiny`, `small`, `medium`, or `large`.
+
+- Use `tiny` or `small` for most reviews, docs tasks, inventory checks, and command-log summaries.
+- Use `medium` when the subagent must inspect several related files or produce a bounded design/review.
+- Use `large` only when the subagent's job is to absorb large logs, broad documentation, or search output and return a compact synthesis.
+- Set an explicit return budget for verbose tasks, such as "findings only", "top 5 risks", or "summary plus changed paths".
+- Do not send secrets, runtime caches, generated noise, or unrelated chat history.
+- Do not ask subagents to restate the full task, reproduce large file contents, or paste long logs unless the exact excerpt is necessary evidence.
+
+The main agent should keep a simple ownership map while agents are active: agent, scope, files or directories, expected output, and stop condition.
 
 ## Use 1 Subagent When
 
@@ -60,7 +74,9 @@ Before spawning a subagent, provide:
 - Files, systems, or decisions out of scope.
 - Relevant constraints and user instructions.
 - Required input files or snippets.
+- Context budget.
 - Expected output format.
+- Return budget.
 - Validation signal.
 - Dependencies and blockers.
 - Risk level.
@@ -85,8 +101,8 @@ The subagent does not own the final answer.
 | Task type | Preferred owner | Use subagent? | Avoid delegation when |
 | --- | --- | --- | --- |
 | Small code/doc edit | Main agent | No | The change is local and obvious |
-| Large code change with independent slices | Worker-style subagent | Yes, if authorized | Files overlap or design is unsettled |
-| Read-only codebase question | Explorer-style subagent | Yes, if authorized | The answer blocks the immediate next command |
+| Large code change with independent slices | Runtime `worker` role or equivalent custom agent | Yes, if authorized | Files overlap or design is unsettled |
+| Read-only codebase question | Runtime `explorer` role or equivalent read-only agent | Yes, if authorized | The answer blocks the immediate next command |
 | Data discovery and source research | `data_discovery_researcher` | Yes, if bounded | The source contract, grain, and owner are already known |
 | SQL, Databricks, dbt logic | `data_pipeline_engineer` | Yes, if bounded | Source lineage is unclear and needs main-thread decisions |
 | Data catalog, taxonomy, glossary, lineage docs | `data_catalog_taxonomist` | Yes, if bounded | The task is transformation implementation or visual design |

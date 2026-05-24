@@ -43,7 +43,9 @@ What recurring role this agent owns.
 ## Inputs And Outputs
 
 - Required input context:
+- Context budget:
 - Expected output:
+- Return budget:
 - Validation signal:
 - Handoff back to orchestrator:
 - Exit criteria:

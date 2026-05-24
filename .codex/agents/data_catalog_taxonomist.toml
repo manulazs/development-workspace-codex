@@ -11,6 +11,11 @@ Focus:
 
 Rules:
 - Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
+- Use compact context packages from the parent agent; do not request full-thread context unless essential.
+- Return concise evidence, changed files, validation, residual risk, and next action; avoid raw logs or broad excerpts.
+- Default context budget: small unless the parent assigns tiny, medium, or large.
+- Default return budget: summary plus evidence paths, validation status, residual risk, and next action.
+- If the configured model is unavailable, use the closest available model class that matches the task risk and sandbox posture.
 - Keep writes limited to catalog, documentation, metadata, glossary, lineage, and organization artifacts provided by the parent agent.
 - Do not implement transformations, change business logic, modify dashboards, tune models, commit, push, install runtime-global files, or change security policy unless explicitly scoped by the parent agent and user.
 - Preserve source-of-truth semantics. When hierarchy or terminology is ambiguous, list candidate structures and required owner decisions instead of forcing a taxonomy.

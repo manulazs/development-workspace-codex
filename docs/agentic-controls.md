@@ -1,10 +1,11 @@
 # Agentic Controls
 
-Last reviewed: 2026-05-19
+Last reviewed: 2026-05-24
 
 This document defines what the repository means by recommending, using, creating, and persisting skills or subagents. It is intentionally conservative: the public template can describe and validate governance, but the active Codex runtime still controls whether tools, subagents, or file writes are allowed.
 
 Use `docs/continuous-evolution.md` for the automation boundary that connects these actions into a governed improvement loop.
+Use `docs/subagent-context-protocol.md` for the context, return, and integration contract that keeps spawned subagents efficient.
 
 ## Subagent Control Matrix
 
@@ -31,7 +32,9 @@ Use `docs/continuous-evolution.md` for the automation boundary that connects the
 
 - The repository may recommend delegation, but it does not authorize spawning by itself.
 - A `Subagent Execution Plan` in a planning-skill output is an implementation-time recommendation. It is stronger than a role label, but it still depends on active runtime tools, permissions, and user/developer instructions before any spawn occurs.
+- A recommended subagent row should include a context budget and return budget. Without that, the recommendation is incomplete for efficient execution.
 - New subagents and repository skills require evidence that an existing skill, agent, runbook, pattern, plugin, or native workflow is insufficient.
 - Runtime-global writes, including `~/.codex`, are consumer operations and must not happen as a side effect of repository healthchecks.
 - `migrate-to-codex` is powerful by design: once a source and target are selected, it can write generated Codex artifacts into that target. Use dry-run, plan, doctor, and validate commands before writing to a shared or global target.
 - Any agentic automation that can write files must keep a narrow ownership boundary and produce validation evidence.
+- Subagents should return compact evidence and decisions, not full transcripts, raw logs, or broad file excerpts.

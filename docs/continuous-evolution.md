@@ -1,8 +1,10 @@
 # Continuous Evolution
 
-Last reviewed: 2026-05-19
+Last reviewed: 2026-05-24
 
 This repository supports governed continuous evolution: agents may catalog tasks, segment work, write evolution reports, update repository-local skills or agents when criteria are met, delegate bounded work to subagents, validate results, and record decisions. It is not permission for unbounded runtime-global mutation.
+
+Use `docs/subagent-context-protocol.md` whenever evolution work routes to subagents. The default optimization target is lower net context load, not maximum delegation count.
 
 ## Autonomy Levels
 
@@ -49,14 +51,17 @@ Before delegation, the main agent sends a compact brief:
 ```text
 Objective:
 Why delegation:
+Context budget:
 Read scope:
 Write scope:
 Out of scope:
+Inputs:
 Constraints:
 Expected output:
 Validation signal:
 Risk:
 Stopping criteria:
+Return budget:
 ```
 
 Subagents return:
@@ -65,11 +70,22 @@ Subagents return:
 Result:
 Evidence:
 Files changed:
+Validation:
 Residual risk:
 Recommended next action:
 ```
 
-The main agent integrates outputs, resolves conflicts, runs validation, and decides what reaches the user.
+The main agent integrates outputs, resolves conflicts, runs validation, and decides what reaches the user. Subagents should summarize large logs or reads instead of returning raw dumps. If the parent only needs a decision, the subagent should return the decision, evidence paths, and residual risk.
+
+## Context Efficiency Rules
+
+- Prefer `fork_context: false` unless the full conversation is essential.
+- Send bounded file lists, command outputs, acceptance criteria, and policy snippets instead of the whole repo or thread.
+- Give each subagent one owner scope and one output format.
+- Keep implementation subagents on disjoint write scopes.
+- Use read-only review subagents after a diff or acceptance criteria exists.
+- Close subagents after their output is integrated or rejected.
+- Treat repeated verbose handoffs as a signal to update a skill, runbook, or policy.
 
 ## Anti-Duplication Rules
 
