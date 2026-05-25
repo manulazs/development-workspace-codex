@@ -75,6 +75,8 @@ Evolution work should be cataloged into these segments:
 | Skill evolution | `local_skill_builder` or main agent | `local_skill_builder`, `security_auditor` | Yes for global/public promotion. |
 | Agent evolution | Main agent | `agents_md_maintainer`, `security_auditor` | Yes for new persistent agents or permission changes. |
 | Validation | Main agent | `code_reviewer`, `security_auditor` | No, unless validation changes policy. |
+| Context budget | Main agent | `code_reviewer` | Yes when pruning, demoting, or archiving capabilities. |
+| Runtime drift doctor | Main agent | `security_auditor` | Yes for live repair or runtime-global writes. |
 | Pruning | Main agent | `code_reviewer` | Yes when removing reusable capabilities. |
 
 ## Orchestrator Protocol
@@ -129,6 +131,9 @@ The main agent integrates outputs, resolves conflicts, runs validation, and deci
 - Run `python scripts/evolve-workspace.py --strict` before claiming the workspace is structurally ready.
 - Run `python scripts/evolve-workspace.py --write-catalog --write-report` during recurring maintenance to leave a current task map and report.
 - Add `--run-validation` only when a report should capture a bounded validation snapshot. Healthchecks call `evolve-workspace.py --strict` without validation recursion.
+- Run `python scripts/analyze-context-budget.py --repo . --profile full-reviewed` during recurring maintenance when evaluating context growth, large skills, or candidate pruning.
+- Run `python scripts/workspace-doctor.py --repo . --profile full-reviewed` to detect manifest/profile/runtime drift without applying repair.
+- Treat context-budget or doctor recommendations as proposals. Pruning, profile status changes, runtime-global writes, and repair actions remain human-gated.
 
 ## Capability Scaffolding
 

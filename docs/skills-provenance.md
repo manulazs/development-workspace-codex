@@ -1,6 +1,6 @@
 # Skills Provenance
 
-Last reviewed: 2026-05-19
+Last reviewed: 2026-05-25
 
 This matrix records repository-visible evidence for every skill under `skills/`. It is informational provenance, not an authorization gate. The maintainer has authorized all repository skills for use; profile status still controls default adoption.
 
@@ -25,6 +25,7 @@ This matrix records repository-visible evidence for every skill under `skills/`.
 | `caveman-commit` | `review` | Inventory says JuliusBrussee caveman. | README attribution exists; no local license file found. | Git-message workflow only. | `profile-restricted` |
 | `caveman-compress` | `review` | Inventory says JuliusBrussee caveman. | README attribution and SECURITY file exist; no local license file found. | Script can send file contents to a third-party API. | `profile-restricted` |
 | `configuring-dbt-mcp-server` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Credential-handling guidance affects secret safety. | `authorized` |
+| `context-budget-audit` | `core` | Locally authored; concepts adapted from Affaan Mustafa's ECC `context-budget`, `token-budget-advisor`, and `strategic-compact` surfaces. | ECC is MIT licensed; no bulk ECC content copied. Repository implementation is covered by the repository license with attribution retained here. | Runs read-only repository analysis through `scripts/analyze-context-budget.py`. | `authorized` |
 | `continuous-evolution` | `core` | Local template. | Covered by repository Apache-2.0 license. | Can route repository-local edits and subagent work; human gates apply to core or sensitive changes. | `authorized` |
 | `creating-mermaid-dbt-dag` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Reference-only markdown. | `authorized` |
 | `fetching-dbt-docs` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Contains a docs-fetching script and external content boundary. | `authorized` |
@@ -44,6 +45,7 @@ This matrix records repository-visible evidence for every skill under `skills/`.
 | `troubleshooting-dbt-job-errors` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Can process logs that may contain sensitive values. | `authorized` |
 | `using-dbt-for-analytics-engineering` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Includes helper script and project-data review guidance. | `authorized` |
 | `using-dbt-index` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | References external CLI behavior. | `authorized` |
+| `verification-loop` | `core` | Locally authored; concepts adapted from Affaan Mustafa's ECC `verification-loop` and `eval-harness` surfaces. | ECC is MIT licensed; no bulk ECC content copied. Repository implementation is covered by the repository license with attribution retained here. | Orchestrates existing validation commands; does not replace healthchecks or perform writes by itself. | `authorized` |
 | `web-artifacts-builder` | `curated` | Inventory says Anthropic skill, adapted. | `skills/web-artifacts-builder/LICENSE.txt`. | Bundled archive and build scripts need review before broad install. | `profile-restricted` |
 | `webapp-testing` | `optional` | Inventory says Anthropic skill. | `skills/webapp-testing/LICENSE.txt`. | Browser/runtime testing dependency risk. | `authorized` |
 | `working-with-dbt-mesh` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Reference-only markdown. | `authorized` |

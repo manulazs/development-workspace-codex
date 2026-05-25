@@ -20,6 +20,8 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
 2. Build the task catalog and report.
    - Run `python scripts/evolve-workspace.py --write-catalog --write-report`.
    - Add `--run-validation` when the report should capture a bounded validation snapshot.
+   - Run `python scripts/analyze-context-budget.py --repo . --profile full-reviewed` when evaluating context growth, candidate pruning, or token-efficiency drift.
+   - Run `python scripts/workspace-doctor.py --repo . --profile full-reviewed` when checking manifest/profile/runtime drift; add `--codex-home` only when the user explicitly wants local runtime comparison.
    - Treat `docs/evolution/task-catalog.md` as the current task map.
    - Treat `docs/evolution/reports/` as the recurring evidence trail.
    - Segment tasks by manifest integrity, inventory integrity, provenance notes, profile safety, duplication review, validation, docs, and pruning.
@@ -65,6 +67,8 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
    - Use `explorer` for bounded read-only repository questions.
    - Use `local_skill_builder` for narrow local skill creation or updates.
    - Use `agents_md_maintainer` for instruction-file maintenance.
+   - Use `docs_researcher` when implementation depends on current primary documentation, API references, release notes, or framework behavior.
+   - Use `test_automation_engineer` for scoped test, fixture, smoke-check, validation-script, or regression-coverage implementation.
    - Use `code_reviewer` after implementation diffs exist.
    - Use `security_auditor` for provenance, secret, runtime, installer, or automation-risk review.
    - Do not ask similar agents to solve the same task.
@@ -79,7 +83,7 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
 
 10. Validate and commit in batches when requested.
    - Run targeted validation after each material batch.
-   - Run full validation before final push: `python3 scripts/evolve-workspace.py --strict`, `python3 scripts/validate-skills.py --strict`, `python3 scripts/validate-observations.py --repo . --strict` on macOS/Linux, equivalent `python ...` commands on Windows, bytecode-free Python syntax validation, platform healthcheck, install dry-run, and relevant skill validators.
+   - Run full validation before final push: `python3 scripts/workspace-doctor.py --repo . --profile full-reviewed`, `python3 scripts/analyze-context-budget.py --repo . --profile full-reviewed`, `python3 scripts/evolve-workspace.py --strict`, `python3 scripts/validate-skills.py --strict`, `python3 scripts/validate-observations.py --repo . --strict` on macOS/Linux, equivalent `python ...` commands on Windows, bytecode-free Python syntax validation, platform healthcheck, install dry-run, and relevant skill validators.
    - In projects with an initialized Git repository, commit coherent validated batches as meaningful milestones emerge when implementation work is authorized.
    - Push only after final validation/review and explicit user confirmation for that push.
 

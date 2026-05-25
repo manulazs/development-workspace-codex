@@ -33,7 +33,7 @@ Use `docs/subagent-context-protocol.md` for the context, return, and integration
 - The repository may recommend delegation, but it does not authorize spawning by itself.
 - A `Subagent Execution Plan` in a planning-skill output is an implementation-time recommendation. It is stronger than a role label, but it still depends on active runtime tools, permissions, and user/developer instructions before any spawn occurs.
 - `workspace_implementer` is a fallback implementation subagent, not a default replacement for the main agent or specialized subagents. It may be recommended only for scoped practical edits when no specialist is a better owner.
-- `frontend_ui_engineer` and `api_backend_engineer` are specialist owners. Route frontend web UI or API/backend work to them before considering `workspace_implementer`.
+- `frontend_ui_engineer`, `api_backend_engineer`, `docs_researcher`, and `test_automation_engineer` are specialist owners for their surfaces. Route frontend UI, API/backend, current documentation research, and automated test implementation to them before considering `workspace_implementer`.
 - When no specialist is a better owner, `workspace_implementer` should be recommended for scoped implementation if the expected benefit is lower parent-context load, lower token use, or cleaner implementation isolation.
 - Multiple `workspace_implementer` instances may be recommended or spawned only for disjoint implementation lanes in the same broader task set, with clear context or token savings and non-overlapping write scopes.
 - A recommended subagent row should include a context budget and return budget. Without that, the recommendation is incomplete for efficient execution.

@@ -140,7 +140,9 @@ The subagent does not own the final answer.
 | Dashboard, BI, DAX, analytical UI | `dashboard_visualization_specialist` | Yes, if bounded | Semantic model decisions are not settled |
 | Frontend web UI, HTML artifacts, responsive interaction | `frontend_ui_engineer` | Yes, if bounded | The task is BI/dashboard-specific, backend/API, or simple enough for the main agent |
 | API routes, backend services, contracts, integration boundaries | `api_backend_engineer` | Yes, if bounded | The task is frontend UI, data pipeline/dbt, broad architecture, or simple enough for the main agent |
+| Current documentation, release notes, API references, framework behavior | `docs_researcher` | Yes, if bounded and current facts affect the decision | Local project evidence is enough or the task is data-source discovery |
 | Markdown docs, README, changelog, runbooks | `markdown_writer` | Yes, if bounded | Product behavior or commands are not validated |
+| Automated tests, fixtures, smoke checks, validation scripts, regression coverage | `test_automation_engineer` | Yes, if bounded | Final QA review is needed or domain implementation should own tightly coupled tests |
 | Review | `code_reviewer` | Yes, after implementation | No diff or acceptance criteria exists |
 | QA, acceptance criteria, test gaps, release readiness | `qa_reviewer` | Yes, after implementation or before release | No implementation or acceptance criteria exists |
 | Security review | `security_auditor` | Yes, for read-only audit | Fix implementation is required in the same step |

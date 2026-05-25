@@ -21,6 +21,7 @@
     "caveman-commit": "review",
     "caveman-compress": "review",
     "configuring-dbt-mcp-server": "optional",
+    "context-budget-audit": "core",
     "continuous-evolution": "core",
     "creating-mermaid-dbt-dag": "optional",
     "fetching-dbt-docs": "optional",
@@ -40,6 +41,7 @@
     "troubleshooting-dbt-job-errors": "optional",
     "using-dbt-for-analytics-engineering": "optional",
     "using-dbt-index": "optional",
+    "verification-loop": "core",
     "web-artifacts-builder": "curated",
     "webapp-testing": "optional",
     "working-with-dbt-mesh": "optional"
@@ -53,12 +55,14 @@
     "data_discovery_researcher": "optional",
     "data_pipeline_engineer": "optional",
     "data_science_modeler": "optional",
+    "docs_researcher": "optional",
     "frontend_ui_engineer": "optional",
     "local_skill_builder": "optional",
     "markdown_writer": "optional",
     "package_manager": "optional",
     "qa_reviewer": "core",
     "security_auditor": "core",
+    "test_automation_engineer": "optional",
     "version_control_manager": "review",
     "workspace_implementer": "core"
   },
@@ -74,11 +78,13 @@
       "skills": [
         "auditing-skills",
         "caveman",
+        "context-budget-audit",
         "continuous-evolution",
         "find-skills",
         "migrate-to-codex",
         "plan-deep",
-        "plan-deep-skills"
+        "plan-deep-skills",
+        "verification-loop"
       ],
       "agents": [
         "agents_md_maintainer",
@@ -146,9 +152,11 @@
       ],
       "agents": [
         "api_backend_engineer",
+        "docs_researcher",
         "local_skill_builder",
         "markdown_writer",
-        "package_manager"
+        "package_manager",
+        "test_automation_engineer"
       ],
       "notes": "Does not include review, curated, deprecated, or archived capabilities."
     }
