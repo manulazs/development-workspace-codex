@@ -9,7 +9,7 @@ This directory contains the operating documentation for the public Codex workspa
 3. Use `capability-inventory.md` to understand capability status, risk, overlap, and selection rules.
 4. Use `skills-provenance.md` before publishing, importing, or reclassifying skills.
 5. Use `agentic-controls.md` before treating a recommendation as an action.
-6. Use `continuous-evolution.md` before automating task cataloging, skill evolution, agent evolution, or subagent routing.
+6. Use `continuous-evolution.md` before automating task cataloging, private observation review, skill evolution, agent evolution, or subagent routing.
 7. Use `subagents-policy.md` before delegating work to subagents.
 8. Use `subagent-context-protocol.md` to keep delegated context, returns, and handoffs compact.
 9. Use `self-improvement-lifecycle.md` before turning lessons into rules, skills, agents, or docs.
@@ -23,7 +23,7 @@ This directory contains the operating documentation for the public Codex workspa
 - `capability-inventory.md`: inventory of skills and agents with status, risk, overlap, and usage guidance.
 - `skills-provenance.md`: informational skill source, license, attribution, and script-risk matrix.
 - `agentic-controls.md`: distinction between recommending, spawning, creating, persisting, and installing capabilities.
-- `continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
+- `continuous-evolution.md`: governed automation model for task cataloging, private observation review, anti-duplication, subagent routing, validation, and human gates.
 - `data-agent-pipeline.md`: data-development pipeline routing across discovery, engineering, cataloging, science, analysis, and visualization agents.
 - `subagents-policy.md`: policy for 0, 1, or multiple subagents.
 - `subagent-context-protocol.md`: context budgets, return budgets, fork-context guidance, and integration rules for efficient subagent use.
@@ -34,7 +34,7 @@ This directory contains the operating documentation for the public Codex workspa
 - `runbooks/setup-windows.md`: Windows setup and optional adoption preview.
 - `runbooks/setup-macos.md`: macOS/Linux setup and optional adoption preview.
 - `operations/workspace-health.md`: what repository health means and what it excludes.
-- `evolution/`: generated task catalogs and machine-readable evolution state.
+- `evolution/`: generated task catalogs, reports, proposals, and public templates for private observation logs.
 - `../scripts/scaffold-capability.py`: governed skill/agent proposal and scaffold helper with duplicate checks.
 
 ## Governance Areas

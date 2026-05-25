@@ -1,6 +1,6 @@
 # Continuous Evolution
 
-Last reviewed: 2026-05-24
+Last reviewed: 2026-05-25
 
 This repository supports governed continuous evolution: agents may catalog tasks, segment work, write evolution reports, update repository-local skills or agents when criteria are met, delegate bounded work to subagents, validate results, and record decisions. It is not permission for unbounded runtime-global mutation.
 
@@ -27,6 +27,39 @@ Continuous evolution follows `observe -> propose -> apply`.
 Runtime-global paths are manual-only. Automation must not write to `~/.codex`, install profiles into a live runtime, run installer live mode, or use `migrate-to-codex` against a global target unless the user gives a separate explicit approval for that operation.
 
 Forbidden inputs for automatic lesson, skill, or agent generation include `~/.codex/auth.json`, `~/.codex/sessions/`, `~/.codex/cache/`, `logs_*.sqlite`, `state_*.sqlite`, `.env`, browser cookies, tokens, private keys, and private corporate data.
+
+## Observation Layer
+
+Use the private observation layer when work reveals a correction, gap, repeated workflow, duplication risk, safety concern, or principle that may improve future tasks.
+
+The protocol is:
+
+```text
+observe -> log -> review -> stage -> validate -> apply/decline -> archive
+```
+
+Default private paths in a consumer workspace:
+
+```text
+.codex-local/evolution/observations/log.md
+.codex-local/evolution/observations/cross-cutting-principles.md
+.codex-local/evolution/staged-updates/YYYY-MM-DD/
+```
+
+Public templates live under `docs/evolution/templates/`. Real observation logs, staged updates, raw session notes, and private runtime facts must not be committed.
+
+Observation statuses are:
+
+- `OPEN`: not reviewed or not actioned yet.
+- `ACTIONED`: applied to a skill, agent, runbook, policy, docs, or script.
+- `DECLINED`: reviewed and intentionally rejected.
+- `SUPERSEDED`: replaced by a newer observation, decision, or implementation.
+
+Cross-cutting principles need at least two observations or one explicit ADR reference. Do not turn a single preference, one failed command, or one project-specific exception into global policy without a structural decision.
+
+Reviews may produce staged updates under `.codex-local/evolution/staged-updates/YYYY-MM-DD/`. Staging is not application. Repository-local changes still require the normal manifest, inventory, provenance, validation, and human-gate rules when they touch skills, agents, public policy, security, licensing, runtime-global behavior, or removal/reclassification.
+
+`ACTIONED` means an observation was resolved after the approved change happened. It is not approval by itself. Moving private observations into public docs, skills, agents, policies, installers, or runtime-global paths still requires the relevant explicit gate.
 
 ## Task Segmentation
 

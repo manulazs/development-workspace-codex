@@ -36,6 +36,22 @@ A lesson must include context, symptom, cause, validated fix, evidence, reuse ru
 
 Do not record private local runtime state as public policy.
 
+## Capture An Observation
+
+Use the private observation log before promoting a finding into a public lesson, pattern, skill, agent, or rule.
+
+Default private path:
+
+```text
+.codex-local/evolution/observations/log.md
+```
+
+Use `docs/evolution/templates/observation-log.md` for the structure. Observations can record corrections, gaps, duplication, recurring workflows, validation misses, or safety concerns. They must use sanitized summaries rather than raw logs, auth data, session transcripts, private customer data, or runtime-global state.
+
+Use these statuses consistently: `OPEN`, `ACTIONED`, `DECLINED`, `SUPERSEDED`.
+
+Cross-cutting principles belong in `.codex-local/evolution/observations/cross-cutting-principles.md` and require at least two observations or one ADR before they influence multiple capabilities.
+
 ## Promote A Lesson To A Pattern Or Runbook
 
 Promote a lesson to `docs/patterns/` when:

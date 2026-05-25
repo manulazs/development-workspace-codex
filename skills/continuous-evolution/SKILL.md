@@ -25,13 +25,20 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
    - Segment tasks by manifest integrity, inventory integrity, provenance notes, profile safety, duplication review, validation, docs, and pruning.
    - Treat installer safety and runtime-global boundaries as human-gated.
 
-3. Decide automation level.
+3. Check private observations when available.
+   - Use `.codex-local/evolution/observations/log.md` for recurring corrections, gaps, duplication risks, validation misses, or workflow improvements.
+   - Use `.codex-local/evolution/observations/cross-cutting-principles.md` only for principles backed by at least two observations or one ADR.
+   - If the files do not exist, use `docs/evolution/templates/` as the source structure; do not create private logs unless implementation work is authorized.
+   - Before changing skills, agents, runbooks, or policy, review relevant `OPEN` observations and principles.
+   - At the end of substantial work, capture sanitized observations when they would reduce future ambiguity, rework, or risk.
+
+4. Decide automation level.
    - `catalog-only`: record status only.
    - `auto-fix-proposal`: draft the change, then review before persistence.
    - `auto-edit-allowed`: edit repository files when the scope is narrow and validation is available.
    - `human-gated`: stop before applying or merging until the user approves.
 
-4. Follow `observe -> propose -> apply`.
+5. Follow `observe -> propose -> apply`.
    - `observe` can run automatically against repository files.
    - `propose` can create task catalog entries, plans, or reviewable patches.
    - `apply` can modify repository-local files only when the user authorized implementation and the task is not human-gated.
@@ -39,13 +46,20 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
    - Use `python scripts/scaffold-capability.py ... --mode proposal` before creating a new skill or agent.
    - Use `--mode apply` only when duplicate checks pass and required human gates are satisfied.
 
-5. Avoid duplication before creating anything.
+6. Use observation staging before sensitive persistence.
+   - Observation review follows `observe -> log -> review -> stage -> validate -> apply/decline -> archive`.
+   - Stage proposed updates under `.codex-local/evolution/staged-updates/YYYY-MM-DD/` when the change needs review before becoming live.
+   - Do not commit private observation logs or staged updates.
+   - New skills, new agents, core capability changes, removals, permission changes, security posture, licensing, and runtime-global writes remain human-gated.
+   - Update observation statuses only after the accepted change is applied or explicitly declined/superseded.
+
+7. Avoid duplication before creating anything.
    - Check existing skills, agents, runbooks, patterns, docs, system skills, and plugin capabilities.
    - Modify an existing skill or agent when the responsibility already exists.
    - Create a new skill only for a recurring reusable workflow not covered elsewhere.
    - Create a new subagent only for a recurring role with independent ownership, permission posture, and exit criteria.
 
-6. Route work to subagents only when useful.
+8. Route work to subagents only when useful.
    - Keep the immediate critical path in the main thread.
    - Use one or more subagents when independent lanes can proceed without file, decision, or context conflict.
    - Use `explorer` for bounded read-only repository questions.
@@ -56,16 +70,16 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
    - Do not ask similar agents to solve the same task.
    - It is acceptable to run a lifecycle lane, such as Git hygiene or documentation cleanup, beside research, review, or implementation when the scopes are disjoint and user permissions allow it.
 
-7. Maintain the handoff protocol.
+9. Maintain the handoff protocol.
    - Send objective, justification, context budget, read scope, write scope, out-of-scope items, constraints, expected output, validation signal, risks, stopping criteria, and return budget.
    - Prefer `fork_context: false` and bounded file lists unless the subagent genuinely needs full thread context.
    - Require subagents to cite changed files when they edit, or evidence paths when read-only.
    - Require compact returns: result, evidence, changed files, validation, residual risk, and next action.
    - The main agent integrates outputs and owns final decisions.
 
-8. Validate and commit in batches when requested.
+10. Validate and commit in batches when requested.
    - Run targeted validation after each material batch.
-   - Run full validation before final push: `python scripts/evolve-workspace.py --strict`, `python scripts/validate-skills.py --strict`, bytecode-free Python syntax validation, platform healthcheck, install dry-run, and relevant skill validators.
+   - Run full validation before final push: `python3 scripts/evolve-workspace.py --strict`, `python3 scripts/validate-skills.py --strict`, `python3 scripts/validate-observations.py --repo . --strict` on macOS/Linux, equivalent `python ...` commands on Windows, bytecode-free Python syntax validation, platform healthcheck, install dry-run, and relevant skill validators.
    - In projects with an initialized Git repository, commit coherent validated batches as meaningful milestones emerge when implementation work is authorized.
    - Push only after final validation/review and explicit user confirmation for that push.
 

@@ -46,6 +46,7 @@ flowchart LR
 - `docs/skills-provenance.md`: informational source, license, attribution, and risk notes for skills.
 - `docs/agentic-controls.md`: control boundaries for recommending, spawning, creating, and persisting skills or subagents.
 - `docs/continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
+- `docs/evolution/templates/`: public templates for private observation logs, cross-cutting principles, review reports, and staged update notes.
 - `docs/subagents-policy.md`: when to use 0, 1, or multiple subagents.
 - `docs/subagent-context-protocol.md`: context budgets, return budgets, and compact handoffs for efficient subagent use.
 - `docs/self-improvement-lifecycle.md`: how lessons become reusable policies, skills, agents, or docs.
@@ -61,6 +62,7 @@ git clone https://github.com/manulazs/development-workspace-codex.git
 cd development-workspace-codex
 scripts/healthcheck.sh --strict
 python scripts/evolve-workspace.py --strict
+python scripts/validate-observations.py --repo . --strict
 python scripts/scaffold-capability.py skill --name example-skill --purpose "Reusable example workflow." --mode proposal --dry-run
 scripts/install-workspace.sh --list-profiles
 scripts/install-workspace.sh --profile governed-codex --dry-run
@@ -129,6 +131,7 @@ macOS/Linux:
 chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
 scripts/healthcheck.sh --strict
 python scripts/validate-skills.py --strict
+python scripts/validate-observations.py --repo . --strict
 ```
 
 The healthcheck validates the repository itself: structure, docs, manifest coverage, skill frontmatter, provenance coverage, agent TOML, installer safety, basic secret patterns, bytecode-free Python syntax, and expected validators. It intentionally does not compare against `~/.codex`.
@@ -166,6 +169,7 @@ The installer copies only the selected profile into the chosen Codex home. It ne
 - Use `docs/agentic-controls.md` to distinguish recommending a capability from spawning, creating, persisting, or installing it.
 - Use `docs/subagent-context-protocol.md` to keep subagent context packages and returns compact.
 - Use `docs/continuous-evolution.md` and `scripts/evolve-workspace.py` to catalog improvement work before creating or changing skills and agents.
+- Use `.codex-local/evolution/observations/` for private task observations when a session reveals recurring corrections, gaps, or cross-cutting principles; keep only sanitized templates and reports in the public repo.
 - Keep global communication-style preferences explicit in `codex-global/AGENTS.md`; do not hide personal tone preferences inside unrelated skills or agents.
 - Record structural decisions in `docs/decisions/`.
 - Capture recurring lessons in `docs/lessons/`, promote reusable workflows to `docs/patterns/` or `docs/runbooks/`, and prune obsolete content.
