@@ -106,6 +106,7 @@ docs/capability-inventory.md
 docs/skills-provenance.md
 docs/agentic-controls.md
 docs/continuous-evolution.md
+docs/mcp-governance.md
 docs/subagent-context-protocol.md
 docs/skill-template.md
 docs/agent-template.md
@@ -374,14 +375,42 @@ else
   add_result WARN "Observation validator not found at $observation_validator."
 fi
 
+context_budget_analyzer="scripts/analyze-context-budget.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$context_budget_analyzer" ]; then
+  if "$PYTHON_BIN" "$context_budget_analyzer" --repo . --profile full-reviewed --json >/tmp/codex-workspace-context-budget.log 2>&1; then
+    add_result INFO "Context budget analysis passed."
+  else
+    add_result FAIL "Context budget analysis failed. See /tmp/codex-workspace-context-budget.log."
+  fi
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped context budget analysis."
+else
+  add_result WARN "Context budget analyzer not found at $context_budget_analyzer."
+fi
+
+workspace_doctor="scripts/workspace-doctor.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$workspace_doctor" ]; then
+  if "$PYTHON_BIN" "$workspace_doctor" --repo . --profile full-reviewed >/tmp/codex-workspace-doctor.log 2>&1; then
+    add_result INFO "Workspace doctor drift check passed."
+  else
+    add_result FAIL "Workspace doctor drift check failed. See /tmp/codex-workspace-doctor.log."
+  fi
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped workspace doctor drift check."
+else
+  add_result WARN "Workspace doctor not found at $workspace_doctor."
+fi
+
 python_syntax_validator="scripts/validate-python-syntax.py"
 if [ -n "${PYTHON_BIN:-}" ] && [ -f "$python_syntax_validator" ]; then
   if "$PYTHON_BIN" "$python_syntax_validator" \
+    scripts/analyze-context-budget.py \
     scripts/validate-skills.py \
     scripts/evolve-workspace.py \
     scripts/scaffold-capability.py \
     scripts/validate-caveman-lite.py \
     scripts/validate-observations.py \
+    scripts/workspace-doctor.py \
     "$python_syntax_validator" >/tmp/codex-workspace-python-syntax.log 2>&1; then
     add_result INFO "Python syntax validation passed without bytecode writes."
   else

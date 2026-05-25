@@ -118,6 +118,7 @@ $requiredDocs = @(
     "docs/skills-provenance.md",
     "docs/agentic-controls.md",
     "docs/continuous-evolution.md",
+    "docs/mcp-governance.md",
     "docs/subagent-context-protocol.md",
     "docs/skill-template.md",
     "docs/agent-template.md",
@@ -402,13 +403,43 @@ if ((Test-Path $observationValidator) -and (Test-CommandExists "python")) {
     Add-Result WARN "Observation validator not found at $observationValidator."
 }
 
+$contextBudgetAnalyzer = "scripts/analyze-context-budget.py"
+if ((Test-Path $contextBudgetAnalyzer) -and (Test-CommandExists "python")) {
+    $contextBudgetOutput = & python $contextBudgetAnalyzer --repo . --profile full-reviewed --json 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Add-Result FAIL "Context budget analysis failed: $($contextBudgetOutput -join ' ')"
+    } else {
+        Add-Result INFO "Context budget analysis passed."
+    }
+} elseif (-not (Test-CommandExists "python")) {
+    Add-Result WARN "python is not available; skipped context budget analysis."
+} else {
+    Add-Result WARN "Context budget analyzer not found at $contextBudgetAnalyzer."
+}
+
+$workspaceDoctor = "scripts/workspace-doctor.py"
+if ((Test-Path $workspaceDoctor) -and (Test-CommandExists "python")) {
+    $workspaceDoctorOutput = & python $workspaceDoctor --repo . --profile full-reviewed 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Add-Result FAIL "Workspace doctor drift check failed: $($workspaceDoctorOutput -join ' ')"
+    } else {
+        Add-Result INFO "Workspace doctor drift check passed."
+    }
+} elseif (-not (Test-CommandExists "python")) {
+    Add-Result WARN "python is not available; skipped workspace doctor drift check."
+} else {
+    Add-Result WARN "Workspace doctor not found at $workspaceDoctor."
+}
+
 $pythonSyntaxValidator = "scripts/validate-python-syntax.py"
 $pythonSyntaxTargets = @(
+    "scripts/analyze-context-budget.py",
     "scripts/validate-skills.py",
     "scripts/evolve-workspace.py",
     "scripts/scaffold-capability.py",
     "scripts/validate-caveman-lite.py",
     "scripts/validate-observations.py",
+    "scripts/workspace-doctor.py",
     $pythonSyntaxValidator
 )
 if ((Test-Path $pythonSyntaxValidator) -and (Test-CommandExists "python")) {

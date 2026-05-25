@@ -25,6 +25,7 @@ The standard healthcheck validates:
 - repository-local validators when their dependencies are available;
 - continuous-evolution task catalog checks for P0 structural drift.
 - observation scaffolding, public templates, allowed observation statuses, and ignored private observation paths.
+- context-budget analysis and read-only workspace doctor checks.
 
 The standard healthcheck intentionally does not validate:
 
@@ -42,7 +43,9 @@ Windows:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
 python scripts/validate-skills.py --strict
-python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-observations.py scripts/validate-python-syntax.py
+python scripts/validate-python-syntax.py scripts/analyze-context-budget.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-observations.py scripts/workspace-doctor.py scripts/validate-python-syntax.py
+python scripts/analyze-context-budget.py --repo . --profile full-reviewed --json
+python scripts/workspace-doctor.py --repo . --profile full-reviewed
 python scripts/evolve-workspace.py --strict
 python scripts/validate-observations.py --repo . --strict
 ```
@@ -52,7 +55,9 @@ macOS/Linux:
 ```bash
 scripts/healthcheck.sh --strict
 python3 scripts/validate-skills.py --strict
-python3 scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-observations.py scripts/validate-python-syntax.py
+python3 scripts/validate-python-syntax.py scripts/analyze-context-budget.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-observations.py scripts/workspace-doctor.py scripts/validate-python-syntax.py
+python3 scripts/analyze-context-budget.py --repo . --profile full-reviewed --json
+python3 scripts/workspace-doctor.py --repo . --profile full-reviewed
 python3 scripts/evolve-workspace.py --strict
 python3 scripts/validate-observations.py --repo . --strict
 ```
@@ -89,6 +94,8 @@ Green:
 - `scripts/validate-python-syntax.py` validates repository Python scripts without writing `__pycache__`.
 - `scripts/evolve-workspace.py --strict` has no P0 structural tasks.
 - `scripts/validate-observations.py --repo . --strict` confirms observation templates and private-path guards.
+- `scripts/analyze-context-budget.py --repo . --profile full-reviewed` reports context footprint and candidate pruning without mutating files.
+- `scripts/workspace-doctor.py --repo . --profile full-reviewed` detects manifest/profile/runtime drift without repair.
 - Optional local observation validation uses `python3 scripts/validate-observations.py --repo . --observations-root .codex-local/evolution/observations --strict` on macOS/Linux or `python scripts/validate-observations.py --repo . --observations-root .codex-local/evolution/observations --strict` on Windows. It is not public repository health.
 - `scripts/scaffold-capability.py` can create non-runtime-loadable proposals and blocks duplicate apply attempts.
 - Install preview is profile-based and non-destructive.
