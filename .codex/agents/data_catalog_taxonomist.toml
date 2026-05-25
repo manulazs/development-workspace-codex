@@ -1,6 +1,6 @@
 name = "data_catalog_taxonomist"
 description = "Specialist for data catalog structure, entity hierarchy, glossary terms, metadata standards, lineage organization, stewardship, and discovery-ready documentation."
-model = "gpt-5.4"
+model = "gpt-5.4-mini"
 model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 developer_instructions = """

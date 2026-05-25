@@ -31,7 +31,7 @@ Use `workspace_implementer` only for practical repository edits with clear scope
 - small or medium refactors;
 - practical tasks without a more appropriate specialist.
 
-Do not use `workspace_implementer` for broad architecture, security, QA, code review, data, BI, `AGENTS.md`, skills, packages, Git/release, sensitive governance, final approval, destructive operations, pushes, or ambiguous work when an existing specialist or the main agent is the better owner.
+Do not use `workspace_implementer` for broad architecture, security, QA, code review, data, BI, frontend UI, API/backend, `AGENTS.md`, skills, packages, Git/release, sensitive governance, final approval, destructive operations, pushes, or ambiguous work when an existing specialist or the main agent is the better owner.
 
 Efficiency default: if the implementation is scoped, practical, and not specialist-owned, route it to `workspace_implementer` when the main benefit is reducing parent-context load, isolating verbose file reads, or avoiding token-heavy local implementation. The main agent should implement directly only when the task is small enough that delegation overhead would cost more than it saves.
 
@@ -138,6 +138,8 @@ The subagent does not own the final answer.
 | Data catalog, taxonomy, glossary, lineage docs | `data_catalog_taxonomist` | Yes, if bounded | The task is transformation implementation or visual design |
 | Data science, statistical analysis, insight synthesis | `data_science_modeler` | Yes, if bounded | The request is only deterministic pipeline work |
 | Dashboard, BI, DAX, analytical UI | `dashboard_visualization_specialist` | Yes, if bounded | Semantic model decisions are not settled |
+| Frontend web UI, HTML artifacts, responsive interaction | `frontend_ui_engineer` | Yes, if bounded | The task is BI/dashboard-specific, backend/API, or simple enough for the main agent |
+| API routes, backend services, contracts, integration boundaries | `api_backend_engineer` | Yes, if bounded | The task is frontend UI, data pipeline/dbt, broad architecture, or simple enough for the main agent |
 | Markdown docs, README, changelog, runbooks | `markdown_writer` | Yes, if bounded | Product behavior or commands are not validated |
 | Review | `code_reviewer` | Yes, after implementation | No diff or acceptance criteria exists |
 | QA, acceptance criteria, test gaps, release readiness | `qa_reviewer` | Yes, after implementation or before release | No implementation or acceptance criteria exists |
@@ -146,7 +148,7 @@ The subagent does not own the final answer.
 | Git staging, commit grouping, release-safe push prep | `version_control_manager` | Rarely | The user did not explicitly request git operations |
 | Project instructions | `agents_md_maintainer` | Yes, after conventions emerge | Facts are not yet validated |
 | Skill creation | `local_skill_builder` | Yes, when recurring | The workflow is one-off |
-| General practical implementation without a specialist owner | `workspace_implementer` | Yes, when scoped and context-saving | A specialist applies, scope is ambiguous, or the edit is simple enough for the main agent |
+| General practical implementation without a specialist owner | `workspace_implementer` | Yes, when scoped and context-saving | A specialist applies, including frontend UI or API/backend, scope is ambiguous, or the edit is simple enough for the main agent |
 
 ## Model Guidance
 

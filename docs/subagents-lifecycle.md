@@ -32,7 +32,7 @@ Prefer the smallest durable capability that solves the recurring need:
 - The agent would require broad write access without a narrow ownership boundary.
 - The only reason is speed rather than quality, control, or risk reduction.
 
-Generic implementation fallback agents are allowed only when the lifecycle documents a strict routing precedence: specialists first, fallback second, main-agent direct execution for simple low-context edits. A fallback implementer must not absorb review, security, QA, data, documentation ownership, package management, Git/release, skill creation, or project-instruction maintenance when those specialist roles exist.
+Generic implementation fallback agents are allowed only when the lifecycle documents a strict routing precedence: specialists first, fallback second, main-agent direct execution for simple low-context edits. A fallback implementer must not absorb review, security, QA, data, frontend UI, API/backend, documentation ownership, package management, Git/release, skill creation, or project-instruction maintenance when those specialist roles exist.
 
 ## Required Agent Template Fields
 

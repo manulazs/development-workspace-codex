@@ -45,6 +45,7 @@
     "working-with-dbt-mesh": "optional"
   },
   "agents": {
+    "api_backend_engineer": "optional",
     "agents_md_maintainer": "core",
     "code_reviewer": "core",
     "dashboard_visualization_specialist": "optional",
@@ -52,6 +53,7 @@
     "data_discovery_researcher": "optional",
     "data_pipeline_engineer": "optional",
     "data_science_modeler": "optional",
+    "frontend_ui_engineer": "optional",
     "local_skill_builder": "optional",
     "markdown_writer": "optional",
     "package_manager": "optional",
@@ -126,7 +128,9 @@
         "frontend-design",
         "webapp-testing"
       ],
-      "agents": [],
+      "agents": [
+        "frontend_ui_engineer"
+      ],
       "notes": "Curated art-heavy or scaffold-heavy skills remain excluded unless separately reviewed."
     },
     "full-reviewed": {
@@ -141,6 +145,7 @@
         "spreadsheet"
       ],
       "agents": [
+        "api_backend_engineer",
         "local_skill_builder",
         "markdown_writer",
         "package_manager"

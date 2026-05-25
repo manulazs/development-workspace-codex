@@ -73,6 +73,7 @@ Delegation is an operational decision, not a default.
 - Use one or more subagents for independent audits, reviews, mechanical tasks, research, docs, Git hygiene, or bounded side tasks when scopes do not conflict.
 - Use multiple subagents whenever the work has genuinely independent lanes and the coordination cost is lower than doing everything in the main thread.
 - Route implementation work by precedence: the main agent decides and integrates; specialized subagents have priority; use `workspace_implementer` only for clear practical implementation work with no better specialist; keep simple low-context edits in the main thread.
+- Route frontend web UI to `frontend_ui_engineer` and API/backend work to `api_backend_engineer` before considering `workspace_implementer`.
 - When no specialist fits, prefer `workspace_implementer` for scoped implementation whenever delegation is expected to reduce parent-context load or token use; the main agent should implement directly only when it is the more efficient token/context path.
 - Multiple `workspace_implementer` instances may run in the same broader task set only when each owns a disjoint implementation lane and the split gives clear context or token savings; never assign two implementers to the same task.
 - The main agent remains responsible for synthesis, final judgment, and user-facing output.
