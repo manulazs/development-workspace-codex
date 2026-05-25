@@ -13,6 +13,7 @@ Use `docs/subagent-context-protocol.md` for compact context packages, return bud
 - Keep task framing, synthesis, conflict control, and final decisions in the main Codex thread.
 - Do not delegate just because a specialized agent exists.
 - Route practical implementation by precedence: main agent decides, plans, reviews, and integrates; a specialized subagent has priority when its domain fits; `workspace_implementer` is the fallback for scoped implementation with no better specialist; the main agent handles simple low-context edits directly.
+- When no specialist fits, prefer `workspace_implementer` for scoped implementation whenever delegation is expected to reduce parent-context load or token use. Keep implementation in the main thread only when that is the more efficient token/context path.
 - Runtime, developer, or user instructions always prevail. If the active platform requires explicit authorization before spawning subagents, request it first.
 - Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Use the smallest context package that can succeed. Prefer `fork_context: false` and bounded file lists unless the subagent genuinely needs full thread context.
@@ -31,6 +32,8 @@ Use `workspace_implementer` only for practical repository edits with clear scope
 - practical tasks without a more appropriate specialist.
 
 Do not use `workspace_implementer` for broad architecture, security, QA, code review, data, BI, `AGENTS.md`, skills, packages, Git/release, sensitive governance, final approval, destructive operations, pushes, or ambiguous work when an existing specialist or the main agent is the better owner.
+
+Efficiency default: if the implementation is scoped, practical, and not specialist-owned, route it to `workspace_implementer` when the main benefit is reducing parent-context load, isolating verbose file reads, or avoiding token-heavy local implementation. The main agent should implement directly only when the task is small enough that delegation overhead would cost more than it saves.
 
 Multiple `workspace_implementer` instances are allowed in the same broader task set only when all conditions hold:
 

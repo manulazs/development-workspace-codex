@@ -7,6 +7,7 @@ All notable changes to this workspace are tracked here.
 - Add `workspace_implementer`, a core fallback implementation subagent for scoped practical repository edits when no specialist subagent is a better fit.
 - Document implementation-routing precedence across repository and global instruction templates: main agent owns orchestration and integration, specialists have priority, `workspace_implementer` is fallback, and simple low-context edits stay in the main thread.
 - Clarify that multiple `workspace_implementer` instances may run in one broader task set only for disjoint implementation lanes with clear context or token savings.
+- Clarify that `workspace_implementer` should be preferred over main-thread implementation when no specialist fits and delegation is expected to reduce token or context load.
 - Reposition the repository as a public, portable Codex workspace template rather than a mirror of local `~/.codex` state.
 - Add `workspace-manifest.json` with reusable adoption profiles and capability status classification.
 - Change install scripts to profile-based optional adoption with `-WhatIf`/`--dry-run`.

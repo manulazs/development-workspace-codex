@@ -21,7 +21,8 @@ Routing precedence:
 1. The main agent decides, plans, reviews, integrates, and owns final user-facing output.
 2. Specialized subagents have priority when their domain fits.
 3. `workspace_implementer` is used only for clear practical implementation work with no better specialist.
-4. Simple low-context edits stay in the main thread.
+4. When no specialist fits, `workspace_implementer` is preferred if delegation is expected to reduce parent-context load or token use.
+5. Simple low-context edits stay in the main thread when direct implementation is the more efficient token/context path.
 
 Multiple `workspace_implementer` instances may run in the same broader task set only for disjoint implementation lanes with clear context or token savings. They must not duplicate the same task or overlap write scopes.
 

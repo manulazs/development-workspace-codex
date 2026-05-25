@@ -31,7 +31,8 @@ For implementation work, route by precedence:
 1. Keep orchestration, planning, integration, and final approval in the main agent.
 2. Use a specialized subagent when the task fits an existing specialist domain.
 3. Use `workspace_implementer` for clear practical implementation only when no specialist is a better fit.
-4. Keep simple low-context edits in the main agent.
+4. Prefer `workspace_implementer` when delegation is expected to reduce parent-context load or token use.
+5. Keep implementation in the main agent only when that is the more efficient token/context path, such as a simple low-context edit.
 
 More than one `workspace_implementer` may be spawned for one broader work package only when each instance owns a disjoint lane and the split clearly saves context or tokens. Do not split one tightly coupled task across multiple generic implementers.
 
