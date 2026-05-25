@@ -12,6 +12,7 @@ Use `docs/subagent-context-protocol.md` for compact context packages, return bud
 - Use one or more subagents when tasks are independent, bounded, useful, and cheaper to delegate than to keep in the main context.
 - Keep task framing, synthesis, conflict control, and final decisions in the main Codex thread.
 - Do not delegate just because a specialized agent exists.
+- The main agent may use subagents in normal operation even when no planning skill is active. This applies both inside `/plan` and outside `/plan`, subject to active runtime tools, permissions, user/developer instructions, and the same context-efficiency rules in this policy.
 - Route practical implementation by precedence: main agent decides, plans, reviews, and integrates; a specialized subagent has priority when its domain fits; `workspace_implementer` is the fallback for scoped implementation with no better specialist; the main agent handles simple low-context edits directly.
 - When no specialist fits, prefer `workspace_implementer` for scoped implementation whenever delegation is expected to reduce parent-context load or token use. Keep implementation in the main thread only when that is the more efficient token/context path.
 - Runtime, developer, or user instructions always prevail. If the active platform requires explicit authorization before spawning subagents, request it first.
@@ -45,7 +46,17 @@ Multiple `workspace_implementer` instances are allowed in the same broader task 
 
 ## Planning To Implementation
 
-Planning skills may recommend subagents but must not spawn them during planning. When a final plan contains a `Subagent Execution Plan`, treat it as an implementation-time routing instruction, not as automatic authorization.
+Planning may use subagents for planning assistance when the active runtime, user instructions, and developer instructions allow it. This is optional, not mandatory, and it does not require `$plan-deep` or `$plan-deep-skills` to be active.
+
+Use planning-assistance subagents when a bounded helper can reduce main-context load or improve plan quality by reading broad repository areas, summarizing logs, researching current documentation, checking risks, or reviewing assumptions. Prefer read-only agents or runtime explorer-style roles. A planning-assistance subagent must not edit files, install packages, create skills or agents, write runtime-global state, commit, push, or make final architecture decisions.
+
+Planning-assistance subagents are different from implementation-time subagents:
+
+- planning assistance helps the main agent create the plan;
+- implementation-time delegation executes plan tasks later;
+- both depend on active runtime tools, permissions, and user/developer instructions.
+
+When a final plan contains a `Subagent Execution Plan`, treat it as an implementation-time routing instruction, not as automatic authorization.
 
 During implementation, prefer spawning the recommended subagent when the task is independent and provides at least one clear benefit: lower main-context load, lower token use, domain isolation, independent validation, safe parallelism, or repetitive mechanical execution.
 

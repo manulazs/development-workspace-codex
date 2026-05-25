@@ -12,6 +12,7 @@ Use `docs/subagent-context-protocol.md` for the context, return, and integration
 | Action | Implemented by this repository? | Who decides at runtime? | Approval gate | Persistence |
 | --- | --- | --- | --- | --- |
 | Recommend a subagent | Yes, through `docs/subagents-policy.md`, `$plan-deep`, and `$plan-deep-skills`. | Main agent. | User/developer/runtime instructions decide whether recommendation is enough. | None. |
+| Use a planning-assistance subagent | Policy-supported, not required. | Active Codex runtime and main agent. | Required when runtime or user instructions demand it. | None unless the runtime records its own local state. |
 | Spawn a subagent | No. This repository only provides templates and policy. | Active Codex runtime and main agent. | Required when runtime or user instructions demand it. | None unless the subagent edits files. |
 | Create a new subagent template | Documented, not automatic. | Maintainer or implementation agent acting under explicit task scope. | Must pass existing-capability review, manifest/inventory update, and validation. | `.codex/agents/<name>.toml`. |
 | Persist a subagent into a consumer runtime | Installer can copy selected profiles; manual copy is possible. | Consumer. | Explicit profile selection or explicit manual adoption. | Consumer `~/.codex/agents`, outside repository health. |
@@ -31,6 +32,8 @@ Use `docs/subagent-context-protocol.md` for the context, return, and integration
 ## Hard Rules
 
 - The repository may recommend delegation, but it does not authorize spawning by itself.
+- The main agent may use subagents during normal operation with or without a planning skill, inside `/plan` or outside it, when the active runtime permits it and the work satisfies the policy's scope, context, and safety rules.
+- Planning-assistance subagents may be used during planning when allowed by the active runtime and when they reduce context load or improve the plan. They are not implementation authorization and should normally be read-only.
 - A `Subagent Execution Plan` in a planning-skill output is an implementation-time recommendation. It is stronger than a role label, but it still depends on active runtime tools, permissions, and user/developer instructions before any spawn occurs.
 - `workspace_implementer` is a fallback implementation subagent, not a default replacement for the main agent or specialized subagents. It may be recommended only for scoped practical edits when no specialist is a better owner.
 - `frontend_ui_engineer`, `api_backend_engineer`, `docs_researcher`, and `test_automation_engineer` are specialist owners for their surfaces. Route frontend UI, API/backend, current documentation research, and automated test implementation to them before considering `workspace_implementer`.

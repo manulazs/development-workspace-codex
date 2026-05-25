@@ -4,6 +4,7 @@ All notable changes to this workspace are tracked here.
 
 ## Unreleased
 
+- Clarify that the main agent may use subagents in normal operation, with or without planning skills, inside `/plan` or outside it, when runtime permissions and context-efficiency rules justify them; planning-assistance subagents remain non-mutating.
 - Improve the public README narrative and add a canonical executive summary that explains the workspace model, profiles, capabilities, validation, self-improvement loop, and safety gates.
 - Add `context-budget-audit` and `verification-loop` core skills as Codex-native adaptations of useful ECC context-budget and verification patterns.
 - Add read-only `scripts/analyze-context-budget.py` and `scripts/workspace-doctor.py`, wired into healthchecks for context footprint and profile drift checks.

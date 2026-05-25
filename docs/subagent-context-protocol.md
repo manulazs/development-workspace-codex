@@ -36,6 +36,8 @@ For implementation work, route by precedence:
 
 More than one `workspace_implementer` may be spawned for one broader work package only when each instance owns a disjoint lane and the split clearly saves context or tokens. Do not split one tightly coupled task across multiple generic implementers.
 
+The main agent may use subagents in normal operation with or without a planning skill, both inside `/plan` and outside it, when the active runtime and user/developer instructions allow it. During planning, planning-assistance subagents should be read-only or analysis-only: repository exploration, current-docs research, risk review, log summarization, or assumption checks. They help shape the plan; they do not execute the plan or own final decisions.
+
 ## Context Package
 
 Send the smallest package that lets the subagent complete the task:
