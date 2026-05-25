@@ -12,9 +12,25 @@ Use `docs/subagent-context-protocol.md` for compact context packages, return bud
 - Use one or more subagents when tasks are independent, bounded, useful, and cheaper to delegate than to keep in the main context.
 - Keep task framing, synthesis, conflict control, and final decisions in the main Codex thread.
 - Do not delegate just because a specialized agent exists.
+- Route practical implementation by precedence: main agent decides, plans, reviews, and integrates; a specialized subagent has priority when its domain fits; `workspace_implementer` is the fallback for scoped implementation with no better specialist; the main agent handles simple low-context edits directly.
 - Runtime, developer, or user instructions always prevail. If the active platform requires explicit authorization before spawning subagents, request it first.
 - Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Use the smallest context package that can succeed. Prefer `fork_context: false` and bounded file lists unless the subagent genuinely needs full thread context.
+
+## Implementation Fallback
+
+Use `workspace_implementer` only for practical repository edits with clear scope and low specialist overlap:
+
+- implementing already planned changes;
+- applying patches;
+- altering scripts;
+- fixing paths;
+- adjusting manifests or configs;
+- updating operational documentation directly tied to the change;
+- small or medium refactors;
+- practical tasks without a more appropriate specialist.
+
+Do not use `workspace_implementer` for broad architecture, security, QA, code review, data, BI, `AGENTS.md`, skills, packages, Git/release, sensitive governance, final approval, destructive operations, pushes, or ambiguous work when an existing specialist or the main agent is the better owner.
 
 ## Planning To Implementation
 
@@ -119,6 +135,7 @@ The subagent does not own the final answer.
 | Git staging, commit grouping, release-safe push prep | `version_control_manager` | Rarely | The user did not explicitly request git operations |
 | Project instructions | `agents_md_maintainer` | Yes, after conventions emerge | Facts are not yet validated |
 | Skill creation | `local_skill_builder` | Yes, when recurring | The workflow is one-off |
+| General practical implementation without a specialist owner | `workspace_implementer` | Yes, when scoped and context-saving | A specialist applies, scope is ambiguous, or the edit is simple enough for the main agent |
 
 ## Model Guidance
 

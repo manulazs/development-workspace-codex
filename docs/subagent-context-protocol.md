@@ -26,6 +26,13 @@ Multiple subagents may run at the same time when their lanes are independent. Fo
 
 Keep work local when the next step is blocked on the answer, the task is trivial, the scope overlaps active edits, the required context is already small, or the main agent would need to redo the whole task to trust the result.
 
+For implementation work, route by precedence:
+
+1. Keep orchestration, planning, integration, and final approval in the main agent.
+2. Use a specialized subagent when the task fits an existing specialist domain.
+3. Use `workspace_implementer` for clear practical implementation only when no specialist is a better fit.
+4. Keep simple low-context edits in the main agent.
+
 ## Context Package
 
 Send the smallest package that lets the subagent complete the task:
