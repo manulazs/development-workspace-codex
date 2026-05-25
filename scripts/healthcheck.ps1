@@ -369,11 +369,26 @@ if ((Test-Path $evolutionValidator) -and (Test-CommandExists "python")) {
     Add-Result WARN "Continuous evolution validator not found at $evolutionValidator."
 }
 
+$cavemanValidator = "scripts/validate-caveman-lite.py"
+if ((Test-Path $cavemanValidator) -and (Test-CommandExists "python")) {
+    $cavemanValidationOutput = & python $cavemanValidator --repo . 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Add-Result FAIL "Caveman LITE activation validation failed: $($cavemanValidationOutput -join ' ')"
+    } else {
+        Add-Result INFO "Caveman LITE activation validation passed."
+    }
+} elseif (-not (Test-CommandExists "python")) {
+    Add-Result WARN "python is not available; skipped Caveman LITE validation."
+} else {
+    Add-Result WARN "Caveman LITE validator not found at $cavemanValidator."
+}
+
 $pythonSyntaxValidator = "scripts/validate-python-syntax.py"
 $pythonSyntaxTargets = @(
     "scripts/validate-skills.py",
     "scripts/evolve-workspace.py",
     "scripts/scaffold-capability.py",
+    "scripts/validate-caveman-lite.py",
     $pythonSyntaxValidator
 )
 if ((Test-Path $pythonSyntaxValidator) -and (Test-CommandExists "python")) {

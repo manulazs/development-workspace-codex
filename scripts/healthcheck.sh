@@ -343,12 +343,26 @@ else
   add_result WARN "Continuous evolution validator not found at $evolution_validator."
 fi
 
+caveman_validator="scripts/validate-caveman-lite.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$caveman_validator" ]; then
+  if "$PYTHON_BIN" "$caveman_validator" --repo . >/tmp/codex-workspace-caveman-lite.log 2>&1; then
+    add_result INFO "Caveman LITE activation validation passed."
+  else
+    add_result FAIL "Caveman LITE activation validation failed. See /tmp/codex-workspace-caveman-lite.log."
+  fi
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped Caveman LITE validation."
+else
+  add_result WARN "Caveman LITE validator not found at $caveman_validator."
+fi
+
 python_syntax_validator="scripts/validate-python-syntax.py"
 if [ -n "${PYTHON_BIN:-}" ] && [ -f "$python_syntax_validator" ]; then
   if "$PYTHON_BIN" "$python_syntax_validator" \
     scripts/validate-skills.py \
     scripts/evolve-workspace.py \
     scripts/scaffold-capability.py \
+    scripts/validate-caveman-lite.py \
     "$python_syntax_validator" >/tmp/codex-workspace-python-syntax.log 2>&1; then
     add_result INFO "Python syntax validation passed without bytecode writes."
   else

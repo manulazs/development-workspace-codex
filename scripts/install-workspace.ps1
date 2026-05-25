@@ -5,6 +5,7 @@ param(
     [switch]$ListProfiles,
     [switch]$SkipSkills,
     [switch]$SkipAgents,
+    [switch]$InstallGlobalInstructions,
     [switch]$Force
 )
 
@@ -14,8 +15,10 @@ $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 $ManifestPath = Join-Path $RepoRoot "workspace-manifest.json"
 $SkillsSource = Join-Path $RepoRoot "skills"
 $AgentsSource = Join-Path $RepoRoot ".codex/agents"
+$GlobalTemplate = Join-Path $RepoRoot "codex-global/AGENTS.md"
 $SkillsTarget = Join-Path $CodexHome "skills"
 $AgentsTarget = Join-Path $CodexHome "agents"
+$GlobalTarget = Join-Path $CodexHome "AGENTS.md"
 $BlockedInstallStatuses = @("curated", "review", "deprecated", "archived")
 
 function Get-ObjectPropertyValue {
@@ -176,6 +179,9 @@ if (-not (Test-Path $SkillsSource)) {
 if (-not (Test-Path $AgentsSource)) {
     throw "Missing source directory: $AgentsSource"
 }
+if (-not (Test-Path $GlobalTemplate)) {
+    throw "Missing global instruction template: $GlobalTemplate"
+}
 
 $Manifest = Get-Content -Raw $ManifestPath | ConvertFrom-Json
 
@@ -197,7 +203,7 @@ Write-Host "Codex home: $CodexHome"
 Write-Host "Profile   : $Profile"
 Write-Host ""
 Write-Host "This repository is a portable template. It does not verify or require any existing local Codex runtime state."
-Write-Host "codex-global/AGENTS.md is a source template; adapt it before copying into a consumer runtime."
+Write-Host "codex-global/AGENTS.md is a source template. Use -InstallGlobalInstructions only after reviewing it."
 Write-Host "Existing runtime files are skipped unless -Force is provided."
 Write-Host ""
 
@@ -235,6 +241,13 @@ if (-not $SkipAgents) {
     Write-Host "Agents skipped."
 }
 
+if ($InstallGlobalInstructions) {
+    Copy-FileExact -Source $GlobalTemplate -Target $GlobalTarget
+    Write-Host "Global instructions planned/copied: $GlobalTarget"
+} else {
+    Write-Host "Global instructions skipped. Use -InstallGlobalInstructions to copy codex-global/AGENTS.md."
+}
+
 Write-Host ""
 Write-Host "Repository validation:"
 Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict"
@@ -243,5 +256,6 @@ Write-Host "  python scripts/evolve-workspace.py --strict"
 Write-Host ""
 Write-Host "Safe preview examples:"
 Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf"
+Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -InstallGlobalInstructions -WhatIf"
 Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf"
 Write-Host "  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -ListProfiles"

@@ -4,6 +4,7 @@ set -eu
 DRY_RUN=0
 SKIP_SKILLS=0
 SKIP_AGENTS=0
+INSTALL_GLOBAL_INSTRUCTIONS=0
 LIST_PROFILES=0
 FORCE=0
 PROFILE="minimal"
@@ -19,6 +20,8 @@ Options:
   --dry-run, -n        Show actions without copying files.
   --force              Overwrite existing runtime skill and agent files.
   --codex-home PATH    Target Codex home. Defaults to $CODEX_HOME or ~/.codex.
+  --install-global-instructions
+                       Copy codex-global/AGENTS.md to $CODEX_HOME/AGENTS.md.
   --skip-skills        Do not copy profile skills.
   --skip-agents        Do not copy profile agents.
   -h, --help           Show this help.
@@ -46,6 +49,10 @@ while [ "$#" -gt 0 ]; do
       ;;
     --force)
       FORCE=1
+      shift
+      ;;
+    --install-global-instructions)
+      INSTALL_GLOBAL_INSTRUCTIONS=1
       shift
       ;;
     --codex-home)
@@ -78,8 +85,10 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 MANIFEST="$REPO_ROOT/workspace-manifest.json"
 SKILLS_SOURCE="$REPO_ROOT/skills"
 AGENTS_SOURCE="$REPO_ROOT/.codex/agents"
+GLOBAL_TEMPLATE="$REPO_ROOT/codex-global/AGENTS.md"
 SKILLS_TARGET="$CODEX_HOME/skills"
 AGENTS_TARGET="$CODEX_HOME/agents"
+GLOBAL_TARGET="$CODEX_HOME/AGENTS.md"
 
 find_python() {
   for candidate in python3 python; do
@@ -228,6 +237,7 @@ PY
 [ -f "$MANIFEST" ] || { echo "Missing manifest: $MANIFEST" >&2; exit 1; }
 [ -d "$SKILLS_SOURCE" ] || { echo "Missing source directory: $SKILLS_SOURCE" >&2; exit 1; }
 [ -d "$AGENTS_SOURCE" ] || { echo "Missing source directory: $AGENTS_SOURCE" >&2; exit 1; }
+[ -f "$GLOBAL_TEMPLATE" ] || { echo "Missing global instruction template: $GLOBAL_TEMPLATE" >&2; exit 1; }
 
 if [ "$LIST_PROFILES" -eq 1 ]; then
   echo "Available adoption profiles"
@@ -245,7 +255,7 @@ echo "Codex home: $CODEX_HOME"
 echo "Profile   : $PROFILE"
 echo
 echo "This repository is a portable template. It does not verify or require any existing local Codex runtime state."
-echo "codex-global/AGENTS.md is a source template; adapt it before copying into a consumer runtime."
+echo "codex-global/AGENTS.md is a source template. Use --install-global-instructions only after reviewing it."
 echo "Existing runtime files are skipped unless --force is provided."
 echo
 
@@ -272,6 +282,13 @@ while IFS="$(printf '\t')" read -r kind name; do
   fi
 done < <(emit_profile_selection)
 
+if [ "$INSTALL_GLOBAL_INSTRUCTIONS" -eq 1 ]; then
+  copy_file "$GLOBAL_TEMPLATE" "$GLOBAL_TARGET"
+  echo "Global instructions planned/copied: $GLOBAL_TARGET"
+else
+  echo "Global instructions skipped. Use --install-global-instructions to copy codex-global/AGENTS.md."
+fi
+
 if [ "$SKIP_SKILLS" -eq 1 ]; then
   echo "Skills skipped."
 else
@@ -292,5 +309,6 @@ echo "  python scripts/evolve-workspace.py --strict"
 echo
 echo "Safe preview examples:"
 echo "  scripts/install-workspace.sh --profile governed-codex --dry-run"
+echo "  scripts/install-workspace.sh --profile governed-codex --install-global-instructions --dry-run"
 echo "  scripts/install-workspace.sh --profile full-reviewed --dry-run"
 echo "  scripts/install-workspace.sh --list-profiles"
