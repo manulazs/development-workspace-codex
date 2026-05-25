@@ -121,9 +121,9 @@ Profile installers are allowed in automation only as dry-run or `-WhatIf` previe
 
 ## Commit And Push Cadence
 
-When the user asks for commits during evolution:
+When a project has an initialized Git repository and implementation work is authorized:
 
-- commit coherent validated batches;
+- create coherent commits as meaningful milestones emerge, instead of leaving all work in one final commit;
 - do not mix unrelated user changes with the evolution batch unless they are already part of the requested workspace update;
 - run full validation before the final push;
-- push only after all required validation passes.
+- push only after required validation/review passes and the user explicitly confirms that final push.

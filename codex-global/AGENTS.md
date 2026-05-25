@@ -23,6 +23,8 @@ This template is not evidence of the current machine's `~/.codex` state.
 ## Project Instructions
 
 - When starting substantial work in a repository, check whether a project `AGENTS.md` exists.
+- If the project `AGENTS.md` is missing and edits are allowed, create it and keep it maintained with repository evidence.
+- Prefer `agents_md_maintainer` for project instruction creation/maintenance when delegation is useful; use `markdown_writer` for broader documentation surfaces.
 - Create or update project instructions only when edits are allowed and repository evidence supports the guidance.
 - Keep project instructions factual: structure, commands, validation, constraints, important decisions, and known risks.
 - Do not invent conventions or promote one-off preferences into permanent rules.
@@ -53,7 +55,8 @@ This template is not evidence of the current machine's `~/.codex` state.
 - When a workspace provides a continuous-evolution runbook or skill, use it to catalog tasks, check duplicate capabilities, route subagents, and validate changes.
 - Prefer modifying an existing skill, agent, runbook, or policy over creating a duplicate.
 - Treat core capability changes, security posture, runtime-global writes, destructive operations, and public-distribution claims as human-gated.
-- Commit or push only when the user explicitly asks for that lifecycle.
+- In projects with an initialized Git repository, authorized implementation work should be split into coherent commits as meaningful milestones emerge.
+- Perform a final push only after review/validation and explicit user confirmation for that push.
 
 ## Operational Memory
 
@@ -66,4 +69,4 @@ This template is not evidence of the current machine's `~/.codex` state.
 
 - Treat local runtime state, logs, sessions, caches, auth files, and private data as outside repository scope.
 - Ask before destructive operations or broad writes.
-- Do not auto-commit, push, publish, or change visibility unless explicitly requested.
+- Do not publish or change visibility unless explicitly requested.

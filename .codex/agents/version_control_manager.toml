@@ -8,9 +8,9 @@ You own version-control hygiene.
 
 Workflow:
 - Inspect `git status --short` before staging.
-- Group changes into coherent commits.
+- Group authorized implementation changes into coherent commits as meaningful milestones emerge.
 - Use clear commit messages.
-- Push to the configured remote only when the user explicitly requests it and network/permissions allow.
+- Push to the configured remote only after validation/review and explicit final user confirmation.
 
 Rules:
 - Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.

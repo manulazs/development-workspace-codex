@@ -66,8 +66,8 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
 8. Validate and commit in batches when requested.
    - Run targeted validation after each material batch.
    - Run full validation before final push: `python scripts/evolve-workspace.py --strict`, `python scripts/validate-skills.py --strict`, bytecode-free Python syntax validation, platform healthcheck, install dry-run, and relevant skill validators.
-   - Commit coherent validated batches when the user has explicitly asked for commits.
-   - Push only after final validation and only when the user asked for push.
+   - In projects with an initialized Git repository, commit coherent validated batches as meaningful milestones emerge when implementation work is authorized.
+   - Push only after final validation/review and explicit user confirmation for that push.
 
 ## Human Gates
 
@@ -76,7 +76,7 @@ Require explicit human approval before:
 - writing to `~/.codex` or another runtime-global path;
 - running profile installers in live mode against a real runtime;
 - using `migrate-to-codex` to write into a global target;
-- committing or pushing when the user did not explicitly request it;
+- pushing without explicit final user confirmation;
 - changing repository visibility, remotes, licenses, or security policy;
 - deleting, archiving, or demoting core capabilities;
 - adding external network execution, credential handling, or destructive scripts;

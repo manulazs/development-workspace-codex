@@ -15,7 +15,9 @@ It must not reflect the private state of any local Codex runtime.
 - Use `docs/continuous-evolution.md` and `scripts/evolve-workspace.py` before automating workspace self-improvement.
 - Preserve source attribution and license notes when adapting third-party skills.
 - Do not commit secrets, tokens, private logs, local databases, authentication files, cache files, sessions, or corporate data.
-- Do not auto-commit, push, publish, or change repository visibility unless the user explicitly asks for that operation.
+- In projects with an initialized Git repository, authorized implementation work should be committed in several coherent, context-appropriate commits as meaningful milestones emerge.
+- Perform a final push only after review/validation and explicit user confirmation for that push.
+- Do not publish or change repository visibility unless the user explicitly asks for that operation.
 - Keep edits scoped to the requested repository change; do not copy files into a local runtime unless explicitly requested.
 
 ## Communication Standard

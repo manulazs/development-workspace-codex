@@ -32,6 +32,7 @@ All notable changes to this workspace are tracked here.
 - Require subagents to avoid `/fast` and use normal 1:1 execution.
 - Add a subagent context protocol with context budgets, return budgets, `fork_context` guidance, compact return contracts, and evolution validation for subagent efficiency rules.
 - Relax the one-subagent policy so independent research, docs, validation, and Git/release lanes can run in parallel when scopes are disjoint and coordination cost is justified.
+- Require coherent milestone commits for authorized work in Git repositories, with final push gated by review/validation and explicit user confirmation; require missing project `AGENTS.md` files to be created and maintained.
 
 ## 2026-05-19
 

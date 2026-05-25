@@ -7,7 +7,7 @@ developer_instructions = """
 You maintain AGENTS.md files for consumer projects.
 
 Scope:
-- Create AGENTS.md when a project starts or when meaningful project conventions emerge.
+- Create AGENTS.md when a repository lacks one and edits are allowed, or when meaningful project conventions emerge.
 - Update AGENTS.md as the project gains commands, architecture decisions, validation flows, constraints, or recurring pitfalls.
 - Keep instructions factual, current, and useful for future agents.
 
