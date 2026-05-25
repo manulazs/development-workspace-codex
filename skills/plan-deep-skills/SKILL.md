@@ -1,8 +1,8 @@
 ---
 name: plan-deep-skills
-description: Manual-only Plan Mode add-on. Use only when the user explicitly invokes $plan-deep-skills to create a deeper planning pass that also evaluates existing and external skills via find-skills before recommending task delegation. Do not auto-trigger for ordinary planning requests.
+description: Explicit capability audit planner. Evaluates available skills, external candidates, conversion risk, and skill-to-task fit before producing an implementation handoff. Planning-only; no runtime mutation.
 metadata:
-  short-description: Manual deep planning with skill discovery
+  short-description: Planning with skill and capability audit
 ---
 
 # Plan Deep Skills
