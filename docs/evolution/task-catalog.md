@@ -1,6 +1,6 @@
 # Continuous Evolution Task Catalog
 
-Generated: 2026-05-24
+Generated: 2026-05-25
 
 This catalog is generated from repository-visible metadata. It guides the main agent; it does not authorize runtime-global writes, commits, pushes, or destructive actions by itself.
 
@@ -17,10 +17,10 @@ This catalog is generated from repository-visible metadata. It guides the main a
 
 | ID | Priority | Segment | Title | Owner | Subagents | Owner scope | Context budget | Return budget | Fork context | Automation | Human approval | Validation |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| EVOL-OVERLAP-SKILL-plan-deep-plan-deep-skills | P2 | duplication-review | Review overlap between `plan-deep` and `plan-deep-skills`. | main-agent | code_reviewer | Repository-local task scope from title and evidence. | `small` | summary, evidence paths, validation status, residual risk, next action | `false` | `auto-fix-proposal` | no | `python scripts/evolve-workspace.py --strict` |
+| EVOL-STEADY-STATE | P3 | maintenance | No structural evolution tasks detected. | main-agent | - | Repository-local task scope from title and evidence. | `small` | summary, evidence paths, validation status, residual risk, next action | `false` | `catalog-only` | no | `bash scripts/healthcheck.sh --strict` |
 
 ## Evidence
 
-### EVOL-OVERLAP-SKILL-plan-deep-plan-deep-skills
+### EVOL-STEADY-STATE
 
-Token similarity score 0.60 from names/descriptions.
+Manifest, inventory, profiles, and overlap checks found no immediate gaps.

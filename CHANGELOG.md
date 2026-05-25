@@ -4,6 +4,10 @@ All notable changes to this workspace are tracked here.
 
 ## Unreleased
 
+- Add `frontend_ui_engineer` and `api_backend_engineer` optional specialist subagents so frontend web/UI and API/backend work do not fall through to the generic implementer.
+- Tune `data_discovery_researcher` and `data_catalog_taxonomist` to smaller model classes for bounded read-only research and metadata work while keeping strong models for implementation, review, security, BI, and data science.
+- Document specialist precedence for frontend/API lanes across subagent policy, global instructions, data pipeline routing, and agentic controls.
+- Clarify `plan-deep-skills` as a capability-audit planner distinct from base `plan-deep`, resolving the last structural overlap finding.
 - Add `workspace_implementer`, a core fallback implementation subagent for scoped practical repository edits when no specialist subagent is a better fit.
 - Document implementation-routing precedence across repository and global instruction templates: main agent owns orchestration and integration, specialists have priority, `workspace_implementer` is fallback, and simple low-context edits stay in the main thread.
 - Clarify that multiple `workspace_implementer` instances may run in one broader task set only for disjoint implementation lanes with clear context or token savings.

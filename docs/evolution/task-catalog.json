@@ -1,22 +1,20 @@
 [
   {
-    "task_id": "EVOL-OVERLAP-SKILL-plan-deep-plan-deep-skills",
-    "priority": "P2",
-    "segment": "duplication-review",
-    "title": "Review overlap between `plan-deep` and `plan-deep-skills`.",
-    "evidence": "Token similarity score 0.60 from names/descriptions.",
+    "task_id": "EVOL-STEADY-STATE",
+    "priority": "P3",
+    "segment": "maintenance",
+    "title": "No structural evolution tasks detected.",
+    "evidence": "Manifest, inventory, profiles, and overlap checks found no immediate gaps.",
     "recommended_owner": "main-agent",
-    "recommended_subagents": [
-      "code_reviewer"
-    ],
+    "recommended_subagents": [],
     "owner_scope": "Repository-local task scope from title and evidence.",
     "context_budget": "small",
     "return_budget": "summary, evidence paths, validation status, residual risk, next action",
     "fork_context": false,
-    "automation_level": "auto-fix-proposal",
+    "automation_level": "catalog-only",
     "human_approval_required": false,
     "validation": [
-      "python scripts/evolve-workspace.py --strict"
+      "bash scripts/healthcheck.sh --strict"
     ]
   }
 ]
