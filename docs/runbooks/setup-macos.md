@@ -38,6 +38,7 @@ scripts/healthcheck.sh --strict
 python scripts/validate-caveman-lite.py --repo .
 python scripts/validate-skills.py --strict
 python scripts/evolve-workspace.py --strict
+python scripts/validate-observations.py --repo . --strict
 ```
 
 The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, continuous-evolution drift, Caveman LITE activation contract, and repository validators. It does not compare against the local Codex runtime.

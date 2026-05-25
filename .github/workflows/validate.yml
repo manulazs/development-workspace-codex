@@ -41,9 +41,10 @@ jobs:
       - name: Validate skill metadata
         shell: bash
         run: |
-          python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
+          python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-observations.py scripts/validate-python-syntax.py
           python scripts/validate-skills.py --strict
           python scripts/evolve-workspace.py --strict
+          python scripts/validate-observations.py --repo . --strict
           python scripts/scaffold-capability.py skill --name continuous-evolution --purpose "Existing governed evolution workflow." --mode proposal --dry-run
 
       - name: Validate shell script syntax

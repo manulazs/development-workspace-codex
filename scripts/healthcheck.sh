@@ -78,6 +78,7 @@ docs/operations
 docs/audits
 docs/evolution
 docs/evolution/reports
+docs/evolution/templates
 docs/lessons
 docs/patterns
 scripts
@@ -117,6 +118,10 @@ docs/patterns/rejected/README.md
 docs/audits/TEMPLATE.md
 docs/decisions/TEMPLATE.md
 docs/archive/README.md
+docs/evolution/templates/observation-log.md
+docs/evolution/templates/cross-cutting-principles.md
+docs/evolution/templates/review-report.md
+docs/evolution/templates/staged-update-note.md
 docs/runbooks/setup-windows.md
 docs/runbooks/setup-macos.md
 "
@@ -356,6 +361,19 @@ else
   add_result WARN "Caveman LITE validator not found at $caveman_validator."
 fi
 
+observation_validator="scripts/validate-observations.py"
+if [ -n "${PYTHON_BIN:-}" ] && [ -f "$observation_validator" ]; then
+  if "$PYTHON_BIN" "$observation_validator" --repo . --strict >/tmp/codex-workspace-observation-validate.log 2>&1; then
+    add_result INFO "Observation scaffolding validation passed."
+  else
+    add_result FAIL "Observation scaffolding validation failed. See /tmp/codex-workspace-observation-validate.log."
+  fi
+elif [ -z "${PYTHON_BIN:-}" ]; then
+  add_result WARN "Python 3 is not available; skipped observation validation."
+else
+  add_result WARN "Observation validator not found at $observation_validator."
+fi
+
 python_syntax_validator="scripts/validate-python-syntax.py"
 if [ -n "${PYTHON_BIN:-}" ] && [ -f "$python_syntax_validator" ]; then
   if "$PYTHON_BIN" "$python_syntax_validator" \
@@ -363,6 +381,7 @@ if [ -n "${PYTHON_BIN:-}" ] && [ -f "$python_syntax_validator" ]; then
     scripts/evolve-workspace.py \
     scripts/scaffold-capability.py \
     scripts/validate-caveman-lite.py \
+    scripts/validate-observations.py \
     "$python_syntax_validator" >/tmp/codex-workspace-python-syntax.log 2>&1; then
     add_result INFO "Python syntax validation passed without bytecode writes."
   else

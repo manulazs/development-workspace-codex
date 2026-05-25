@@ -306,6 +306,7 @@ echo "Repository validation:"
 echo "  scripts/healthcheck.sh --strict"
 echo "  python scripts/validate-skills.py --strict"
 echo "  python scripts/evolve-workspace.py --strict"
+echo "  python scripts/validate-observations.py --repo . --strict"
 echo
 echo "Safe preview examples:"
 echo "  scripts/install-workspace.sh --profile governed-codex --dry-run"

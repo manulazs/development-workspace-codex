@@ -90,6 +90,7 @@ $requiredDirs = @(
     "docs/audits",
     "docs/evolution",
     "docs/evolution/reports",
+    "docs/evolution/templates",
     "docs/lessons",
     "docs/patterns",
     "scripts"
@@ -129,6 +130,10 @@ $requiredDocs = @(
     "docs/audits/TEMPLATE.md",
     "docs/decisions/TEMPLATE.md",
     "docs/archive/README.md",
+    "docs/evolution/templates/observation-log.md",
+    "docs/evolution/templates/cross-cutting-principles.md",
+    "docs/evolution/templates/review-report.md",
+    "docs/evolution/templates/staged-update-note.md",
     "docs/runbooks/setup-windows.md",
     "docs/runbooks/setup-macos.md"
 )
@@ -383,12 +388,27 @@ if ((Test-Path $cavemanValidator) -and (Test-CommandExists "python")) {
     Add-Result WARN "Caveman LITE validator not found at $cavemanValidator."
 }
 
+$observationValidator = "scripts/validate-observations.py"
+if ((Test-Path $observationValidator) -and (Test-CommandExists "python")) {
+    $observationValidationOutput = & python $observationValidator --repo . --strict 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Add-Result FAIL "Observation scaffolding validation failed: $($observationValidationOutput -join ' ')"
+    } else {
+        Add-Result INFO "Observation scaffolding validation passed."
+    }
+} elseif (-not (Test-CommandExists "python")) {
+    Add-Result WARN "python is not available; skipped observation validation."
+} else {
+    Add-Result WARN "Observation validator not found at $observationValidator."
+}
+
 $pythonSyntaxValidator = "scripts/validate-python-syntax.py"
 $pythonSyntaxTargets = @(
     "scripts/validate-skills.py",
     "scripts/evolve-workspace.py",
     "scripts/scaffold-capability.py",
     "scripts/validate-caveman-lite.py",
+    "scripts/validate-observations.py",
     $pythonSyntaxValidator
 )
 if ((Test-Path $pythonSyntaxValidator) -and (Test-CommandExists "python")) {

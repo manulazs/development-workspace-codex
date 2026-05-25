@@ -1,6 +1,6 @@
 # Workspace Health
 
-Last reviewed: 2026-05-19
+Last reviewed: 2026-05-25
 
 ## Definition
 
@@ -24,12 +24,14 @@ The standard healthcheck validates:
 - bytecode-free Python syntax validation;
 - repository-local validators when their dependencies are available;
 - continuous-evolution task catalog checks for P0 structural drift.
+- observation scaffolding, public templates, allowed observation statuses, and ignored private observation paths.
 
 The standard healthcheck intentionally does not validate:
 
 - whether any profile has been copied into `~/.codex`;
 - whether a consumer has restarted Codex after local adoption;
 - local auth, sessions, caches, logs, or private runtime state;
+- private `.codex-local/evolution/observations/` contents unless explicitly passed to the observation validator with `--observations-root`;
 - private corporate data or tools outside the repository;
 - external legal verification for third-party skills beyond the informational evidence recorded in `docs/skills-provenance.md`.
 
@@ -40,17 +42,19 @@ Windows:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
 python scripts/validate-skills.py --strict
-python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
+python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-observations.py scripts/validate-python-syntax.py
 python scripts/evolve-workspace.py --strict
+python scripts/validate-observations.py --repo . --strict
 ```
 
 macOS/Linux:
 
 ```bash
 scripts/healthcheck.sh --strict
-python scripts/validate-skills.py --strict
-python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
-python scripts/evolve-workspace.py --strict
+python3 scripts/validate-skills.py --strict
+python3 scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-observations.py scripts/validate-python-syntax.py
+python3 scripts/evolve-workspace.py --strict
+python3 scripts/validate-observations.py --repo . --strict
 ```
 
 Strict mode treats warnings as failures:
@@ -84,6 +88,8 @@ Green:
 - `scripts/validate-skills.py --strict` passes with 0 failures.
 - `scripts/validate-python-syntax.py` validates repository Python scripts without writing `__pycache__`.
 - `scripts/evolve-workspace.py --strict` has no P0 structural tasks.
+- `scripts/validate-observations.py --repo . --strict` confirms observation templates and private-path guards.
+- Optional local observation validation uses `python3 scripts/validate-observations.py --repo . --observations-root .codex-local/evolution/observations --strict` on macOS/Linux or `python scripts/validate-observations.py --repo . --observations-root .codex-local/evolution/observations --strict` on Windows. It is not public repository health.
 - `scripts/scaffold-capability.py` can create non-runtime-loadable proposals and blocks duplicate apply attempts.
 - Install preview is profile-based and non-destructive.
 - No obvious secret patterns are tracked.
@@ -102,6 +108,7 @@ Red:
 - Skill frontmatter or agent TOML is structurally invalid.
 - Installer copies everything by default or lacks preview mode.
 - Potential secrets, local runtime state, logs, caches, or sessions are tracked.
+- Private observation logs or staged updates are tracked.
 
 ## Maintenance Cadence
 
