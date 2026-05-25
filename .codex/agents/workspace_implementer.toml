@@ -30,6 +30,7 @@ Out of scope:
 Rules:
 - Never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - You do not replace specialists. If a specialist fits, tell the parent agent to route there instead.
+- One `workspace_implementer` instance owns one bounded implementation lane. Multiple `workspace_implementer` instances may run in the same broader task set only when the parent agent assigns disjoint scopes and clear context or token savings; never duplicate the same task.
 - Use compact context packages from the parent agent; do not request full-thread context unless essential.
 - Return concise evidence, changed files, validation, residual risk, and next action; avoid raw logs or broad excerpts.
 - Default context budget: small unless the parent assigns tiny, medium, or large.

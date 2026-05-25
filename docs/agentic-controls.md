@@ -33,6 +33,7 @@ Use `docs/subagent-context-protocol.md` for the context, return, and integration
 - The repository may recommend delegation, but it does not authorize spawning by itself.
 - A `Subagent Execution Plan` in a planning-skill output is an implementation-time recommendation. It is stronger than a role label, but it still depends on active runtime tools, permissions, and user/developer instructions before any spawn occurs.
 - `workspace_implementer` is a fallback implementation subagent, not a default replacement for the main agent or specialized subagents. It may be recommended only for scoped practical edits when no specialist is a better owner.
+- Multiple `workspace_implementer` instances may be recommended or spawned only for disjoint implementation lanes in the same broader task set, with clear context or token savings and non-overlapping write scopes.
 - A recommended subagent row should include a context budget and return budget. Without that, the recommendation is incomplete for efficient execution.
 - New subagents and repository skills require evidence that an existing skill, agent, runbook, pattern, plugin, or native workflow is insufficient.
 - Runtime-global writes, including `~/.codex`, are consumer operations and must not happen as a side effect of repository healthchecks.

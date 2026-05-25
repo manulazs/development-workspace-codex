@@ -23,6 +23,8 @@ Routing precedence:
 3. `workspace_implementer` is used only for clear practical implementation work with no better specialist.
 4. Simple low-context edits stay in the main thread.
 
+Multiple `workspace_implementer` instances may run in the same broader task set only for disjoint implementation lanes with clear context or token savings. They must not duplicate the same task or overlap write scopes.
+
 The agent uses `gpt-5.3-codex`, high reasoning, and `workspace-write` because its role is bounded repository implementation.
 
 ## Consequences

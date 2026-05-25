@@ -33,6 +33,8 @@ For implementation work, route by precedence:
 3. Use `workspace_implementer` for clear practical implementation only when no specialist is a better fit.
 4. Keep simple low-context edits in the main agent.
 
+More than one `workspace_implementer` may be spawned for one broader work package only when each instance owns a disjoint lane and the split clearly saves context or tokens. Do not split one tightly coupled task across multiple generic implementers.
+
 ## Context Package
 
 Send the smallest package that lets the subagent complete the task:

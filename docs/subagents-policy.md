@@ -32,6 +32,14 @@ Use `workspace_implementer` only for practical repository edits with clear scope
 
 Do not use `workspace_implementer` for broad architecture, security, QA, code review, data, BI, `AGENTS.md`, skills, packages, Git/release, sensitive governance, final approval, destructive operations, pushes, or ambiguous work when an existing specialist or the main agent is the better owner.
 
+Multiple `workspace_implementer` instances are allowed in the same broader task set only when all conditions hold:
+
+- each instance owns a disjoint implementation lane, file set, or responsibility;
+- there is clear context or token savings from splitting the work;
+- the parent agent can integrate the outputs without redoing the work;
+- no specialist subagent is a better owner for any lane;
+- no two implementers receive the same task or overlapping write scope.
+
 ## Planning To Implementation
 
 Planning skills may recommend subagents but must not spawn them during planning. When a final plan contains a `Subagent Execution Plan`, treat it as an implementation-time routing instruction, not as automatic authorization.
