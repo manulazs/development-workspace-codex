@@ -12,6 +12,9 @@ auth.json
 *secret*
 
 # Codex internal state, logs, and caches
+.codex-local/
+skill-observations/
+skill-updates/
 logs_*.sqlite*
 state_*.sqlite*
 models_cache.json
@@ -25,4 +28,3 @@ tmp/
 __pycache__/
 *.pyc
 node_modules/
-
