@@ -46,6 +46,7 @@ flowchart LR
 - `docs/skills-provenance.md`: informational source, license, attribution, and risk notes for skills.
 - `docs/agentic-controls.md`: control boundaries for recommending, spawning, creating, and persisting skills or subagents.
 - `docs/continuous-evolution.md`: governed automation model for task cataloging, anti-duplication, subagent routing, validation, and human gates.
+- `docs/mcp-governance.md`: MCP catalog and risk policy; review-only by default, no MCP installation.
 - `docs/evolution/templates/`: public templates for private observation logs, cross-cutting principles, review reports, and staged update notes.
 - `docs/subagents-policy.md`: when to use 0, 1, or multiple subagents.
 - `docs/subagent-context-protocol.md`: context budgets, return budgets, and compact handoffs for efficient subagent use.
@@ -169,6 +170,7 @@ The installer copies only the selected profile into the chosen Codex home. It ne
 - Use `docs/agentic-controls.md` to distinguish recommending a capability from spawning, creating, persisting, or installing it.
 - Use `docs/subagent-context-protocol.md` to keep subagent context packages and returns compact.
 - Use `docs/continuous-evolution.md` and `scripts/evolve-workspace.py` to catalog improvement work before creating or changing skills and agents.
+- Use `scripts/analyze-context-budget.py` and `scripts/workspace-doctor.py` for read-only context budget and drift checks before pruning or repair decisions.
 - Use `.codex-local/evolution/observations/` for private task observations when a session reveals recurring corrections, gaps, or cross-cutting principles; keep only sanitized templates and reports in the public repo.
 - Keep global communication-style preferences explicit in `codex-global/AGENTS.md`; do not hide personal tone preferences inside unrelated skills or agents.
 - Record structural decisions in `docs/decisions/`.

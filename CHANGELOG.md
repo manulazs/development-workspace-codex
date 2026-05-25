@@ -4,6 +4,10 @@ All notable changes to this workspace are tracked here.
 
 ## Unreleased
 
+- Add `context-budget-audit` and `verification-loop` core skills as Codex-native adaptations of useful ECC context-budget and verification patterns.
+- Add read-only `scripts/analyze-context-budget.py` and `scripts/workspace-doctor.py`, wired into healthchecks for context footprint and profile drift checks.
+- Add `docs_researcher` and `test_automation_engineer` optional subagents, with routing precedence ahead of `workspace_implementer` for documentation research and test automation work.
+- Add `docs/mcp-governance.md` and ADR 0020 to record accepted/rejected ECC patterns without importing hooks, MCP defaults, command shims, or runtime repair flows.
 - Add `frontend_ui_engineer` and `api_backend_engineer` optional specialist subagents so frontend web/UI and API/backend work do not fall through to the generic implementer.
 - Tune `data_discovery_researcher` and `data_catalog_taxonomist` to smaller model classes for bounded read-only research and metadata work while keeping strong models for implementation, review, security, BI, and data science.
 - Document specialist precedence for frontend/API lanes across subagent policy, global instructions, data pipeline routing, and agentic controls.

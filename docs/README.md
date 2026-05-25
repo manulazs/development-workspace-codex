@@ -10,11 +10,12 @@ This directory contains the operating documentation for the public Codex workspa
 4. Use `skills-provenance.md` before publishing, importing, or reclassifying skills.
 5. Use `agentic-controls.md` before treating a recommendation as an action.
 6. Use `continuous-evolution.md` before automating task cataloging, private observation review, skill evolution, agent evolution, or subagent routing.
-7. Use `subagents-policy.md` before delegating work to subagents.
-8. Use `subagent-context-protocol.md` to keep delegated context, returns, and handoffs compact.
-9. Use `self-improvement-lifecycle.md` before turning lessons into rules, skills, agents, or docs.
-10. Use the platform runbook for setup and optional runtime adoption.
-11. Record structural decisions in `decisions/`.
+7. Use `mcp-governance.md` before adding, recommending, or installing MCP servers.
+8. Use `subagents-policy.md` before delegating work to subagents.
+9. Use `subagent-context-protocol.md` to keep delegated context, returns, and handoffs compact.
+10. Use `self-improvement-lifecycle.md` before turning lessons into rules, skills, agents, or docs.
+11. Use the platform runbook for setup and optional runtime adoption.
+12. Record structural decisions in `decisions/`.
 
 ## Canonical Docs
 
@@ -24,6 +25,7 @@ This directory contains the operating documentation for the public Codex workspa
 - `skills-provenance.md`: informational skill source, license, attribution, and script-risk matrix.
 - `agentic-controls.md`: distinction between recommending, spawning, creating, persisting, and installing capabilities.
 - `continuous-evolution.md`: governed automation model for task cataloging, private observation review, anti-duplication, subagent routing, validation, and human gates.
+- `mcp-governance.md`: MCP adoption policy, risk checklist, and review-only catalog pattern.
 - `data-agent-pipeline.md`: data-development pipeline routing across discovery, engineering, cataloging, science, analysis, and visualization agents.
 - `subagents-policy.md`: policy for 0, 1, or multiple subagents.
 - `subagent-context-protocol.md`: context budgets, return budgets, fork-context guidance, and integration rules for efficient subagent use.
