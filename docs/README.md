@@ -5,21 +5,23 @@ This directory contains the operating documentation for the public Codex workspa
 ## Daily Path
 
 1. Read `../README.md` for the repository model and quickstart.
-2. Inspect `../workspace-manifest.json` to choose an adoption profile.
-3. Use `capability-inventory.md` to understand capability status, risk, overlap, and selection rules.
-4. Use `skills-provenance.md` before publishing, importing, or reclassifying skills.
-5. Use `agentic-controls.md` before treating a recommendation as an action.
-6. Use `continuous-evolution.md` before automating task cataloging, private observation review, skill evolution, agent evolution, or subagent routing.
-7. Use `mcp-governance.md` before adding, recommending, or installing MCP servers.
-8. Use `subagents-policy.md` before delegating work to subagents.
-9. Use `subagent-context-protocol.md` to keep delegated context, returns, and handoffs compact.
-10. Use `self-improvement-lifecycle.md` before turning lessons into rules, skills, agents, or docs.
-11. Use the platform runbook for setup and optional runtime adoption.
-12. Record structural decisions in `decisions/`.
+2. Read `executive-summary.md` for the full operating model.
+3. Inspect `../workspace-manifest.json` to choose an adoption profile.
+4. Use `capability-inventory.md` to understand capability status, risk, overlap, and selection rules.
+5. Use `skills-provenance.md` before publishing, importing, or reclassifying skills.
+6. Use `agentic-controls.md` before treating a recommendation as an action.
+7. Use `continuous-evolution.md` before automating task cataloging, private observation review, skill evolution, agent evolution, or subagent routing.
+8. Use `mcp-governance.md` before adding, recommending, or installing MCP servers.
+9. Use `subagents-policy.md` before delegating work to subagents.
+10. Use `subagent-context-protocol.md` to keep delegated context, returns, and handoffs compact.
+11. Use `self-improvement-lifecycle.md` before turning lessons into rules, skills, agents, or docs.
+12. Use the platform runbook for setup and optional runtime adoption.
+13. Record structural decisions in `decisions/`.
 
 ## Canonical Docs
 
 - `../README.md`: public overview, architecture, quickstart, and governance summary.
+- `executive-summary.md`: full explanation of what the workspace is, how it works, what changed, and how each major capability is used.
 - `../workspace-manifest.json`: reusable adoption profiles; not local runtime state.
 - `capability-inventory.md`: inventory of skills and agents with status, risk, overlap, and usage guidance.
 - `skills-provenance.md`: informational skill source, license, attribution, and script-risk matrix.

@@ -1,12 +1,25 @@
 # Development Workspace Codex
 
-Public, portable Codex workspace framework for governed skills, subagent templates, operational documentation, validation, and continuous improvement.
+Portable operating system for serious Codex workspaces: governed skills, reusable subagents, validation, adoption profiles, and a continuous-improvement loop that keeps automation useful without letting it become reckless.
 
 ![Validate Workspace](https://github.com/manulazs/development-workspace-codex/actions/workflows/validate.yml/badge.svg)
 
-## What This Is
+## Why This Exists
 
-This repository is a reusable template for teams or individuals who want a governed Codex-assisted development workspace.
+Most agent workspaces grow by accident: prompts get copied around, useful skills drift out of sync, local runtime state becomes tribal knowledge, and automation either stays too manual or becomes unsafe. This repository takes the opposite approach.
+
+It gives you a public, auditable, profile-based Codex workspace that can be cloned, validated, adapted, and installed into a local runtime only when you explicitly choose to do so.
+
+Use it when you want:
+
+- a Codex workspace that is portable across machines and teams;
+- skills and subagents with clear ownership, status, risk, and provenance;
+- a self-improvement process that records lessons, proposes changes, validates them, and preserves human gates;
+- token/context efficiency through Caveman LITE, context-budget checks, compact subagent handoffs, and specialist routing;
+- macOS/Linux and Windows setup paths with healthchecks and dry-run installers;
+- public-template hygiene that keeps `~/.codex`, secrets, logs, caches, and private state out of Git.
+
+## What This Is
 
 It is not a copy of any user's local Codex runtime. It does not try to mirror `~/.codex`, validate a maintainer's private machine, or treat absence of local installation as a repository failure.
 
@@ -19,6 +32,18 @@ The repository contains:
 - healthcheck and profile-based installation helpers under `scripts/`;
 - governance, setup, lifecycle, and audit documentation under `docs/`.
 
+## What You Get
+
+| Area | Included capability |
+| --- | --- |
+| Workspace adoption | `minimal`, `governed-codex`, `data-bi`, `frontend-artifacts`, and `full-reviewed` profiles |
+| Communication | mandatory `caveman lite` style through global/project instructions |
+| Planning | deep planning skills that separate logical ownership from implementation-time subagent execution |
+| Delegation | specialist subagents for review, QA, security, docs, data, frontend, API/backend, tests, packages, Git, and fallback implementation |
+| Continuous evolution | task cataloging, private observation templates, anti-duplication checks, staged update rules, and human gates |
+| Validation | strict healthchecks, skill validation, observation validation, Caveman LITE validation, context-budget analysis, workspace doctor, install dry-runs |
+| Public safety | provenance matrix, MCP governance, secret-pattern checks, ignored private runtime paths, and explicit runtime boundaries |
+
 ## Architecture
 
 | Layer | Responsibility |
@@ -28,19 +53,28 @@ The repository contains:
 | Local runtime | Private user state such as `~/.codex`, outside repository control |
 
 ```mermaid
-flowchart LR
-  repo[Public repository] --> manifest[Adoption manifest]
-  repo --> health[Repository healthcheck]
-  manifest --> preview[Install preview]
-  preview --> runtime[Optional local runtime]
-  repo --> docs[Governance docs]
-  docs --> review[Review and pruning]
+flowchart TD
+  repo["Public template repo"] --> manifest["workspace-manifest.json"]
+  repo --> capabilities["skills/ + .codex/agents/"]
+  repo --> docs["Governance docs"]
+  repo --> scripts["Validation + install scripts"]
+
+  manifest --> profiles["Adoption profiles"]
+  profiles --> preview["Dry-run / WhatIf preview"]
+  preview --> runtime["Optional consumer ~/.codex"]
+
+  docs --> controls["Agentic controls + human gates"]
+  controls --> evolution["Continuous evolution loop"]
+  scripts --> health["Repository healthcheck"]
+  evolution --> reports["Task catalog + reports"]
+  reports --> review["Review, prune, improve"]
   review --> repo
 ```
 
 ## Start Here
 
 - `docs/README.md`: documentation index.
+- `docs/executive-summary.md`: complete executive summary of how the workspace works and what it contains.
 - `workspace-manifest.json`: reusable adoption profiles.
 - `docs/capability-inventory.md`: status, risk, overlap, and usage guidance for skills and agents.
 - `docs/skills-provenance.md`: informational source, license, attribution, and risk notes for skills.
@@ -72,6 +106,24 @@ scripts/install-workspace.sh --profile governed-codex --dry-run
 On Windows, use the matching PowerShell commands from `docs/runbooks/setup-windows.md`.
 
 Only copy capabilities into a runtime after choosing a profile explicitly. The maintainer's local `~/.codex` may contain extra review or curated capabilities and is not the public baseline.
+
+## How The Workspace Improves Itself
+
+The repository follows a governed loop:
+
+```text
+observe -> log -> review -> stage -> validate -> apply/decline -> archive
+```
+
+That loop is intentionally not a permission slip for uncontrolled mutation. Repository-local improvements can be proposed, cataloged, validated, and implemented when authorized. Runtime-global writes, security posture changes, destructive operations, MCP installs, capability promotion, pruning, and public-distribution claims remain human-gated.
+
+For recurring maintenance:
+
+```bash
+python scripts/evolve-workspace.py --write-catalog --write-report
+python scripts/analyze-context-budget.py --repo . --profile full-reviewed
+python scripts/workspace-doctor.py --repo . --profile full-reviewed
+```
 
 ## Adoption Profiles
 

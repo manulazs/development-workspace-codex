@@ -114,6 +114,7 @@ $requiredDocs = @(
     "CODE_OF_CONDUCT.md",
     "workspace-manifest.json",
     "docs/README.md",
+    "docs/executive-summary.md",
     "docs/capability-inventory.md",
     "docs/skills-provenance.md",
     "docs/agentic-controls.md",
