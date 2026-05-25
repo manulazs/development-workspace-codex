@@ -9,6 +9,7 @@ Use `docs/subagent-context-protocol.md` for compact context packages, return bud
 ## Default
 
 - Use 0 subagents for small, linear, tightly coupled, or low-risk work.
+- Use one or more subagents when tasks are independent, bounded, useful, and cheaper to delegate than to keep in the main context.
 - Keep task framing, synthesis, conflict control, and final decisions in the main Codex thread.
 - Do not delegate just because a specialized agent exists.
 - Runtime, developer, or user instructions always prevail. If the active platform requires explicit authorization before spawning subagents, request it first.
@@ -36,13 +37,14 @@ Delegation should reduce net work. Before spawning, choose a context budget from
 
 The main agent should keep a simple ownership map while agents are active: agent, scope, files or directories, expected output, and stop condition.
 
-## Use 1 Subagent When
+## Use One Or More Subagents When
 
 - The task is independent from the next critical-path step.
 - The scope has a clear owner, input, output, validation signal, and stopping point.
 - The work can be reviewed by the main agent without redoing it.
 - The risk of file, decision, or context conflict is low.
 - A specialist can materially improve quality, coverage, or operational control.
+- Another independent lane can proceed in parallel without blocking or colliding with current work.
 
 ## Use Multiple Subagents When
 
@@ -51,8 +53,9 @@ The main agent should keep a simple ownership map while agents are active: agent
 - The main agent can integrate outputs deterministically.
 - The subagents are not answering the same question with similar scope.
 - The expected quality or risk benefit exceeds the coordination overhead.
+- A mechanical or lifecycle lane, such as Git commit prep, docs cleanup, dependency diagnosis, or release notes, can safely run beside research, review, or implementation.
 
-Multiple subagents should be rare in a public governance template. Similar-looking scopes require explicit justification.
+Multiple subagents should be intentional, not rare by default. Similar-looking scopes require explicit justification, but independent lanes should not be collapsed into the main thread only because another subagent is already active.
 
 ## Do Not Delegate
 

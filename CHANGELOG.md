@@ -31,6 +31,7 @@ All notable changes to this workspace are tracked here.
 - Add `qa_reviewer` and `markdown_writer` subagent templates.
 - Require subagents to avoid `/fast` and use normal 1:1 execution.
 - Add a subagent context protocol with context budgets, return budgets, `fork_context` guidance, compact return contracts, and evolution validation for subagent efficiency rules.
+- Relax the one-subagent policy so independent research, docs, validation, and Git/release lanes can run in parallel when scopes are disjoint and coordination cost is justified.
 
 ## 2026-05-19
 

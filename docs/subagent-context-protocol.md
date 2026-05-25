@@ -22,6 +22,8 @@ Spawn a subagent only when at least one value is clear and the coordination cost
 - `parallel-safe`: the subagent owns a disjoint read/write scope.
 - `mechanical-repeat`: the task is repetitive, structured, and easy to verify.
 
+Multiple subagents may run at the same time when their lanes are independent. For example, a Git hygiene or release-notes lane can run beside source research, documentation cleanup can run beside validation, and a read-only reviewer can run beside non-overlapping implementation. The rule is disjoint scope and useful output, not a fixed cap of one active subagent.
+
 Keep work local when the next step is blocked on the answer, the task is trivial, the scope overlaps active edits, the required context is already small, or the main agent would need to redo the whole task to trust the result.
 
 ## Context Package

@@ -30,8 +30,8 @@ This template is not evidence of the current machine's `~/.codex` state.
 ## Subagent Control
 
 - Use 0 subagents for small, linear, tightly coupled, or low-risk work.
-- Use 1 subagent for an independent audit, review, or bounded side task.
-- Use multiple subagents only for genuinely separate workstreams with clear ownership and integration value.
+- Use one or more subagents for independent audits, reviews, mechanical tasks, research, docs, Git hygiene, or bounded side tasks when scopes do not conflict.
+- Use multiple subagents whenever the work has genuinely independent lanes and the coordination cost is lower than doing everything in the main thread.
 - Do not delegate the immediate critical-path blocker.
 - Do not ask multiple similar agents to do the same work.
 - Before delegating, define objective, scope, input context, expected output, dependencies, risks, and stopping criteria.

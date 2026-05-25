@@ -68,8 +68,8 @@ Core skills should be small, generally useful, and low ambiguity. Domain skills 
 Delegation is an operational decision, not a default.
 
 - Use 0 subagents for simple, linear, tightly coupled, or low-risk work.
-- Use 1 subagent for an independent audit, review, or bounded side task.
-- Use multiple subagents only when scopes are genuinely independent and integration cost is justified.
+- Use one or more subagents for independent audits, reviews, mechanical tasks, research, docs, Git hygiene, or bounded side tasks when scopes do not conflict.
+- Use multiple subagents whenever the work has genuinely independent lanes and the coordination cost is lower than doing everything in the main thread.
 - The main agent remains responsible for synthesis, final judgment, and user-facing output.
 - Subagents must never use `/fast` or fast-mode shortcuts. Use normal 1:1 subagent execution only.
 - Prefer compact subagent context packages over full-thread forks. Include objective, context budget, read/write scope, expected output, validation signal, return budget, and stopping criteria.

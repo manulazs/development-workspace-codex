@@ -47,12 +47,14 @@ This skill enables governed automation, not unbounded self-mutation. Repository-
 
 6. Route work to subagents only when useful.
    - Keep the immediate critical path in the main thread.
+   - Use one or more subagents when independent lanes can proceed without file, decision, or context conflict.
    - Use `explorer` for bounded read-only repository questions.
    - Use `local_skill_builder` for narrow local skill creation or updates.
    - Use `agents_md_maintainer` for instruction-file maintenance.
    - Use `code_reviewer` after implementation diffs exist.
    - Use `security_auditor` for provenance, secret, runtime, installer, or automation-risk review.
    - Do not ask similar agents to solve the same task.
+   - It is acceptable to run a lifecycle lane, such as Git hygiene or documentation cleanup, beside research, review, or implementation when the scopes are disjoint and user permissions allow it.
 
 7. Maintain the handoff protocol.
    - Send objective, justification, context budget, read scope, write scope, out-of-scope items, constraints, expected output, validation signal, risks, stopping criteria, and return budget.
