@@ -57,7 +57,8 @@
     "package_manager": "optional",
     "qa_reviewer": "core",
     "security_auditor": "core",
-    "version_control_manager": "review"
+    "version_control_manager": "review",
+    "workspace_implementer": "core"
   },
   "profiles": {
     "minimal": {
@@ -81,7 +82,8 @@
         "agents_md_maintainer",
         "code_reviewer",
         "qa_reviewer",
-        "security_auditor"
+        "security_auditor",
+        "workspace_implementer"
       ],
       "notes": "Start here for a reusable governed workspace."
     },
