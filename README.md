@@ -84,6 +84,37 @@ Capabilities marked `curated`, `review`, `deprecated`, or `archived` are never i
 
 `caveman lite` is the mandatory communication standard for this repository and its exported global template. It means concise, direct, no filler, professional, and technically precise. Temporarily use fuller prose when safety, destructive operations, legal clarity, or complex instructions require it.
 
+## Caveman LITE Activation Model
+
+The upstream Caveman Codex install path is per-session: installing the `caveman` skill makes `/caveman` available, but Codex users still need to activate it during a session unless a higher-level instruction file says otherwise. This workspace intentionally keeps the upstream `skills/caveman/SKILL.md` behavior intact and makes LITE mandatory through `AGENTS.md` policy.
+
+For a consumer runtime, both parts must be present:
+
+- `skills/caveman/SKILL.md` under the selected Codex home;
+- `AGENTS.md` copied from `codex-global/AGENTS.md`, adapted if needed, requiring `caveman lite`.
+
+Preview a runtime adoption that includes the global instruction template:
+
+```bash
+scripts/install-workspace.sh --profile governed-codex --install-global-instructions --dry-run
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -InstallGlobalInstructions -WhatIf
+```
+
+Validate the repository contract:
+
+```bash
+python scripts/validate-caveman-lite.py --repo .
+```
+
+Validate an active local runtime explicitly:
+
+```bash
+python scripts/validate-caveman-lite.py --repo . --codex-home ~/.codex
+```
+
 ## Validate The Repository
 
 Windows:

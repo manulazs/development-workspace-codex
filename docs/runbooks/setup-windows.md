@@ -23,12 +23,13 @@ git status --short --branch
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/healthcheck.ps1 -Strict
-python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-python-syntax.py
+python scripts/validate-python-syntax.py scripts/validate-skills.py scripts/evolve-workspace.py scripts/scaffold-capability.py scripts/validate-caveman-lite.py scripts/validate-python-syntax.py
+python scripts/validate-caveman-lite.py --repo .
 python scripts/validate-skills.py --strict
 python scripts/evolve-workspace.py --strict
 ```
 
-The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, continuous-evolution drift, and repository validators. It does not compare against the local Codex runtime.
+The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, continuous-evolution drift, Caveman LITE activation contract, and repository validators. It does not compare against the local Codex runtime.
 
 ## Inspect Adoption Profiles
 
@@ -48,6 +49,7 @@ Profiles are reusable recommendations:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -WhatIf
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -InstallGlobalInstructions -WhatIf
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile full-reviewed -WhatIf
 ```
 
@@ -61,6 +63,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps
 
 The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
 
+The original Caveman Codex path is per-session. To make `caveman lite` active by default in a Codex runtime, install both the `caveman` skill and the global instruction template with `-InstallGlobalInstructions`.
+
 Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` for source, license, attribution, and script-risk notes. These notes are informational and do not block authorized repository skills.
 
 ## Install Into A Runtime
@@ -69,6 +73,13 @@ Only run this when you explicitly want to copy a profile into your local Codex h
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex
+```
+
+To install the global instruction template at the same time:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-workspace.ps1 -Profile governed-codex -InstallGlobalInstructions
+python scripts/validate-caveman-lite.py --repo . --codex-home $env:USERPROFILE\.codex
 ```
 
 Restart Codex after changing runtime skills or agents.

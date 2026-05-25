@@ -21,7 +21,7 @@ This matrix records repository-visible evidence for every skill under `skills/`.
 | `auditing-skills` | `core` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Refers to external audit services. | `authorized` |
 | `building-dbt-semantic-layer` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | References external dbt tooling and docs. | `authorized` |
 | `canvas-design` | `curated` | Inventory says Anthropic skill, adapted. | `skills/canvas-design/LICENSE.txt` plus bundled font license files. | Bundled fonts and visual assets need attribution preservation. | `profile-restricted` |
-| `caveman` | `core` | Inventory says JuliusBrussee caveman. | README attribution exists; no local license file found. | Style-only instructions. | `authorized` |
+| `caveman` | `core` | Inventory says JuliusBrussee caveman. | README attribution exists; no local license file found. | Style-only instructions; upstream Codex usage is per-session unless this workspace's global `AGENTS.md` rule is installed. | `authorized` |
 | `caveman-commit` | `review` | Inventory says JuliusBrussee caveman. | README attribution exists; no local license file found. | Git-message workflow only. | `profile-restricted` |
 | `caveman-compress` | `review` | Inventory says JuliusBrussee caveman. | README attribution and SECURITY file exist; no local license file found. | Script can send file contents to a third-party API. | `profile-restricted` |
 | `configuring-dbt-mcp-server` | `optional` | Inventory says dbt Labs. | No local license file or source URL recorded in skill frontmatter. | Credential-handling guidance affects secret safety. | `authorized` |

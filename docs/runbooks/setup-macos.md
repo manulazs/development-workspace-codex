@@ -35,11 +35,12 @@ chmod +x scripts/healthcheck.sh scripts/install-workspace.sh
 
 ```bash
 scripts/healthcheck.sh --strict
+python scripts/validate-caveman-lite.py --repo .
 python scripts/validate-skills.py --strict
 python scripts/evolve-workspace.py --strict
 ```
 
-The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, continuous-evolution drift, and repository validators. It does not compare against the local Codex runtime.
+The healthcheck validates repository structure, docs, manifest coverage, skill frontmatter, agent TOML, installer safety, basic secret patterns, continuous-evolution drift, Caveman LITE activation contract, and repository validators. It does not compare against the local Codex runtime.
 
 ## Inspect Adoption Profiles
 
@@ -59,6 +60,7 @@ Profiles are reusable recommendations:
 
 ```bash
 scripts/install-workspace.sh --profile governed-codex --dry-run
+scripts/install-workspace.sh --profile governed-codex --install-global-instructions --dry-run
 scripts/install-workspace.sh --profile full-reviewed --dry-run
 ```
 
@@ -72,6 +74,8 @@ scripts/install-workspace.sh --profile governed-codex --codex-home ./.tmp/codex-
 
 The installer copies only selected profile capabilities. It never deletes files from the target runtime and never installs `curated`, `review`, `deprecated`, or `archived` capabilities automatically.
 
+The original Caveman Codex path is per-session. To make `caveman lite` active by default in a Codex runtime, install both the `caveman` skill and the global instruction template with `--install-global-instructions`.
+
 Before publishing a fork for broad reuse, inspect `docs/skills-provenance.md` for source, license, attribution, and script-risk notes. These notes are informational and do not block authorized repository skills.
 
 ## Install Into A Runtime
@@ -80,6 +84,13 @@ Only run this when you explicitly want to copy a profile into your local Codex h
 
 ```bash
 scripts/install-workspace.sh --profile governed-codex
+```
+
+To install the global instruction template at the same time:
+
+```bash
+scripts/install-workspace.sh --profile governed-codex --install-global-instructions
+python scripts/validate-caveman-lite.py --repo . --codex-home ~/.codex
 ```
 
 Restart Codex after changing runtime skills or agents.
